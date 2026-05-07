@@ -3550,6 +3550,38 @@ const DRAMA_REVIEW = [
   .conj-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-bottom: 8px; }
   .conj-table th, .conj-table td { border: 1px solid var(--border); padding: 4px 6px; text-align: left; }
   .conj-table th { background: var(--surface); font-weight: 600; }
+  /* 카타카나 탭 */
+  .kt-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .kt-tab { flex: 1; padding: 10px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); font-size: 0.88rem; cursor: pointer; }
+  .kt-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 700; }
+  .kt-chart-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 20px; }
+  .kt-cell { text-align: center; padding: 10px 4px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: background .15s; position: relative; }
+  .kt-cell:active { background: var(--primary-light); }
+  .kt-cell .kt-char { font-size: 1.5rem; font-weight: 700; display: block; }
+  .kt-cell .kt-roma { font-size: 0.7rem; color: var(--text-light); display: block; margin-top: 2px; }
+  .kt-cell.confused { border-color: #f59e0b; background: #fffbeb; }
+  .kt-popup { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 999; }
+  .kt-popup-inner { background: #fff; border-radius: 16px; padding: 28px 32px; text-align: center; min-width: 220px; }
+  .kt-popup-char { font-size: 4rem; font-weight: 900; }
+  .kt-popup-roma { font-size: 1.4rem; color: var(--primary); font-weight: 700; margin: 4px 0; }
+  .kt-popup-hira { font-size: 1.1rem; color: var(--text-light); }
+  .kt-popup-tip { font-size: 0.85rem; color: #555; margin-top: 10px; padding: 8px; background: #f8f8f8; border-radius: 8px; }
+  .kt-confused { margin-top: 20px; }
+  .kt-confused h3 { font-size: 0.95rem; margin-bottom: 10px; }
+  .confused-pair { display: flex; align-items: center; gap: 12px; padding: 10px; background: #fffbeb; border: 1px solid #f59e0b; border-radius: 10px; margin-bottom: 8px; }
+  .confused-pair .pair-chars { font-size: 1.6rem; font-weight: 900; letter-spacing: 8px; min-width: 80px; }
+  .confused-pair .pair-desc { font-size: 0.8rem; color: #555; line-height: 1.5; }
+  .kt-tip-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+  .kt-tip-char { font-size: 2.2rem; font-weight: 900; min-width: 48px; text-align: center; }
+  .kt-tip-roma { font-size: 0.75rem; color: var(--primary); font-weight: 700; }
+  .kt-tip-text { font-size: 0.83rem; color: #444; line-height: 1.6; }
+  .quiz-question { font-size: 3.5rem; font-weight: 900; text-align: center; margin: 16px 0 24px; }
+  .quiz-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .quiz-btn { padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 1.1rem; background: #fff; cursor: pointer; transition: all .15s; }
+  .quiz-btn.correct { background: #d1fae5; border-color: #10b981; }
+  .quiz-btn.wrong { background: #fee2e2; border-color: #ef4444; }
+  .quiz-result { text-align: center; font-size: 1rem; font-weight: 700; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+  .quiz-next { display: block; width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px; }
   .grammar-ex { background: var(--bg); border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; }
   .grammar-ex .jp { font-size: 0.9rem; line-height: 1.6; }
   .grammar-ex .kr { font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
@@ -3627,6 +3659,7 @@ const DRAMA_REVIEW = [
   <button class="tab-btn" onclick="showTab('grammar')">📝 문법</button>
   <button class="tab-btn" onclick="showTab('travel')">✈️ 여행회화</button>
   <button class="tab-btn" onclick="showTab('drama')">🎬 드라마</button>
+  <button class="tab-btn" onclick="showTab('katakana')">🔤 카타카나</button>
 </nav>
 
 <!-- 오늘의 학습 탭 -->
@@ -3708,6 +3741,55 @@ const DRAMA_REVIEW = [
 <div id="tab-drama" class="tab-content">
   <div id="dramaReviewContainer"></div>
   <div id="dramaContainer"></div>
+</div>
+
+<div id="tab-katakana" class="tab-content">
+  <!-- 서브탭 -->
+  <div class="kt-tabs">
+    <button class="kt-tab active" onclick="showKtTab('chart',this)">📋 일람표</button>
+    <button class="kt-tab" onclick="showKtTab('tips',this)">💡 암기법</button>
+    <button class="kt-tab" onclick="showKtTab('quiz',this)">✏️ 퀴즈</button>
+  </div>
+
+  <!-- 일람표 -->
+  <div id="kt-chart" class="kt-section">
+    <div class="card">
+      <h2>카타카나 50음도</h2>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:12px">탭하면 읽는 법을 확인할 수 있어요</p>
+      <div id="ktChartGrid"></div>
+      <div class="kt-confused">
+        <h3>⚠️ 자주 헷갈리는 쌍</h3>
+        <div id="ktConfusedList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 암기법 -->
+  <div id="kt-tips" class="kt-section" style="display:none">
+    <div class="card">
+      <h2>모양으로 기억하는 카타카나</h2>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:12px">각 글자를 이미지로 연상해 보세요</p>
+      <div id="ktTipsList"></div>
+    </div>
+  </div>
+
+  <!-- 퀴즈 -->
+  <div id="kt-quiz" class="kt-section" style="display:none">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 style="margin:0">카타카나 퀴즈</h2>
+        <div>
+          <select id="quizMode" style="font-size:0.85rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;margin-right:6px">
+            <option value="kata2roma">카타카나 → 읽기</option>
+            <option value="roma2kata">읽기 → 카타카나</option>
+          </select>
+          <button onclick="startQuiz()" style="background:var(--primary);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.85rem;cursor:pointer">시작</button>
+        </div>
+      </div>
+      <div id="quizScore" style="font-size:0.85rem;color:var(--text-light);margin-bottom:12px"></div>
+      <div id="quizBody"></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -4248,7 +4330,7 @@ function revealFill(id) {
 // ============================================================
 // 탭 전환
 // ============================================================
-const tabIds = ['today', 'vocab', 'grammar', 'travel', 'drama'];
+const tabIds = ['today', 'vocab', 'grammar', 'travel', 'drama', 'katakana'];
 
 function showTab(tabName) {
   tabIds.forEach(t => {
@@ -4261,6 +4343,219 @@ function showTab(tabName) {
   if (tabName === 'grammar') initGrammar();
   if (tabName === 'travel') initTravel();
   if (tabName === 'drama') { initDramaReview(); initDrama(); }
+  if (tabName === 'katakana') initKatakana();
+}
+
+// ============================================================
+// 카타카나 탭
+// ============================================================
+const KATAKANA = [
+  {k:'ア',h:'あ',r:'a'}, {k:'イ',h:'い',r:'i'}, {k:'ウ',h:'う',r:'u'}, {k:'エ',h:'え',r:'e'}, {k:'オ',h:'お',r:'o'},
+  {k:'カ',h:'か',r:'ka'},{k:'キ',h:'き',r:'ki'},{k:'ク',h:'く',r:'ku'},{k:'ケ',h:'け',r:'ke'},{k:'コ',h:'こ',r:'ko'},
+  {k:'サ',h:'さ',r:'sa'},{k:'シ',h:'し',r:'shi'},{k:'ス',h:'す',r:'su'},{k:'セ',h:'せ',r:'se'},{k:'ソ',h:'そ',r:'so'},
+  {k:'タ',h:'た',r:'ta'},{k:'チ',h:'ち',r:'chi'},{k:'ツ',h:'つ',r:'tsu'},{k:'テ',h:'て',r:'te'},{k:'ト',h:'と',r:'to'},
+  {k:'ナ',h:'な',r:'na'},{k:'ニ',h:'に',r:'ni'},{k:'ヌ',h:'ぬ',r:'nu'},{k:'ネ',h:'ね',r:'ne'},{k:'ノ',h:'の',r:'no'},
+  {k:'ハ',h:'は',r:'ha'},{k:'ヒ',h:'ひ',r:'hi'},{k:'フ',h:'ふ',r:'fu'},{k:'ヘ',h:'へ',r:'he'},{k:'ホ',h:'ほ',r:'ho'},
+  {k:'マ',h:'ま',r:'ma'},{k:'ミ',h:'み',r:'mi'},{k:'ム',h:'む',r:'mu'},{k:'メ',h:'め',r:'me'},{k:'モ',h:'も',r:'mo'},
+  {k:'ヤ',h:'や',r:'ya'},{k:'　',h:'',r:''}, {k:'ユ',h:'ゆ',r:'yu'},{k:'　',h:'',r:''}, {k:'ヨ',h:'よ',r:'yo'},
+  {k:'ラ',h:'ら',r:'ra'},{k:'リ',h:'り',r:'ri'},{k:'ル',h:'る',r:'ru'},{k:'レ',h:'れ',r:'re'},{k:'ロ',h:'ろ',r:'ro'},
+  {k:'ワ',h:'わ',r:'wa'},{k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'ヲ',h:'を',r:'wo'},
+  {k:'ン',h:'ん',r:'n'}, {k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'　',h:'',r:''},
+];
+
+// 자주 헷갈리는 쌍
+const CONFUSED_PAIRS = [
+  { chars: 'シ ツ', r: 'shi / tsu', desc: 'シ(shi): 짧은 획 2개가 왼쪽에 세로로 → 긴 획이 오른쪽 위로 흐름\nツ(tsu): 짧은 획 2개가 위에 가로로 → 긴 획이 오른쪽 아래로 흐름' },
+  { chars: 'ソ ン', r: 'so / n', desc: 'ソ(so): 짧은 획이 오른쪽 위에 → 긴 획이 왼쪽 아래로\nン(n): 짧은 획이 왼쪽에 → 긴 획이 오른쪽 위로 올라감' },
+  { chars: 'ア マ', r: 'a / ma', desc: 'ア(a): 세로획이 교차점 위에서 시작\nマ(ma): 오른쪽 획이 교차점 아래에서 꺾임' },
+  { chars: 'ウ ワ', r: 'u / wa', desc: 'ウ(u): 위에 짧은 획 하나, 아래가 U자\nワ(wa): 위에 짧은 획 없고 오른쪽이 내려옴' },
+  { chars: 'ク ケ', r: 'ku / ke', desc: 'ク(ku): 획이 2개 (단순한 형태)\nケ(ke): 획이 3개, 세로획에 두 획이 붙음' },
+  { chars: 'ヌ メ', r: 'nu / me', desc: 'ヌ(nu): 가로획 + X처럼 교차, 마지막에 고리\nメ(me): X자 교차, 고리 없음' },
+  { chars: 'フ ラ', r: 'fu / ra', desc: 'フ(fu): 위에서 꺾이는 후지산 모양\nラ(ra): 가로획 + 아래로 꺾임 (라멘 그릇)' },
+  { chars: 'コ ロ', r: 'ko / ro', desc: 'コ(ko): 오른쪽이 열려있는 ㄷ 모양\nロ(ro): 사각형이 완전히 닫혀 있음' },
+];
+
+// 암기 팁
+const KATAKANA_TIPS = [
+  {k:'ア',r:'a',  tip:'가위 벌린 모양. 영어 A를 눕힌 것'},
+  {k:'イ',r:'i',  tip:'두 사람이 나란히. 이(2)인'},
+  {k:'ウ',r:'u',  tip:'우산(傘) 손잡이 위쪽 부분'},
+  {k:'エ',r:'e',  tip:'철로 모양 (=工). 위아래 선과 가운데 선'},
+  {k:'オ',r:'o',  tip:'あ보다 단순한 오 모양. 오 하고 입 벌린 형태'},
+  {k:'カ',r:'ka', tip:'칼(刀) 모양. 力(力)과 같은 형태'},
+  {k:'キ',r:'ki', tip:'키(key)를 세워놓은 모양. 가로 2획 + 세로 1획'},
+  {k:'ク',r:'ku', tip:'새 부리(beak). 쿠쿠 새 입'},
+  {k:'ケ',r:'ke', tip:'ク에 가로획 하나 추가된 케'},
+  {k:'コ',r:'ko', tip:'コーナー(코너). ㄷ자처럼 열린 모양'},
+  {k:'サ',r:'sa', tip:'사람이 팔 벌린 모양. 세 획'},
+  {k:'シ',r:'shi', tip:'웃는 얼굴(:). 점 2개가 왼쪽 세로로, 획이 오른쪽 위로'},
+  {k:'ス',r:'su', tip:'스윙(swing). 아래가 고리처럼 휘어짐'},
+  {k:'セ',r:'se', tip:'영어 세(SE)처럼 생긴 모양'},
+  {k:'ソ',r:'so', tip:'씨앗(seed) 뿌리는 동작. 위에 점, 아래로 흐름'},
+  {k:'タ',r:'ta', tip:'タ는 た의 윗부분. 타(打) 모양'},
+  {k:'チ',r:'chi', tip:'치어리더 모양. 위에 가로획, 아래 곡선'},
+  {k:'ツ',r:'tsu', tip:'점 2개가 위에 가로로, 획이 오른쪽 아래로 → シ와 방향이 반대!'},
+  {k:'テ',r:'te', tip:'테레비(TV) 안테나 모양. 十자에 위 가로획'},
+  {k:'ト',r:'to', tip:'도끼(to-kin/토끼). 세로획에 짧은 가로획'},
+  {k:'ナ',r:'na', tip:'나이프(knife). 十자 모양'},
+  {k:'ニ',r:'ni', tip:'二(に). 가로 두 획, 숫자 2처럼'},
+  {k:'ヌ',r:'nu', tip:'누들(noodle). X자 교차에 마지막 고리'},
+  {k:'ネ',r:'ne', tip:'네코(고양이, neko). 고양이 얼굴처럼 생긴 形'},
+  {k:'ノ',r:'no', tip:'노(NO)를 사선으로. 단순한 한 획'},
+  {k:'ハ',r:'ha', tip:'하하(ha-ha). 두 사람이 웃는 모양'},
+  {k:'ヒ',r:'hi', tip:'히(heel, 발뒤꿈치). ㄴ자에 위 가로획'},
+  {k:'フ',r:'fu', tip:'후지산(富士山). 위에서 꺾이는 산 모양'},
+  {k:'ヘ',r:'he', tip:'へ와 똑같이 생겼어요! 가장 쉬운 카타카나'},
+  {k:'ホ',r:'ho', tip:'호(ho-ho). 十자에 양쪽으로 획이 나옴'},
+  {k:'マ',r:'ma', tip:'마마(mama). 낚싯바늘 모양'},
+  {k:'ミ',r:'mi', tip:'ミ=三(み). 가로 세 획, 미(3)'},
+  {k:'ム',r:'mu', tip:'무(cow, MOO). 소가 입을 벌린 모양'},
+  {k:'メ',r:'me', tip:'메(me=나). X자 교차'},
+  {k:'モ',r:'mo', tip:'모어(more). 가로 세 획 + 곡선'},
+  {k:'ヤ',r:'ya', tip:'야(야호). や의 윗부분, 오른쪽 방향'},
+  {k:'ユ',r:'yu', tip:'유(U자). 아래가 U자로 열림'},
+  {k:'ヨ',r:'yo', tip:'요(요요). ヨ=三개의 가로획, 오른쪽 막힘'},
+  {k:'ラ',r:'ra', tip:'라멘(ramen) 그릇. 가로획 + 아래로 꺾임'},
+  {k:'リ',r:'ri', tip:'리(ri=두 기둥). 두 세로획이 나란히'},
+  {k:'ル',r:'ru', tip:'루트(route). 꺾임이 있는 경로 모양'},
+  {k:'レ',r:'re', tip:'레이(ray). 한 획이 아래로 뻗음 (ノ보다 꺾임)'},
+  {k:'ロ',r:'ro', tip:'로봇(robot). 완전히 닫힌 사각형'},
+  {k:'ワ',r:'wa', tip:'와인잔(wine glass). 위가 열리고 아래로 모임'},
+  {k:'ヲ',r:'wo', tip:'조사 を의 카타카나. 거의 외래어 표기에 안 씀'},
+  {k:'ン',r:'n', tip:'ン vs ソ 주의! ン은 영어 n처럼 위로 올라감'},
+];
+
+const confusedSet = new Set(['シ','ツ','ソ','ン','ア','マ','ウ','ワ','ク','ケ','ヌ','メ','フ','ラ','コ','ロ']);
+
+let quizList = [], quizIdx = 0, quizCorrect = 0, quizAnswered = false;
+
+function initKatakana() {
+  renderKtChart();
+  renderKtTips();
+}
+
+function showKtTab(name, btn) {
+  ['chart','tips','quiz'].forEach(n => {
+    document.getElementById('kt-' + n).style.display = n === name ? '' : 'none';
+  });
+  document.querySelectorAll('.kt-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (name === 'quiz' && quizList.length === 0) startQuiz();
+}
+
+function renderKtChart() {
+  const grid = document.createElement('div');
+  grid.className = 'kt-chart-grid';
+  KATAKANA.forEach(item => {
+    const cell = document.createElement('div');
+    if (!item.r) {
+      cell.style.visibility = 'hidden';
+      cell.className = 'kt-cell';
+    } else {
+      cell.className = 'kt-cell' + (confusedSet.has(item.k) ? ' confused' : '');
+      cell.innerHTML = `<span class="kt-char">${item.k}</span><span class="kt-roma">${item.r}</span>`;
+      cell.onclick = () => showKtPopup(item);
+    }
+    grid.appendChild(cell);
+  });
+  document.getElementById('ktChartGrid').replaceChildren(grid);
+
+  const confList = document.getElementById('ktConfusedList');
+  confList.innerHTML = CONFUSED_PAIRS.map(p => `
+    <div class="confused-pair">
+      <div class="pair-chars">${p.chars}</div>
+      <div>
+        <div style="font-weight:700;font-size:0.82rem;margin-bottom:4px">${p.r}</div>
+        <div class="pair-desc">${p.desc.replace(/\n/g,'<br>')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showKtPopup(item) {
+  const tip = KATAKANA_TIPS.find(t => t.k === item.k);
+  const overlay = document.createElement('div');
+  overlay.className = 'kt-popup';
+  overlay.innerHTML = `
+    <div class="kt-popup-inner">
+      <div class="kt-popup-char">${item.k}</div>
+      <div class="kt-popup-roma">${item.r}</div>
+      <div class="kt-popup-hira">히라가나: ${item.h}</div>
+      ${tip ? `<div class="kt-popup-tip">💡 ${tip.tip}</div>` : ''}
+      <button onclick="this.closest('.kt-popup').remove()" style="margin-top:16px;background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:0.9rem;cursor:pointer">닫기</button>
+    </div>
+  `;
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+}
+
+function renderKtTips() {
+  document.getElementById('ktTipsList').innerHTML = KATAKANA_TIPS.map(t => `
+    <div class="kt-tip-item">
+      <div class="kt-tip-char">${t.k}<div class="kt-tip-roma">${t.r}</div></div>
+      <div class="kt-tip-text">${t.tip}</div>
+    </div>
+  `).join('');
+}
+
+function startQuiz() {
+  const mode = document.getElementById('quizMode') ? document.getElementById('quizMode').value : 'kata2roma';
+  const pool = KATAKANA.filter(x => x.r && x.r.trim());
+  quizList = [...pool].sort(() => Math.random() - 0.5);
+  quizIdx = 0; quizCorrect = 0; quizAnswered = false;
+  renderQuiz(mode);
+}
+
+function renderQuiz(mode) {
+  mode = mode || (document.getElementById('quizMode') ? document.getElementById('quizMode').value : 'kata2roma');
+  const pool = KATAKANA.filter(x => x.r && x.r.trim());
+  if (quizIdx >= quizList.length) {
+    document.getElementById('quizBody').innerHTML = `
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:2rem;margin-bottom:8px">🎉</div>
+        <div style="font-size:1.2rem;font-weight:700;margin-bottom:4px">${quizCorrect} / ${quizList.length} 정답</div>
+        <div style="color:var(--text-light);margin-bottom:16px">${Math.round(quizCorrect/quizList.length*100)}% 정확도</div>
+        <button onclick="startQuiz()" class="quiz-next">다시 하기</button>
+      </div>`;
+    document.getElementById('quizScore').textContent = '';
+    return;
+  }
+  const item = quizList[quizIdx];
+  const question = mode === 'kata2roma' ? item.k : item.r;
+  // 오답 3개 선택
+  const wrong = pool.filter(x => x.k !== item.k).sort(() => Math.random() - 0.5).slice(0, 3);
+  const choices = [...wrong, item].sort(() => Math.random() - 0.5);
+  const choiceHtml = choices.map(c => {
+    const label = mode === 'kata2roma' ? c.r : c.k;
+    return `<button class="quiz-btn" onclick="checkAnswer(this,'${c.k}','${item.k}','${mode}')">${label}</button>`;
+  }).join('');
+  document.getElementById('quizScore').textContent = `${quizIdx + 1} / ${quizList.length}  ·  맞힌 수: ${quizCorrect}`;
+  document.getElementById('quizBody').innerHTML = `
+    <div class="quiz-question">${question}</div>
+    <div class="quiz-choices">${choiceHtml}</div>
+    <div id="quizResult"></div>
+  `;
+  quizAnswered = false;
+}
+
+function checkAnswer(btn, chosen, correct, mode) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const isOk = chosen === correct;
+  if (isOk) quizCorrect++;
+  document.querySelectorAll('.quiz-btn').forEach(b => {
+    const label = b.textContent.trim();
+    const target = mode === 'kata2roma' ? KATAKANA.find(x=>x.k===correct)?.r : correct;
+    if (label === target || b === btn && isOk) b.classList.add('correct');
+    else if (b === btn && !isOk) b.classList.add('wrong');
+  });
+  const res = document.getElementById('quizResult');
+  const tip = KATAKANA_TIPS.find(t=>t.k===correct);
+  res.innerHTML = `
+    <div class="quiz-result" style="background:${isOk?'#d1fae5':'#fee2e2'}">${isOk?'⭕ 정답!':'❌ 오답 — 정답: '+correct+' ('+KATAKANA.find(x=>x.k===correct)?.r+')'}</div>
+    ${tip?`<div style="font-size:0.8rem;color:#555;text-align:center;margin-bottom:8px">💡 ${tip.tip}</div>`:''}
+    <button class="quiz-next" onclick="quizIdx++;renderQuiz()">다음 →</button>
+  `;
 }
 
 // 앱 시작
