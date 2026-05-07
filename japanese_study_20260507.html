@@ -3644,12 +3644,10 @@ const DRAMA_REVIEW = [
       <div class="flashcard" id="flashcard">
         <div class="flashcard-front">
           <div class="flashcard-jp" id="fc-jp">-</div>
-          <div class="flashcard-reading" id="fc-reading">-</div>
           <div class="flashcard-hint">클릭하면 뜻이 나와요 👆</div>
         </div>
         <div class="flashcard-back">
           <div class="flashcard-kr" id="fc-kr">-</div>
-          <div class="flashcard-reading" id="fc-reading2">-</div>
           <div class="flashcard-example" id="fc-example"></div>
         </div>
       </div>
@@ -3869,9 +3867,7 @@ function updateFlashcard() {
   const learned = isLearned(w.id);
 
   document.getElementById('fc-jp').innerHTML = w.jp;
-  document.getElementById('fc-reading').textContent = w.kana || w.reading || '';
   document.getElementById('fc-kr').textContent = w.ko || w.kr;
-  document.getElementById('fc-reading2').textContent = `(${w.kana || w.reading || ''})`;
 
   const exJp = w.example_jp || '';
   const exKo = w.example_ko || '';
