@@ -3350,6 +3350,7 @@ const DRAMA_REVIEW = [
     ]
   }
 ];
+const TODAY_TALK = {"level": "N4", "topic": "<ruby>友<rt>とも</rt></ruby>だちと<ruby>約束<rt>やくそく</rt></ruby>", "topic_ko": "친구와 약속 잡기", "turns": [{"jp": "<ruby>今度<rt>こんど</rt></ruby>の<ruby>土曜日<rt>どようび</rt></ruby>、<ruby>暇<rt>ひま</rt></ruby>？", "ko": "이번 토요일에 한가해?", "mine": false, "who": "친구"}, {"cue_ko": "한가하다고 답하고 무슨 일이냐고 묻기", "jp": "うん、<ruby>暇<rt>ひま</rt></ruby>だよ。どうしたの？", "ko": "응, 한가해. 무슨 일이야?", "mine": true, "tip": "どうしたの？ = 무슨 일이야?/왜 그래? — 가볍게 이유를 물을 때", "who": "나"}, {"jp": "<ruby>新<rt>あたら</rt></ruby>しくできたカフェに<ruby>行<rt>い</rt></ruby>かない？", "ko": "새로 생긴 카페에 가지 않을래?", "mine": false, "who": "친구"}, {"cue_ko": "좋다고 하면서 몇 시에 만날지 묻기", "jp": "いいね！<ruby>何時<rt>なんじ</rt></ruby>に<ruby>待<rt>ま</rt></ruby>ち<ruby>合<rt>あ</rt></ruby>わせする？", "ko": "좋아! 몇 시에 만날까?", "mine": true, "tip": "<ruby>待<rt>ま</rt></ruby>ち<ruby>合<rt>あ</rt></ruby>わせ = (약속 장소에서) 만나기로 함, 약속 시간·장소", "who": "나"}, {"jp": "<ruby>午後<rt>ごご</rt></ruby><ruby>二時<rt>にじ</rt></ruby>に<ruby>駅<rt>えき</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>はどう？", "ko": "오후 2시에 역 앞은 어때?", "mine": false, "who": "친구"}, {"cue_ko": "괜찮다고 답하고 기대된다고 말하기", "jp": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>！<ruby>楽<rt>たの</rt></ruby>しみにしてるね。", "ko": "괜찮아! 기대하고 있을게.", "mine": true, "tip": "<ruby>楽<rt>たの</rt></ruby>しみにしてる = 기대하고 있다 — 약속·이벤트를 앞두고 자주 쓰는 표현", "who": "나"}, {"jp": "じゃあ、<ruby>土曜日<rt>どようび</rt></ruby>にね。<ruby>遅<rt>おく</rt></ruby>れないでね。", "ko": "그럼 토요일에 보자. 늦지 마.", "mine": false, "who": "친구"}, {"cue_ko": "알겠다고 답하기", "jp": "うん、わかった。また<ruby>連絡<rt>れんらく</rt></ruby>するね。", "ko": "응, 알겠어. 또 연락할게.", "mine": true, "tip": "<ruby>連絡<rt>れんらく</rt></ruby>する = 연락하다", "who": "나"}]};
 
 </script>
 <style>
@@ -3722,6 +3723,13 @@ const DRAMA_REVIEW = [
       <button class="btn-review" onclick="markReviewAndNext()">🔄 다시 볼게요</button>
     </div>
   </div>
+
+<div class="card" id="todayTalkCard">
+  <h2>💬 오늘의 회화</h2>
+  <div class="talk-topic" id="talkTopic"></div>
+  <div id="talkBody"></div>
+</div>
+
 
   <div class="card" id="todayGrammarCard">
     <h2>📝 오늘의 문법</h2>
@@ -4587,6 +4595,90 @@ function checkAnswer(btn, chosen, correct, mode) {
 
 // 앱 시작
 initToday();
+
+function installTodayTalkStyles() {
+  if (document.getElementById('todayTalkStyles')) return;
+  const style = document.createElement('style');
+  style.id = 'todayTalkStyles';
+  style.textContent = `
+    .talk-topic { font-weight: 700; margin-bottom: 14px; color: #374151; }
+    .talk-turn { border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; margin: 10px 0; background: #fff; }
+    .talk-speaker { font-weight: 700; color: #111827; margin-bottom: 6px; }
+    .talk-jp { font-size: 1.05rem; line-height: 1.8; color: #111827; }
+    .talk-ko, .talk-cue, .talk-tip { margin-top: 6px; color: #4b5563; line-height: 1.5; }
+    .talk-mine { cursor: pointer; background: #f8fafc; }
+    .talk-reveal { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .24s ease, opacity .2s ease; }
+    .talk-mine.open .talk-reveal { max-height: 240px; opacity: 1; }
+  `;
+  document.head.appendChild(style);
+}
+
+function renderTodayTalk() {
+  const card = document.getElementById('todayTalkCard');
+  if (!card) return;
+  if (!TODAY_TALK) {
+    card.style.display = 'none';
+    return;
+  }
+  installTodayTalkStyles();
+  const topic = document.getElementById('talkTopic');
+  const body = document.getElementById('talkBody');
+  if (!topic || !body) return;
+  topic.innerHTML = `${TODAY_TALK.topic_ko || ''} (${TODAY_TALK.topic || ''}) · ${TODAY_TALK.level || ''}`;
+  body.innerHTML = '';
+  (TODAY_TALK.turns || []).forEach((turn) => {
+    const item = document.createElement('div');
+    item.className = `talk-turn${turn.mine ? ' talk-mine' : ''}`;
+    if (turn.mine) {
+      const speaker = document.createElement('div');
+      speaker.className = 'talk-speaker';
+      speaker.textContent = '🙋 내 차례';
+      const cue = document.createElement('div');
+      cue.className = 'talk-cue';
+      cue.textContent = turn.cue_ko || '';
+      const reveal = document.createElement('div');
+      reveal.className = 'talk-reveal';
+      const jp = document.createElement('div');
+      jp.className = 'talk-jp';
+      jp.innerHTML = turn.jp || '';
+      const ko = document.createElement('div');
+      ko.className = 'talk-ko';
+      ko.textContent = turn.ko || '';
+      reveal.appendChild(jp);
+      reveal.appendChild(ko);
+      if (turn.tip) {
+        const tip = document.createElement('div');
+        tip.className = 'talk-tip';
+        tip.textContent = turn.tip;
+        reveal.appendChild(tip);
+      }
+      item.appendChild(speaker);
+      item.appendChild(cue);
+      item.appendChild(reveal);
+      item.addEventListener('click', () => item.classList.toggle('open'));
+    } else {
+      const speaker = document.createElement('div');
+      speaker.className = 'talk-speaker';
+      speaker.textContent = turn.who || '';
+      const jp = document.createElement('div');
+      jp.className = 'talk-jp';
+      jp.innerHTML = turn.jp || '';
+      const ko = document.createElement('div');
+      ko.className = 'talk-ko';
+      ko.textContent = turn.ko || '';
+      item.appendChild(speaker);
+      item.appendChild(jp);
+      item.appendChild(ko);
+    }
+    body.appendChild(item);
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderTodayTalk);
+} else {
+  renderTodayTalk();
+}
 </script>
 </body>
 </html>
