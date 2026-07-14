@@ -1,0 +1,4884 @@
+<!DOCTYPE html>
+<!--
+  일본어 매일 학습 앱
+  데이터 추가: data.js 파일만 수정하세요.
+  단어(WORDS), 문법(GRAMMAR), 여행(TRAVEL), 드라마(DRAMA) 배열에 추가
+  id는 절대 변경 금지 — localStorage 학습 기록이 ID 기준으로 저장됩니다.
+-->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>일본어 매일 학습</title>
+<script>
+// data.js — 여기만 수정하면 데이터 추가 가능
+//
+// 단어 추가: WORDS 배열에 추가, id는 마지막 번호 다음으로 (w087 다음은 w088)
+// 문법 추가: GRAMMAR 배열에 추가, id는 마지막 번호 다음으로 (g016 다음은 g017)
+// 여행회화 추가: TRAVEL 배열에 추가, id는 마지막 번호 다음으로
+// 드라마 추가: DRAMA 배열에 추가, id는 마지막 번호 다음으로
+//
+// ⚠️ 주의: id는 한 번 정하면 절대 변경 금지! (localStorage 학습 기록이 ID 기준으로 저장됨)
+
+const WORDS = [
+  {
+    "id": "w206",
+    "jp": "好きそうだ",
+    "kana": "",
+    "ko": "좋아할 것 같다",
+    "tag": "드라마",
+    "level": "3단계",
+    "source": "올 리가 없다",
+    "example_jp": "",
+    "example_ko": ""
+  },
+  {
+    "id": "w207",
+    "jp": "棚（たな）",
+    "kana": "",
+    "ko": "선반, 진열대, 장 (本棚 책장, 食器棚 찬장·식기장)",
+    "tag": "드라마",
+    "level": "3단계",
+    "source": "올 리가 없다",
+    "example_jp": "",
+    "example_ko": ""
+  },
+  {
+    "id": "w208",
+    "jp": "偶然（ぐうぜん）",
+    "kana": "",
+    "ko": "우연",
+    "tag": "드라마",
+    "level": "3단계",
+    "source": "올 리가 없다",
+    "example_jp": "",
+    "example_ko": ""
+  },
+  {
+    "id": "w209",
+    "jp": "既に（すでに）",
+    "kana": "",
+    "ko": "이미, 벌써",
+    "tag": "드라마",
+    "level": "3단계",
+    "source": "올 리가 없다",
+    "example_jp": "",
+    "example_ko": ""
+  },
+  {
+    "id": "w210",
+    "jp": "ちょこっとだけ",
+    "kana": "",
+    "ko": "조금만, 아주 조금만 (ちょこっと 쪼금, 찔끔)",
+    "tag": "드라마",
+    "level": "3단계",
+    "source": "올 리가 없다",
+    "example_jp": "うん!ちょこっとだけ",
+    "example_ko": "응! 조금만"
+  },
+  // ===== 3-9과 기본 단어 =====
+  {
+    id: 'w001',
+    jp: '<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>',
+    kana: 'たべもの',
+    ko: '음식, 먹거리',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>りました。',
+    example_ko: '음식 사진을 찍었습니다.'
+  },
+  {
+    id: 'w002',
+    jp: '<ruby>写真<rt>しゃしん</rt></ruby>',
+    kana: 'しゃしん',
+    ko: '사진',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってもいいですか？',
+    example_ko: '사진 찍어도 됩니까?'
+  },
+  {
+    id: 'w003',
+    jp: 'お<ruby>店<rt>みせ</rt></ruby>',
+    kana: 'おみせ',
+    ko: '가게',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'お<ruby>店<rt>みせ</rt></ruby>はどこですか？',
+    example_ko: '가게는 어디입니까?'
+  },
+  {
+    id: 'w004',
+    jp: '<ruby>先週<rt>せんしゅう</rt></ruby>',
+    kana: 'せんしゅう',
+    ko: '저번주',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>先週<rt>せんしゅう</rt></ruby>、<ruby>日本<rt>にほん</rt></ruby>に<ruby>行<rt>い</rt></ruby>きました。',
+    example_ko: '저번주 일본에 갔습니다.'
+  },
+  {
+    id: 'w005',
+    jp: '<ruby>食事<rt>しょくじ</rt></ruby>',
+    kana: 'しょくじ',
+    ko: '식사',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>食事<rt>しょくじ</rt></ruby>をする<ruby>予定<rt>よてい</rt></ruby>です。',
+    example_ko: '식사를 할 예정입니다.'
+  },
+  {
+    id: 'w006',
+    jp: '<ruby>有名<rt>ゆうめい</rt></ruby>',
+    kana: 'ゆうめい',
+    ko: '유명함',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>有名<rt>ゆうめい</rt></ruby>なお<ruby>店<rt>みせ</rt></ruby>です。',
+    example_ko: '유명한 가게입니다.'
+  },
+  {
+    id: 'w007',
+    jp: '<ruby>静<rt>しず</rt></ruby>か',
+    kana: 'しずか',
+    ko: '조용함',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>静<rt>しず</rt></ruby>かなところです。',
+    example_ko: '조용한 곳입니다.'
+  },
+  {
+    id: 'w008',
+    jp: '<ruby>便利<rt>べんり</rt></ruby>',
+    kana: 'べんり',
+    ko: '편리함',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>電車<rt>でんしゃ</rt></ruby>は<ruby>便利<rt>べんり</rt></ruby>です。',
+    example_ko: '전철은 편리합니다.'
+  },
+  {
+    id: 'w009',
+    jp: '<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>',
+    kana: 'だいじょうぶ',
+    ko: '괜찮음',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？',
+    example_ko: '괜찮습니까?'
+  },
+  {
+    id: 'w010',
+    jp: '<ruby>楽<rt>たの</rt></ruby>しい',
+    kana: 'たのしい',
+    ko: '즐거운',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>旅行<rt>りょこう</rt></ruby>は<ruby>楽<rt>たの</rt></ruby>しいです。',
+    example_ko: '여행은 즐겁습니다.'
+  },
+  {
+    id: 'w011',
+    jp: '<ruby>映画<rt>えいが</rt></ruby>',
+    kana: 'えいが',
+    ko: '영화',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ませんか？',
+    example_ko: '영화 보지 않을래요?'
+  },
+  {
+    id: 'w012',
+    jp: '<ruby>財布<rt>さいふ</rt></ruby>',
+    kana: 'さいふ',
+    ko: '지갑',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>財布<rt>さいふ</rt></ruby>を<ruby>失<rt>な</rt></ruby>くしてしまいました。',
+    example_ko: '지갑을 잃어버렸어요.'
+  },
+  {
+    id: 'w013',
+    jp: '<ruby>健康<rt>けんこう</rt></ruby>',
+    kana: 'けんこう',
+    ko: '건강',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>健康<rt>けんこう</rt></ruby>には<ruby>運動<rt>うんどう</rt></ruby>です。',
+    example_ko: '건강에는 운동입니다.'
+  },
+  {
+    id: 'w014',
+    jp: 'まつり',
+    kana: 'まつり',
+    ko: '축제',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'まつりに<ruby>行<rt>い</rt></ruby>きます。',
+    example_ko: '축제에 갑니다.'
+  },
+  {
+    id: 'w015',
+    jp: 'お<ruby>菓子<rt>かし</rt></ruby>',
+    kana: 'おかし',
+    ko: '과자',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'お<ruby>菓子<rt>かし</rt></ruby>を<ruby>食<rt>た</rt></ruby>べました。',
+    example_ko: '과자를 먹었습니다.'
+  },
+  {
+    id: 'w016',
+    jp: '<ruby>暑<rt>あつ</rt></ruby>い',
+    kana: 'あつい',
+    ko: '덥다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>暑<rt>あつ</rt></ruby>いですね。',
+    example_ko: '오늘은 덥네요.'
+  },
+  {
+    id: 'w017',
+    jp: '<ruby>人気<rt>にんき</rt></ruby>',
+    kana: 'にんき',
+    ko: '인기',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>人気<rt>にんき</rt></ruby>のお<ruby>店<rt>みせ</rt></ruby>です。',
+    example_ko: '인기 있는 가게입니다.'
+  },
+  {
+    id: 'w018',
+    jp: '<ruby>高校<rt>こうこう</rt></ruby>',
+    kana: 'こうこう',
+    ko: '고등학교',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>高校<rt>こうこう</rt></ruby>のときから<ruby>好<rt>す</rt></ruby>きです。',
+    example_ko: '고등학교 때부터 좋아합니다.'
+  },
+  {
+    id: 'w019',
+    jp: '<ruby>体調<rt>たいちょう</rt></ruby>',
+    kana: 'たいちょう',
+    ko: '컨디션',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>体調<rt>たいちょう</rt></ruby>はどうですか？',
+    example_ko: '컨디션은 어떻습니까?'
+  },
+  {
+    id: 'w020',
+    jp: '<ruby>展望台<rt>てんぼうだい</rt></ruby>',
+    kana: 'てんぼうだい',
+    ko: '전망대',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>展望台<rt>てんぼうだい</rt></ruby>から<ruby>見<rt>み</rt></ruby>えます。',
+    example_ko: '전망대에서 보입니다.'
+  },
+  {
+    id: 'w021',
+    jp: '<ruby>屋台<rt>やたい</rt></ruby>',
+    kana: 'やたい',
+    ko: '포장마차',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>屋台<rt>やたい</rt></ruby>でたこ焼きを<ruby>食<rt>た</rt></ruby>べました。',
+    example_ko: '포장마차에서 타코야키를 먹었습니다.'
+  },
+  {
+    id: 'w022',
+    jp: '<ruby>銀行<rt>ぎんこう</rt></ruby>',
+    kana: 'ぎんこう',
+    ko: '은행',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>銀行<rt>ぎんこう</rt></ruby>はどこですか？',
+    example_ko: '은행은 어디입니까?'
+  },
+  {
+    id: 'w023',
+    jp: '<ruby>花火<rt>はなび</rt></ruby>',
+    kana: 'はなび',
+    ko: '불꽃놀이',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>花火<rt>はなび</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きました。',
+    example_ko: '불꽃놀이를 보러 갔습니다.'
+  },
+  {
+    id: 'w024',
+    jp: '<ruby>夏祭<rt>なつまつ</rt></ruby>り',
+    kana: 'なつまつり',
+    ko: '여름 축제',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>夏祭<rt>なつまつ</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きましょう！',
+    example_ko: '여름 축제에 갑시다!'
+  },
+  {
+    id: 'w025',
+    jp: '<ruby>上手<rt>じょうず</rt></ruby>',
+    kana: 'じょうず',
+    ko: '잘함, 능숙함',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>ですね。',
+    example_ko: '일본어를 잘하시네요.'
+  },
+  {
+    id: 'w026',
+    jp: '<ruby>下手<rt>へた</rt></ruby>',
+    kana: 'へた',
+    ko: '못함, 서툶',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>料理<rt>りょうり</rt></ruby>が<ruby>下手<rt>へた</rt></ruby>です。',
+    example_ko: '요리를 못합니다.'
+  },
+  {
+    id: 'w027',
+    jp: 'ぺらぺら',
+    kana: 'ぺらぺら',
+    ko: '술술 (말이 유창하게)',
+    tag: '부사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>日本語<rt>にほんご</rt></ruby>がぺらぺらです。',
+    example_ko: '일본어가 유창합니다.'
+  },
+  {
+    id: 'w028',
+    jp: '<ruby>英語<rt>えいご</rt></ruby>',
+    kana: 'えいご',
+    ko: '영어',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>英語<rt>えいご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>せますか？',
+    example_ko: '영어를 할 수 있습니까?'
+  },
+  {
+    id: 'w029',
+    jp: '<ruby>運転<rt>うんてん</rt></ruby>',
+    kana: 'うんてん',
+    ko: '운전',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>運転<rt>うんてん</rt></ruby>ができますか？',
+    example_ko: '운전을 할 수 있습니까?'
+  },
+  {
+    id: 'w030',
+    jp: 'きっぷ',
+    kana: 'きっぷ',
+    ko: '승차권, 티켓',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'きっぷを<ruby>買<rt>か</rt></ruby>います。',
+    example_ko: '승차권을 삽니다.'
+  },
+  {
+    id: 'w031',
+    jp: '<ruby>出口<rt>でぐち</rt></ruby>',
+    kana: 'でぐち',
+    ko: '출구',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>出口<rt>でぐち</rt></ruby>はどこですか？',
+    example_ko: '출구는 어디입니까?'
+  },
+  {
+    id: 'w032',
+    jp: '<ruby>入口<rt>いりぐち</rt></ruby>',
+    kana: 'いりぐち',
+    ko: '입구',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>入口<rt>いりぐち</rt></ruby>はあちらです。',
+    example_ko: '입구는 저쪽입니다.'
+  },
+  {
+    id: 'w033',
+    jp: 'お<ruby>手洗<rt>てあら</rt></ruby>い',
+    kana: 'おてあらい',
+    ko: '화장실',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'お<ruby>手洗<rt>てあら</rt></ruby>いはどこですか？',
+    example_ko: '화장실은 어디입니까?'
+  },
+  {
+    id: 'w034',
+    jp: '<ruby>風邪薬<rt>かぜぐすり</rt></ruby>',
+    kana: 'かぜぐすり',
+    ko: '감기약',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>風邪薬<rt>かぜぐすり</rt></ruby>をください。',
+    example_ko: '감기약을 주세요.'
+  },
+  {
+    id: 'w035',
+    jp: '<ruby>電話番号<rt>でんわばんごう</rt></ruby>',
+    kana: 'でんわばんごう',
+    ko: '전화번호',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>電話番号<rt>でんわばんごう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。',
+    example_ko: '전화번호를 알려 주세요.'
+  },
+  {
+    id: 'w036',
+    jp: '<ruby>予約<rt>よやく</rt></ruby>',
+    kana: 'よやく',
+    ko: '예약',
+    tag: '명사/동사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>予約<rt>よやく</rt></ruby>をしたいのですが。',
+    example_ko: '예약을 하고 싶은데요.'
+  },
+  {
+    id: 'w037',
+    jp: '<ruby>来週<rt>らいしゅう</rt></ruby>',
+    kana: 'らいしゅう',
+    ko: '다음 주',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>来週<rt>らいしゅう</rt></ruby>また<ruby>来<rt>き</rt></ruby>ます。',
+    example_ko: '다음 주에 또 옵니다.'
+  },
+  {
+    id: 'w038',
+    jp: '<ruby>今週<rt>こんしゅう</rt></ruby>',
+    kana: 'こんしゅう',
+    ko: '이번 주',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>今週<rt>こんしゅう</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しいです。',
+    example_ko: '이번 주는 바쁩니다.'
+  },
+  {
+    id: 'w039',
+    jp: '<ruby>天気<rt>てんき</rt></ruby>',
+    kana: 'てんき',
+    ko: '날씨',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>天気<rt>てんき</rt></ruby>がいいですね。',
+    example_ko: '날씨가 좋네요.'
+  },
+  {
+    id: 'w040',
+    jp: '<ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>',
+    kana: 'のりば',
+    ko: '타는 곳',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'バスの<ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>はどこですか？',
+    example_ko: '버스 타는 곳은 어디입니까?'
+  },
+
+  // ===== 10-15과 단어 =====
+  {
+    id: 'w041',
+    jp: '<ruby>昼<rt>ひる</rt></ruby>ごはん',
+    kana: 'ひるごはん',
+    ko: '점심 식사',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べましょう。',
+    example_ko: '점심을 먹읍시다.'
+  },
+  {
+    id: 'w042',
+    jp: '<ruby>今回<rt>こんかい</rt></ruby>',
+    kana: 'こんかい',
+    ko: '이번',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>今回<rt>こんかい</rt></ruby>の<ruby>旅行<rt>りょこう</rt></ruby>は<ruby>楽<rt>たの</rt></ruby>しかった。',
+    example_ko: '이번 여행은 즐거웠습니다.'
+  },
+  {
+    id: 'w043',
+    jp: '<ruby>想像<rt>そうぞう</rt></ruby>',
+    kana: 'そうぞう',
+    ko: '상상',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>想像<rt>そうぞう</rt></ruby>していませんでした。',
+    example_ko: '상상하지 못했습니다.'
+  },
+  {
+    id: 'w044',
+    jp: '<ruby>図書館<rt>としょかん</rt></ruby>',
+    kana: 'としょかん',
+    ko: '도서관',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>図書館<rt>としょかん</rt></ruby>で<ruby>勉強<rt>べんきょう</rt></ruby>します。',
+    example_ko: '도서관에서 공부합니다.'
+  },
+  {
+    id: 'w045',
+    jp: '<ruby>塩<rt>しお</rt></ruby>',
+    kana: 'しお',
+    ko: '소금',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>塩<rt>しお</rt></ruby>をください。',
+    example_ko: '소금을 주세요.'
+  },
+  {
+    id: 'w046',
+    jp: '<ruby>日本製<rt>にほんせい</rt></ruby>',
+    kana: 'にほんせい',
+    ko: '일본제, 일본산',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>日本製<rt>にほんせい</rt></ruby>の<ruby>商品<rt>しょうひん</rt></ruby>です。',
+    example_ko: '일본산 상품입니다.'
+  },
+  {
+    id: 'w047',
+    jp: 'いやだ',
+    kana: 'いやだ',
+    ko: '싫다',
+    tag: '형용사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: 'それはいやです。',
+    example_ko: '그건 싫어요.'
+  },
+  {
+    id: 'w048',
+    jp: '<ruby>遊<rt>あそ</rt></ruby>ぶ',
+    kana: 'あそぶ',
+    ko: '놀다',
+    tag: '동사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>公園<rt>こうえん</rt></ruby>で<ruby>遊<rt>あそ</rt></ruby>びましょう。',
+    example_ko: '공원에서 놉시다.'
+  },
+  {
+    id: 'w049',
+    jp: '<ruby>分<rt>わ</rt></ruby>かる',
+    kana: 'わかる',
+    ko: '알다, 이해하다',
+    tag: '동사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>分<rt>わ</rt></ruby>かりました。',
+    example_ko: '알겠습니다.'
+  },
+  {
+    id: 'w050',
+    jp: '<ruby>勉強<rt>べんきょう</rt></ruby>する',
+    kana: 'べんきょうする',
+    ko: '공부하다',
+    tag: '동사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しています。',
+    example_ko: '일본어를 공부하고 있습니다.'
+  },
+  {
+    id: 'w051',
+    jp: '<ruby>公園<rt>こうえん</rt></ruby>',
+    kana: 'こうえん',
+    ko: '공원',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>公園<rt>こうえん</rt></ruby>を<ruby>散歩<rt>さんぽ</rt></ruby>します。',
+    example_ko: '공원을 산책합니다.'
+  },
+  {
+    id: 'w052',
+    jp: '<ruby>最高<rt>さいこう</rt></ruby>',
+    kana: 'さいこう',
+    ko: '최고',
+    tag: '명사/형용사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>最高<rt>さいこう</rt></ruby>です！',
+    example_ko: '최고입니다!'
+  },
+  {
+    id: 'w053',
+    jp: '<ruby>抹茶<rt>まっちゃ</rt></ruby>',
+    kana: 'まっちゃ',
+    ko: '말차, 녹차',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>抹茶<rt>まっちゃ</rt></ruby>アイスが<ruby>好<rt>す</rt></ruby>きです。',
+    example_ko: '말차 아이스크림을 좋아합니다.'
+  },
+  {
+    id: 'w054',
+    jp: '<ruby>荷物<rt>にもつ</rt></ruby>',
+    kana: 'にもつ',
+    ko: '짐',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>預<rt>あず</rt></ruby>けてもいいですか？',
+    example_ko: '짐을 맡겨도 됩니까?'
+  },
+  {
+    id: 'w055',
+    jp: 'チケット',
+    kana: 'ちけっと',
+    ko: '티켓',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: 'チケットを<ruby>買<rt>か</rt></ruby>いましょう。',
+    example_ko: '티켓을 삽시다.'
+  },
+  {
+    id: 'w056',
+    jp: 'パスワード',
+    kana: 'ぱすわーど',
+    ko: '비밀번호',
+    tag: '명사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: 'パスワードを<ruby>教<rt>おし</rt></ruby>えてください。',
+    example_ko: '비밀번호를 알려 주세요.'
+  },
+  {
+    id: 'w057',
+    jp: '<ruby>戻<rt>もど</rt></ruby>る',
+    kana: 'もどる',
+    ko: '돌아가다, 돌아오다',
+    tag: '동사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: 'ホテルに<ruby>戻<rt>もど</rt></ruby>りましょう。',
+    example_ko: '호텔로 돌아갑시다.'
+  },
+  {
+    id: 'w058',
+    jp: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>る',
+    kana: 'しゃしんをとる',
+    ko: '사진을 찍다',
+    tag: '동사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってもいいですか？',
+    example_ko: '사진을 찍어도 됩니까?'
+  },
+  {
+    id: 'w059',
+    jp: '<ruby>準備<rt>じゅんび</rt></ruby>する',
+    kana: 'じゅんびする',
+    ko: '준비하다',
+    tag: '동사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>準備<rt>じゅんび</rt></ruby>はできていますか？',
+    example_ko: '준비는 되어 있습니까?'
+  },
+  {
+    id: 'w060',
+    jp: '<ruby>絶対<rt>ぜったい</rt></ruby>',
+    kana: 'ぜったい',
+    ko: '절대',
+    tag: '부사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>忘<rt>わす</rt></ruby>れないでください。',
+    example_ko: '절대 잊지 마세요.'
+  },
+  {
+    id: 'w061',
+    jp: '<ruby>早<rt>はや</rt></ruby>く',
+    kana: 'はやく',
+    ko: '빨리',
+    tag: '부사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>早<rt>はや</rt></ruby>く<ruby>来<rt>き</rt></ruby>てください。',
+    example_ko: '빨리 오세요.'
+  },
+  {
+    id: 'w062',
+    jp: '<ruby>一番<rt>いちばん</rt></ruby>',
+    kana: 'いちばん',
+    ko: '가장, 제일',
+    tag: '부사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>一番<rt>いちばん</rt></ruby><ruby>好<rt>す</rt></ruby>きな<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>は何ですか？',
+    example_ko: '가장 좋아하는 음식은 무엇입니까?'
+  },
+  {
+    id: 'w063',
+    jp: '<ruby>一緒<rt>いっしょ</rt></ruby>に',
+    kana: 'いっしょに',
+    ko: '함께',
+    tag: '부사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: '<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょう。',
+    example_ko: '함께 갑시다.'
+  },
+  {
+    id: 'w064',
+    jp: 'もうすぐ',
+    kana: 'もうすぐ',
+    ko: '곧, 이제 곧',
+    tag: '부사',
+    level: '동작·회화',
+    source: '동작·회화',
+    example_jp: 'もうすぐ<ruby>着<rt>つ</rt></ruby>きます。',
+    example_ko: '곧 도착합니다.'
+  },
+
+  // ===== 16-20과 단어 =====
+  {
+    id: 'w065',
+    jp: '<ruby>怒<rt>おこ</rt></ruby>る',
+    kana: 'おこる',
+    ko: '화내다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>怒<rt>おこ</rt></ruby>らないでください。',
+    example_ko: '화내지 마세요.'
+  },
+  {
+    id: 'w066',
+    jp: '<ruby>始<rt>はじ</rt></ruby>まる',
+    kana: 'はじまる',
+    ko: '시작하다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>映画<rt>えいが</rt></ruby>はもう<ruby>始<rt>はじ</rt></ruby>まりました。',
+    example_ko: '영화는 이미 시작했습니다.'
+  },
+  {
+    id: 'w067',
+    jp: '<ruby>着<rt>つ</rt></ruby>く',
+    kana: 'つく',
+    ko: '도착하다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きました。',
+    example_ko: '역에 도착했습니다.'
+  },
+  {
+    id: 'w068',
+    jp: '<ruby>泣<rt>な</rt></ruby>く',
+    kana: 'なく',
+    ko: '울다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>泣<rt>な</rt></ruby>かないでください。',
+    example_ko: '울지 마세요.'
+  },
+  {
+    id: 'w069',
+    jp: '<ruby>勝<rt>か</rt></ruby>つ',
+    kana: 'かつ',
+    ko: '이기다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>勝<rt>か</rt></ruby>てると<ruby>思<rt>おも</rt></ruby>います。',
+    example_ko: '이길 수 있다고 생각합니다.'
+  },
+  {
+    id: 'w070',
+    jp: '<ruby>別<rt>わか</rt></ruby>れる',
+    kana: 'わかれる',
+    ko: '헤어지다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>別<rt>わか</rt></ruby>れてしまいました。',
+    example_ko: '헤어져버렸습니다.'
+  },
+  {
+    id: 'w071',
+    jp: '<ruby>忘<rt>わす</rt></ruby>れる',
+    kana: 'わすれる',
+    ko: '잊다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>忘<rt>わす</rt></ruby>れないでください。',
+    example_ko: '잊지 마세요.'
+  },
+  {
+    id: 'w072',
+    jp: '<ruby>続<rt>つづ</rt></ruby>ける',
+    kana: 'つづける',
+    ko: '계속하다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けます。',
+    example_ko: '공부를 계속합니다.'
+  },
+  {
+    id: 'w073',
+    jp: '<ruby>働<rt>はたら</rt></ruby>く',
+    kana: 'はたらく',
+    ko: '일하다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>毎日<rt>まいにち</rt></ruby><ruby>働<rt>はたら</rt></ruby>いています。',
+    example_ko: '매일 일하고 있습니다.'
+  },
+  {
+    id: 'w074',
+    jp: '<ruby>乗<rt>の</rt></ruby>り<ruby>換<rt>か</rt></ruby>える',
+    kana: 'のりかえる',
+    ko: '환승하다',
+    tag: '동사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>渋谷<rt>しぶや</rt></ruby>で<ruby>乗<rt>の</rt></ruby>り<ruby>換<rt>か</rt></ruby>えます。',
+    example_ko: '시부야에서 환승합니다.'
+  },
+  {
+    id: 'w075',
+    jp: '<ruby>地下鉄<rt>ちかてつ</rt></ruby>',
+    kana: 'ちかてつ',
+    ko: '지하철',
+    tag: '명사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>地下鉄<rt>ちかてつ</rt></ruby>で<ruby>行<rt>い</rt></ruby>きます。',
+    example_ko: '지하철로 갑니다.'
+  },
+  {
+    id: 'w076',
+    jp: '<ruby>渋滞<rt>じゅうたい</rt></ruby>',
+    kana: 'じゅうたい',
+    ko: '교통 정체',
+    tag: '명사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>渋滞<rt>じゅうたい</rt></ruby>がひどいです。',
+    example_ko: '정체가 심합니다.'
+  },
+  {
+    id: 'w077',
+    jp: '<ruby>案内<rt>あんない</rt></ruby>',
+    kana: 'あんない',
+    ko: '안내',
+    tag: '명사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>案内<rt>あんない</rt></ruby>してください。',
+    example_ko: '안내해 주세요.'
+  },
+  {
+    id: 'w078',
+    jp: '<ruby>紅葉<rt>もみじ</rt></ruby>',
+    kana: 'もみじ',
+    ko: '단풍',
+    tag: '명사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>紅葉<rt>もみじ</rt></ruby>がきれいです。',
+    example_ko: '단풍이 아름답습니다.'
+  },
+  {
+    id: 'w079',
+    jp: '<ruby>飛行機<rt>ひこうき</rt></ruby>',
+    kana: 'ひこうき',
+    ko: '비행기',
+    tag: '명사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>飛行機<rt>ひこうき</rt></ruby>で<ruby>行<rt>い</rt></ruby>きます。',
+    example_ko: '비행기로 갑니다.'
+  },
+  {
+    id: 'w080',
+    jp: '<ruby>説明<rt>せつめい</rt></ruby>',
+    kana: 'せつめい',
+    ko: '설명',
+    tag: '명사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>説明<rt>せつめい</rt></ruby>してください。',
+    example_ko: '설명해 주세요.'
+  },
+  {
+    id: 'w081',
+    jp: '<ruby>多分<rt>たぶん</rt></ruby>',
+    kana: 'たぶん',
+    ko: '아마',
+    tag: '부사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>多分<rt>たぶん</rt></ruby>いると<ruby>思<rt>おも</rt></ruby>います。',
+    example_ko: '아마 있을 거라고 생각합니다.'
+  },
+  {
+    id: 'w082',
+    jp: '<ruby>分<rt>わ</rt></ruby>かりやすい',
+    kana: 'わかりやすい',
+    ko: '알기 쉽다',
+    tag: '형용사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>説明<rt>せつめい</rt></ruby>が<ruby>分<rt>わ</rt></ruby>かりやすいです。',
+    example_ko: '설명이 알기 쉽습니다.'
+  },
+  {
+    id: 'w083',
+    jp: '<ruby>食<rt>た</rt></ruby>べやすい',
+    kana: 'たべやすい',
+    ko: '먹기 쉽다',
+    tag: '형용사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>食<rt>た</rt></ruby>べやすい<ruby>料理<rt>りょうり</rt></ruby>です。',
+    example_ko: '먹기 쉬운 요리입니다.'
+  },
+  {
+    id: 'w084',
+    jp: '<ruby>初心者<rt>しょしんしゃ</rt></ruby>',
+    kana: 'しょしんしゃ',
+    ko: '초보자',
+    tag: '명사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>初心者<rt>しょしんしゃ</rt></ruby>でも<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。',
+    example_ko: '초보자도 괜찮습니다.'
+  },
+  {
+    id: 'w085',
+    jp: '<ruby>毎晩<rt>まいばん</rt></ruby>',
+    kana: 'まいばん',
+    ko: '매일 밤',
+    tag: '명사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>毎晩<rt>まいばん</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>しています。',
+    example_ko: '매일 밤 공부하고 있습니다.'
+  },
+  {
+    id: 'w086',
+    jp: '<ruby>一人<rt>ひとり</rt></ruby>で',
+    kana: 'ひとりで',
+    ko: '혼자서',
+    tag: '부사',
+    level: '의견·표현',
+    source: '의견·표현',
+    example_jp: '<ruby>一人<rt>ひとり</rt></ruby>で<ruby>旅行<rt>りょこう</rt></ruby>しました。',
+    example_ko: '혼자서 여행했습니다.'
+  },
+
+  // ===== 여행 단어 =====
+  {
+    id: 'w087',
+    jp: '<ruby>観光<rt>かんこう</rt></ruby>',
+    kana: 'かんこう',
+    ko: '관광',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>観光<rt>かんこう</rt></ruby>に<ruby>来<rt>き</rt></ruby>ました。',
+    example_ko: '관광하러 왔습니다.'
+  },
+  {
+    id: 'w088',
+    jp: '<ruby>旅行<rt>りょこう</rt></ruby>',
+    kana: 'りょこう',
+    ko: '여행',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>日本<rt>にほん</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>は<ruby>楽<rt>たの</rt></ruby>しかった。',
+    example_ko: '일본 여행은 즐거웠습니다.'
+  },
+  {
+    id: 'w089',
+    jp: '<ruby>宿泊先<rt>しゅくはくさき</rt></ruby>',
+    kana: 'しゅくはくさき',
+    ko: '숙소',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>宿泊先<rt>しゅくはくさき</rt></ruby>はどこですか？',
+    example_ko: '숙소는 어디입니까?'
+  },
+  {
+    id: 'w090',
+    jp: '<ruby>滞在<rt>たいざい</rt></ruby>',
+    kana: 'たいざい',
+    ko: '체재, 머무름',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>滞在<rt>たいざい</rt></ruby>は<ruby>何日<rt>なんにち</rt></ruby>ですか？',
+    example_ko: '체재는 며칠입니까?'
+  },
+  {
+    id: 'w091',
+    jp: 'パスポート',
+    kana: 'ぱすぽーと',
+    ko: '여권',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: 'パスポートを<ruby>見<rt>み</rt></ruby>せてください。',
+    example_ko: '여권을 보여 주세요.'
+  },
+  {
+    id: 'w092',
+    jp: '<ruby>免税<rt>めんぜい</rt></ruby>',
+    kana: 'めんぜい',
+    ko: '면세',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>免税<rt>めんぜい</rt></ruby>できますか？',
+    example_ko: '면세할 수 있습니까?'
+  },
+  {
+    id: 'w093',
+    jp: '<ruby>返品<rt>へんぴん</rt></ruby>',
+    kana: 'へんぴん',
+    ko: '반품',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>返品<rt>へんぴん</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします。',
+    example_ko: '반품을 부탁합니다.'
+  },
+  {
+    id: 'w094',
+    jp: '<ruby>交換<rt>こうかん</rt></ruby>',
+    kana: 'こうかん',
+    ko: '교환',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>交換<rt>こうかん</rt></ruby>できますか？',
+    example_ko: '교환할 수 있습니까?'
+  },
+  {
+    id: 'w095',
+    jp: '<ruby>試着<rt>しちゃく</rt></ruby>',
+    kana: 'しちゃく',
+    ko: '시착, 옷 입어보기',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>試着<rt>しちゃく</rt></ruby>できますか？',
+    example_ko: '입어볼 수 있습니까?'
+  },
+  {
+    id: 'w096',
+    jp: '<ruby>在庫<rt>ざいこ</rt></ruby>',
+    kana: 'ざいこ',
+    ko: '재고',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>在庫<rt>ざいこ</rt></ruby>はありますか？',
+    example_ko: '재고가 있습니까?'
+  },
+  {
+    id: 'w097',
+    jp: '<ruby>落<rt>お</rt></ruby>とし<ruby>物<rt>もの</rt></ruby>',
+    kana: 'おとしもの',
+    ko: '분실물',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>落<rt>お</rt></ruby>とし<ruby>物<rt>もの</rt></ruby>センターはどこですか？',
+    example_ko: '분실물 센터는 어디입니까?'
+  },
+  {
+    id: 'w098',
+    jp: '<ruby>定期券<rt>ていきけん</rt></ruby>',
+    kana: 'ていきけん',
+    ko: '정기권',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>定期券<rt>ていきけん</rt></ruby>を<ruby>買<rt>か</rt></ruby>いたいです。',
+    example_ko: '정기권을 사고 싶습니다.'
+  },
+  {
+    id: 'w099',
+    jp: '<ruby>成田空港<rt>なりたくうこう</rt></ruby>',
+    kana: 'なりたくうこう',
+    ko: '나리타 공항',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>成田空港<rt>なりたくうこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。',
+    example_ko: '나리타 공항에 갑니다.'
+  },
+  {
+    id: 'w100',
+    jp: '<ruby>有料道路<rt>ゆうりょうどうろ</rt></ruby>',
+    kana: 'ゆうりょうどうろ',
+    ko: '유료도로',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>有料道路<rt>ゆうりょうどうろ</rt></ruby>で<ruby>行<rt>い</rt></ruby>きますか？',
+    example_ko: '유료도로로 갈까요?'
+  },
+  {
+    id: 'w101',
+    jp: '<ruby>渋谷<rt>しぶや</rt></ruby>',
+    kana: 'しぶや',
+    ko: '시부야',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>渋谷<rt>しぶや</rt></ruby>で<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>しました。',
+    example_ko: '시부야에서 쇼핑했습니다.'
+  },
+  {
+    id: 'w102',
+    jp: '<ruby>浅草<rt>あさくさ</rt></ruby>',
+    kana: 'あさくさ',
+    ko: '아사쿠사',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>浅草<rt>あさくさ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたいです。',
+    example_ko: '아사쿠사에 가고 싶습니다.'
+  },
+  {
+    id: 'w103',
+    jp: '<ruby>銀座<rt>ぎんざ</rt></ruby>',
+    kana: 'ぎんざ',
+    ko: '긴자',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>銀座<rt>ぎんざ</rt></ruby>のホテルです。',
+    example_ko: '긴자의 호텔입니다.'
+  },
+  {
+    id: 'w104',
+    jp: '<ruby>袋<rt>ふくろ</rt></ruby>',
+    kana: 'ふくろ',
+    ko: '봉투',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>袋<rt>ふくろ</rt></ruby>はいりますか？',
+    example_ko: '봉투는 필요하십니까?'
+  },
+  {
+    id: 'w105',
+    jp: 'ポイントカード',
+    kana: 'ぽいんとかーど',
+    ko: '포인트 카드',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: 'ポイントカードはお<ruby>持<rt>も</rt></ruby>ちですか？',
+    example_ko: '포인트 카드 있으십니까?'
+  },
+  {
+    id: 'w106',
+    jp: 'クーポン',
+    kana: 'くーぽん',
+    ko: '쿠폰',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: 'クーポンを<ruby>使<rt>つか</rt></ruby>えますか？',
+    example_ko: '쿠폰을 사용할 수 있습니까?'
+  },
+  {
+    id: 'w107',
+    jp: 'レシート',
+    kana: 'れしーと',
+    ko: '영수증',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: 'レシートをください。',
+    example_ko: '영수증을 주세요.'
+  },
+  {
+    id: 'w108',
+    jp: '<ruby>合計<rt>ごうけい</rt></ruby>',
+    kana: 'ごうけい',
+    ko: '합계',
+    tag: '명사',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>合計<rt>ごうけい</rt></ruby>はいくらですか？',
+    example_ko: '합계는 얼마입니까?'
+  },
+  {
+    id: 'w109',
+    jp: '<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください',
+    kana: 'しょうしょうおまちください',
+    ko: '잠시만 기다려 주세요',
+    tag: '여행',
+    level: '여행',
+    source: '여행',
+    example_jp: '<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください。',
+    example_ko: '잠시만 기다려 주세요.'
+  },
+  {
+    id: 'w110',
+    jp: 'いらっしゃいませ',
+    kana: 'いらっしゃいませ',
+    ko: '어서 오세요',
+    tag: '여행',
+    level: '여행',
+    source: '여행',
+    example_jp: 'いらっしゃいませ。ご<ruby>注文<rt>ちゅうもん</rt></ruby>はお<ruby>決<rt>き</rt></ruby>まりですか？',
+    example_ko: '어서 오세요. 주문은 정하셨습니까?'
+  },  ,
+  // ===== 기초어휘 추가 (복습 자료) =====
+  {
+    id: 'w111',
+    jp: 'すき<ruby>焼<rt>や</rt></ruby>き',
+    kana: 'すきやき',
+    ko: '스키야키 (일본식 전골)',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'すき<ruby>焼<rt>や</rt></ruby>きは<ruby>日本<rt>にほん</rt></ruby>の<ruby>代表的<rt>だいひょうてき</rt></ruby>な<ruby>料理<rt>りょうり</rt></ruby>です。',
+    example_ko: '스키야키는 일본의 대표적인 요리입니다.'
+  },
+  {
+    id: 'w112',
+    jp: '<ruby>焼肉<rt>やきにく</rt></ruby>',
+    kana: 'やきにく',
+    ko: '야키니쿠, 불고기',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>焼肉<rt>やきにく</rt></ruby>を<ruby>食<rt>た</rt></ruby>べに<ruby>行<rt>い</rt></ruby>きましょう！',
+    example_ko: '야키니쿠 먹으러 갑시다!'
+  },
+  {
+    id: 'w113',
+    jp: '<ruby>卵<rt>たまご</rt></ruby>',
+    kana: 'たまご',
+    ko: '계란',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>卵<rt>たまご</rt></ruby>を<ruby>割<rt>わ</rt></ruby>ってください。',
+    example_ko: '계란을 깨주세요.'
+  },
+  {
+    id: 'w114',
+    jp: '<ruby>楽<rt>たの</rt></ruby>しい',
+    kana: 'たのしい',
+    ko: '즐겁다, 신나다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>旅行<rt>りょこう</rt></ruby>はとても<ruby>楽<rt>たの</rt></ruby>しかったです。',
+    example_ko: '여행은 매우 즐거웠어요.'
+  },
+  {
+    id: 'w115',
+    jp: '<ruby>痛<rt>いた</rt></ruby>い',
+    kana: 'いたい',
+    ko: '아프다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>いです。',
+    example_ko: '머리가 아파요.'
+  },
+  {
+    id: 'w116',
+    jp: '<ruby>美<rt>うつく</rt></ruby>しい',
+    kana: 'うつくしい',
+    ko: '아름답다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>桜<rt>さくら</rt></ruby>が<ruby>美<rt>うつく</rt></ruby>しいですね。',
+    example_ko: '벚꽃이 아름답네요.'
+  },
+  {
+    id: 'w117',
+    jp: '<ruby>羨<rt>うらや</rt></ruby>ましい',
+    kana: 'うらやましい',
+    ko: '부럽다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>せるなんて<ruby>羨<rt>うらや</rt></ruby>ましい。',
+    example_ko: '일본어를 말할 수 있다니 부럽다.'
+  },
+  {
+    id: 'w118',
+    jp: '<ruby>優<rt>やさ</rt></ruby>しい',
+    kana: 'やさしい',
+    ko: '상냥하다, 친절하다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>彼<rt>かれ</rt></ruby>はとても<ruby>優<rt>やさ</rt></ruby>しいです。',
+    example_ko: '그는 매우 상냥합니다.'
+  },
+  {
+    id: 'w119',
+    jp: '<ruby>懐<rt>なつ</rt></ruby>かしい',
+    kana: 'なつかしい',
+    ko: '그립다, 아련하다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>昔<rt>むかし</rt></ruby>の<ruby>歌<rt>うた</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>懐<rt>なつ</rt></ruby>かしかったです。',
+    example_ko: '옛날 노래를 듣고 그리웠습니다.'
+  },
+  {
+    id: 'w120',
+    jp: '<ruby>残念<rt>ざんねん</rt></ruby>',
+    kana: 'ざんねん',
+    ko: '아쉽다, 안타깝다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>行<rt>い</rt></ruby>けなくて<ruby>残念<rt>ざんねん</rt></ruby>です。',
+    example_ko: '갈 수 없어서 아쉽습니다.'
+  },
+  {
+    id: 'w121',
+    jp: '<ruby>暖<rt>あたた</rt></ruby>かい',
+    kana: 'あたたかい',
+    ko: '따뜻하다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>暖<rt>あたた</rt></ruby>かいですね。',
+    example_ko: '오늘은 따뜻하네요.'
+  },
+  {
+    id: 'w122',
+    jp: '<ruby>大切<rt>たいせつ</rt></ruby>だ',
+    kana: 'たいせつだ',
+    ko: '소중하다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>家族<rt>かぞく</rt></ruby>はとても<ruby>大切<rt>たいせつ</rt></ruby>です。',
+    example_ko: '가족은 매우 소중합니다.'
+  },
+  {
+    id: 'w123',
+    jp: '<ruby>辛<rt>から</rt></ruby>い',
+    kana: 'からい',
+    ko: '맵다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'このカレーは<ruby>辛<rt>から</rt></ruby>いです。',
+    example_ko: '이 카레는 매워요.'
+  },
+  {
+    id: 'w124',
+    jp: '<ruby>甘<rt>あま</rt></ruby>い',
+    kana: 'あまい',
+    ko: '달다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: 'このケーキは<ruby>甘<rt>あま</rt></ruby>くておいしいです。',
+    example_ko: '이 케이크는 달고 맛있어요.'
+  },
+  {
+    id: 'w125',
+    jp: '<ruby>苦手<rt>にがて</rt></ruby>だ',
+    kana: 'にがてだ',
+    ko: '못하다, 싫어하다, 꺼리다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>虫<rt>むし</rt></ruby>は<ruby>苦手<rt>にがて</rt></ruby>です。',
+    example_ko: '벌레는 질색이에요.'
+  },
+  {
+    id: 'w126',
+    jp: '<ruby>趣味<rt>しゅみ</rt></ruby>',
+    kana: 'しゅみ',
+    ko: '취미',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか？',
+    example_ko: '취미는 무엇인가요?'
+  },
+  {
+    id: 'w127',
+    jp: '<ruby>運動<rt>うんどう</rt></ruby>',
+    kana: 'うんどう',
+    ko: '운동',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>毎日<rt>まいにち</rt></ruby><ruby>運動<rt>うんどう</rt></ruby>しています。',
+    example_ko: '매일 운동하고 있습니다.'
+  },
+  {
+    id: 'w128',
+    jp: '<ruby>体調<rt>たいちょう</rt></ruby>',
+    kana: 'たいちょう',
+    ko: '컨디션, 몸 상태',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>体調<rt>たいちょう</rt></ruby>はどうですか？',
+    example_ko: '컨디션은 어때요?'
+  },
+  {
+    id: 'w129',
+    jp: '<ruby>花火<rt>はなび</rt></ruby>',
+    kana: 'はなび',
+    ko: '불꽃놀이',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>花火大会<rt>はなびたいかい</rt></ruby>に<ruby>行<rt>い</rt></ruby>きませんか？',
+    example_ko: '불꽃놀이 대회에 가지 않을래요?'
+  },
+  {
+    id: 'w130',
+    jp: '<ruby>屋台<rt>やたい</rt></ruby>',
+    kana: 'やたい',
+    ko: '포장마차, 노점',
+    tag: '명사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>祭<rt>まつ</rt></ruby>りの<ruby>屋台<rt>やたい</rt></ruby>は<ruby>楽<rt>たの</rt></ruby>しいですね。',
+    example_ko: '축제의 노점은 즐겁네요.'
+  },
+  {
+    id: 'w131',
+    jp: '<ruby>上手<rt>じょうず</rt></ruby>だ',
+    kana: 'じょうずだ',
+    ko: '잘하다 (실력이 좋다)',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>料理<rt>りょうり</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>ですね！',
+    example_ko: '요리를 잘하시네요!'
+  },
+  {
+    id: 'w132',
+    jp: '<ruby>得意<rt>とくい</rt></ruby>だ',
+    kana: 'とくいだ',
+    ko: '잘하다 (자신 있다)',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>歌<rt>うた</rt></ruby>が<ruby>得意<rt>とくい</rt></ruby>です。',
+    example_ko: '노래를 잘합니다 (자신 있어요).'
+  },
+  {
+    id: 'w133',
+    jp: '<ruby>複雑<rt>ふくざつ</rt></ruby>',
+    kana: 'ふくざつ',
+    ko: '복잡하다',
+    tag: '형용사',
+    level: '기초어휘',
+    source: '기초어휘',
+    example_jp: '<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>電車<rt>でんしゃ</rt></ruby>は<ruby>複雑<rt>ふくざつ</rt></ruby>ですね。',
+    example_ko: '도쿄의 전철은 복잡하네요.'
+  },
+  // ===== 드라마 어휘 =====
+  {
+    id: 'w134',
+    jp: 'もしかして',
+    kana: 'もしかして',
+    ko: '혹시, 설마 (조심스러운 추측)',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: 'もしかして、<ruby>怒<rt>おこ</rt></ruby>ってる？',
+    example_ko: '설마 화난 거야?'
+  },
+  {
+    id: 'w135',
+    jp: 'それにしても',
+    kana: 'それにしても',
+    ko: '그렇다고 해도, 그건 그렇고',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: 'それにしても、すごいですね。',
+    example_ko: '그건 그렇고, 대단하네요.'
+  },
+  {
+    id: 'w136',
+    jp: 'やっと',
+    kana: 'やっと',
+    ko: '드디어, 겨우',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: 'やっと<ruby>会<rt>あ</rt></ruby>えましたね！',
+    example_ko: '드디어 만났네요!'
+  },
+  {
+    id: 'w137',
+    jp: 'どんどん',
+    kana: 'どんどん',
+    ko: '점점, 차차',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: '<ruby>日本語<rt>にほんご</rt></ruby>がどんどん<ruby>上手<rt>じょうず</rt></ruby>になっています。',
+    example_ko: '일본어가 점점 늘고 있어요.'
+  },
+  {
+    id: 'w138',
+    jp: 'ずっと',
+    kana: 'ずっと',
+    ko: '계속, 쭉, 훨씬',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: 'ずっと<ruby>待<rt>ま</rt></ruby>っていました。',
+    example_ko: '계속 기다리고 있었어요.'
+  },
+  {
+    id: 'w139',
+    jp: 'まず',
+    kana: 'まず',
+    ko: '먼저, 우선',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: 'まず<ruby>自己紹介<rt>じこしょうかい</rt></ruby>をします。',
+    example_ko: '먼저 자기소개를 합니다.'
+  },
+  {
+    id: 'w140',
+    jp: 'わざわざ',
+    kana: 'わざわざ',
+    ko: '일부러, 굳이, 번거롭게',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: 'わざわざ<ruby>来<rt>き</rt></ruby>てくれてありがとう。',
+    example_ko: '일부러 와줘서 고마워.'
+  },
+  {
+    id: 'w141',
+    jp: 'ちゃんと',
+    kana: 'ちゃんと',
+    ko: '제대로, 잘, 확실히',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: 'ちゃんと<ruby>食<rt>た</rt></ruby>べましたか？',
+    example_ko: '제대로 먹었어요?'
+  },
+  {
+    id: 'w142',
+    jp: '<ruby>何だかんだ<rt>なんだかんだ</rt></ruby>',
+    kana: 'なんだかんだ',
+    ko: '이러니저러니, 결국엔',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: '<ruby>何だかんだ<rt>なんだかんだ</rt></ruby><ruby>楽<rt>たの</rt></ruby>しい<ruby>人生<rt>じんせい</rt></ruby>だ。',
+    example_ko: '이러니저러니해도 즐거운 인생이다.'
+  },
+  {
+    id: 'w143',
+    jp: '<ruby>今頃<rt>いまごろ</rt></ruby>',
+    kana: 'いまごろ',
+    ko: '지금쯤, 이맘때',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: '<ruby>今頃<rt>いまごろ</rt></ruby>どこにいるんだろう？',
+    example_ko: '지금쯤 어디 있을까?'
+  },
+  {
+    id: 'w144',
+    jp: '<ruby>近頃<rt>ちかごろ</rt></ruby>',
+    kana: 'ちかごろ',
+    ko: '요즘, 최근',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: '<ruby>近頃<rt>ちかごろ</rt></ruby>はどうですか？',
+    example_ko: '요즘은 어떻게 지내요?'
+  },
+  {
+    id: 'w145',
+    jp: '<ruby>今朝<rt>けさ</rt></ruby>',
+    kana: 'けさ',
+    ko: '오늘 아침',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>今朝<rt>けさ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>を<ruby>食<rt>た</rt></ruby>べましたか？',
+    example_ko: '오늘 아침은 무엇을 먹었어요?'
+  },
+  {
+    id: 'w146',
+    jp: 'おかず',
+    kana: 'おかず',
+    ko: '반찬',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>今日<rt>きょう</rt></ruby>のおかずは<ruby>何<rt>なに</rt></ruby>ですか？',
+    example_ko: '오늘 반찬은 뭐예요?'
+  },
+  {
+    id: 'w147',
+    jp: '<ruby>定番<rt>ていばん</rt></ruby>',
+    kana: 'ていばん',
+    ko: '단골메뉴, 정석, 스테디셀러',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>唐揚<rt>からあ</rt></ruby>げはお<ruby>弁当<rt>べんとう</rt></ruby>の<ruby>定番<rt>ていばん</rt></ruby>ですね。',
+    example_ko: '가라아게는 도시락의 단골이네요.'
+  },
+  {
+    id: 'w148',
+    jp: '<ruby>日替<rt>ひが</rt></ruby>わり',
+    kana: 'ひがわり',
+    ko: '오늘의 메뉴 (매일 바뀜)',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>日替<rt>ひが</rt></ruby>わりランチをください。',
+    example_ko: '오늘의 점심 정식을 주세요.'
+  },
+  {
+    id: 'w149',
+    jp: '<ruby>朝食<rt>ちょうしょく</rt></ruby>',
+    kana: 'ちょうしょく',
+    ko: '아침, 조식',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>朝食<rt>ちょうしょく</rt></ruby>は<ruby>何<rt>なに</rt></ruby>を<ruby>食<rt>た</rt></ruby>べましたか？',
+    example_ko: '아침은 무엇을 먹었어요?'
+  },
+  {
+    id: 'w150',
+    jp: '<ruby>種類<rt>しゅるい</rt></ruby>',
+    kana: 'しゅるい',
+    ko: '종류',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: 'どんな<ruby>種類<rt>しゅるい</rt></ruby>がありますか？',
+    example_ko: '어떤 종류가 있어요?'
+  },
+  {
+    id: 'w151',
+    jp: '<ruby>感動<rt>かんどう</rt></ruby>',
+    kana: 'かんどう',
+    ko: '감동',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>て<ruby>感動<rt>かんどう</rt></ruby>しました。',
+    example_ko: '영화를 보고 감동받았습니다.'
+  },
+  {
+    id: 'w152',
+    jp: '<ruby>応援<rt>おうえん</rt></ruby>',
+    kana: 'おうえん',
+    ko: '응원',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>応援<rt>おうえん</rt></ruby>してくれてありがとう！',
+    example_ko: '응원해줘서 고마워!'
+  },
+  {
+    id: 'w153',
+    jp: '<ruby>体力<rt>たいりょく</rt></ruby>',
+    kana: 'たいりょく',
+    ko: '체력',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>体力<rt>たいりょく</rt></ruby>をつけないといけませんね。',
+    example_ko: '체력을 길러야 하네요.'
+  },
+  {
+    id: 'w154',
+    jp: '<ruby>顔合<rt>かおあ</rt></ruby>わせ',
+    kana: 'かおあわせ',
+    ko: '상견례, 첫 만남',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>顔合<rt>かおあ</rt></ruby>わせの<ruby>日程<rt>にってい</rt></ruby>はいつですか？',
+    example_ko: '상견례 일정은 언제예요?'
+  },
+  {
+    id: 'w155',
+    jp: '<ruby>言<rt>い</rt></ruby>い<ruby>訳<rt>わけ</rt></ruby>',
+    kana: 'いいわけ',
+    ko: '변명, 핑계',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>言<rt>い</rt></ruby>い<ruby>訳<rt>わけ</rt></ruby>はいいから、ちゃんとやって。',
+    example_ko: '핑계는 됐으니까 제대로 해.'
+  },
+  {
+    id: 'w156',
+    jp: '<ruby>家事<rt>かじ</rt></ruby>',
+    kana: 'かじ',
+    ko: '집안일',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>家事<rt>かじ</rt></ruby>を<ruby>手伝<rt>てつだ</rt></ruby>ってもらえますか？',
+    example_ko: '집안일을 도와줄 수 있어요?'
+  },
+  {
+    id: 'w157',
+    jp: '<ruby>義理<rt>ぎり</rt></ruby>',
+    kana: 'ぎり',
+    ko: '의리, 도리',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>義理<rt>ぎり</rt></ruby>があるから<ruby>断<rt>ことわ</rt></ruby>れない。',
+    example_ko: '의리가 있어서 거절할 수 없어.'
+  },
+  {
+    id: 'w158',
+    jp: '<ruby>失礼<rt>しつれい</rt></ruby>',
+    kana: 'しつれい',
+    ko: '실례, 무례',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>失礼<rt>しつれい</rt></ruby>なことを<ruby>言<rt>い</rt></ruby>ってすみません。',
+    example_ko: '실례되는 말을 해서 죄송합니다.'
+  },
+  {
+    id: 'w159',
+    jp: '<ruby>飾<rt>かざ</rt></ruby>り',
+    kana: 'かざり',
+    ko: '장식',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>飾<rt>かざ</rt></ruby>りみたいなもんだから<ruby>気<rt>き</rt></ruby>にしないで。',
+    example_ko: '장식 같은 거니까 신경 쓰지 마.'
+  },
+  {
+    id: 'w160',
+    jp: '<ruby>幼馴染<rt>おさななじみ</rt></ruby>',
+    kana: 'おさななじみ',
+    ko: '소꿉친구',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>幼馴染<rt>おさななじみ</rt></ruby>と<ruby>再会<rt>さいかい</rt></ruby>しました。',
+    example_ko: '소꿉친구와 재회했습니다.'
+  },
+  {
+    id: 'w161',
+    jp: 'お<ruby>見舞<rt>みま</rt></ruby>い',
+    kana: 'おみまい',
+    ko: '병문안',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: 'お<ruby>見舞<rt>みま</rt></ruby>いに<ruby>行<rt>い</rt></ruby>きたいです。',
+    example_ko: '병문안 가고 싶어요.'
+  },
+  {
+    id: 'w162',
+    jp: '<ruby>貯金<rt>ちょきん</rt></ruby>',
+    kana: 'ちょきん',
+    ko: '저금, 저축',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>貯金<rt>ちょきん</rt></ruby>が<ruby>全然<rt>ぜんぜん</rt></ruby>ないです。',
+    example_ko: '저금이 전혀 없어요.'
+  },
+  {
+    id: 'w163',
+    jp: '<ruby>海外<rt>かいがい</rt></ruby>',
+    kana: 'かいがい',
+    ko: '해외',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>海外<rt>かいがい</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたいです。',
+    example_ko: '해외여행에 가고 싶어요.'
+  },
+  {
+    id: 'w164',
+    jp: '<ruby>旨味<rt>うまみ</rt></ruby>',
+    kana: 'うまみ',
+    ko: '감칠맛',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>昆布<rt>こんぶ</rt></ruby>の<ruby>旨味<rt>うまみ</rt></ruby>が<ruby>効<rt>き</rt></ruby>いています。',
+    example_ko: '다시마의 감칠맛이 배어 있어요.'
+  },
+  {
+    id: 'w165',
+    jp: '<ruby>別人<rt>べつじん</rt></ruby>',
+    kana: 'べつじん',
+    ko: '딴 사람, 완전히 다른 사람',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>久<rt>ひさ</rt></ruby>しぶりに<ruby>会<rt>あ</rt></ruby>ったら<ruby>別人<rt>べつじん</rt></ruby>みたいだった。',
+    example_ko: '오랜만에 만났더니 딴 사람 같았어.'
+  },
+  {
+    id: 'w166',
+    jp: '<ruby>普通<rt>ふつう</rt></ruby>',
+    kana: 'ふつう',
+    ko: '평범하게, 보통, 일반적으로',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: '<ruby>普通<rt>ふつう</rt></ruby>にやればできます。',
+    example_ko: '평범하게 하면 할 수 있어요.'
+  },
+  {
+    id: 'w167',
+    jp: '<ruby>意外<rt>いがい</rt></ruby>',
+    kana: 'いがい',
+    ko: '의외로, 뜻밖에',
+    tag: '부사',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: '<ruby>意外<rt>いがい</rt></ruby>と<ruby>簡単<rt>かんたん</rt></ruby>でした。',
+    example_ko: '의외로 간단했습니다.'
+  },
+  {
+    id: 'w168',
+    jp: '<ruby>濃<rt>こ</rt></ruby>い',
+    kana: 'こい',
+    ko: '진하다 (맛·색깔 등)',
+    tag: '형용사',
+    level: '형용사',
+    source: '형용사',
+    example_jp: '<ruby>濃<rt>こ</rt></ruby>いめにしてください。',
+    example_ko: '진한 편으로 해주세요.'
+  },
+  {
+    id: 'w169',
+    jp: '<ruby>硬<rt>かた</rt></ruby>い',
+    kana: 'かたい',
+    ko: '딱딱하다, 단단하다',
+    tag: '형용사',
+    level: '형용사',
+    source: '형용사',
+    example_jp: '<ruby>麺硬<rt>めんかた</rt></ruby>めでお<ruby>願<rt>ねが</rt></ruby>いします。',
+    example_ko: '면 딱딱하게 해주세요.'
+  },
+  {
+    id: 'w170',
+    jp: '<ruby>珍<rt>めずら</rt></ruby>しい',
+    kana: 'めずらしい',
+    ko: '드물다, 진귀하다, 평소와 다르다',
+    tag: '형용사',
+    level: '형용사',
+    source: '형용사',
+    example_jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>珍<rt>めずら</rt></ruby>しく<ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きた。',
+    example_ko: '오늘은 평소와 달리 일찍 일어났다.'
+  },
+  {
+    id: 'w171',
+    jp: '<ruby>丈夫<rt>じょうぶ</rt></ruby>だ',
+    kana: 'じょうぶだ',
+    ko: '튼튼하다, 건강하다',
+    tag: '형용사',
+    level: '형용사',
+    source: '형용사',
+    example_jp: '<ruby>丈夫<rt>じょうぶ</rt></ruby>な<ruby>歯<rt>は</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていますね。',
+    example_ko: '튼튼한 이를 갖고 있네요.'
+  },
+  {
+    id: 'w172',
+    jp: '<ruby>危<rt>あぶ</rt></ruby>ない',
+    kana: 'あぶない',
+    ko: '위험하다',
+    tag: '형용사',
+    level: '형용사',
+    source: '형용사',
+    example_jp: '<ruby>危<rt>あぶ</rt></ruby>ない！<ruby>気<rt>き</rt></ruby>をつけて！',
+    example_ko: '위험해! 조심해!'
+  },
+  {
+    id: 'w173',
+    jp: 'ちょうどいい',
+    kana: 'ちょうどいい',
+    ko: '딱 좋다, 알맞다',
+    tag: '표현',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: '<ruby>甘<rt>あま</rt></ruby>さがちょうどいいですね。',
+    example_ko: '단맛이 딱 좋네요.'
+  },
+  {
+    id: 'w174',
+    jp: 'しょうがない',
+    kana: 'しょうがない',
+    ko: '어쩔 수 없다, 방법이 없다',
+    tag: '표현',
+    level: '부사·표현',
+    source: '부사·표현',
+    example_jp: 'しょうがないから<ruby>行<rt>い</rt></ruby>くか。',
+    example_ko: '어쩔 수 없으니까 가자.'
+  },
+  {
+    id: 'w175',
+    jp: '<ruby>面倒<rt>めんどう</rt></ruby>くさい',
+    kana: 'めんどうくさい',
+    ko: '귀찮다, 번거롭다',
+    tag: '형용사',
+    level: '형용사',
+    source: '형용사',
+    example_jp: '<ruby>宿題<rt>しゅくだい</rt></ruby>が<ruby>面倒<rt>めんどう</rt></ruby>くさいです。',
+    example_ko: '숙제가 귀찮아요.'
+  },
+  {
+    id: 'w176',
+    jp: '<ruby>素朴<rt>そぼく</rt></ruby>だ',
+    kana: 'そぼくだ',
+    ko: '소박하다, 꾸밈없다',
+    tag: '형용사',
+    level: '형용사',
+    source: '형용사',
+    example_jp: '<ruby>素朴<rt>そぼく</rt></ruby>だけど<ruby>美味<rt>おい</rt></ruby>しい<ruby>料理<rt>りょうり</rt></ruby>です。',
+    example_ko: '소박하지만 맛있는 요리입니다.'
+  },
+  {
+    id: 'w177',
+    jp: '<ruby>大半<rt>たいはん</rt></ruby>',
+    kana: 'たいはん',
+    ko: '대부분, 태반',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>大半<rt>たいはん</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>賛成<rt>さんせい</rt></ruby>しました。',
+    example_ko: '대부분의 사람이 찬성했습니다.'
+  },
+  // ===== 동사 추가 =====
+  {
+    id: 'w178',
+    jp: '<ruby>考<rt>かんが</rt></ruby>える',
+    kana: 'かんがえる',
+    ko: '생각하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>少<rt>すこ</rt></ruby>し<ruby>考<rt>かんが</rt></ruby>えてみます。',
+    example_ko: '조금 생각해 볼게요.'
+  },
+  {
+    id: 'w179',
+    jp: '<ruby>塗<rt>ぬ</rt></ruby>る',
+    kana: 'ぬる',
+    ko: '칠하다, 바르다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>自分<rt>じぶん</rt></ruby>で<ruby>色<rt>いろ</rt></ruby>を<ruby>塗<rt>ぬ</rt></ruby>った。',
+    example_ko: '스스로 색을 칠했다.'
+  },
+  {
+    id: 'w180',
+    jp: '<ruby>集<rt>あつ</rt></ruby>まる',
+    kana: 'あつまる',
+    ko: '모이다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: 'みんな<ruby>集<rt>あつ</rt></ruby>まりましたか？',
+    example_ko: '모두 모였나요?'
+  },
+  {
+    id: 'w181',
+    jp: '<ruby>急<rt>いそ</rt></ruby>ぐ',
+    kana: 'いそぐ',
+    ko: '서두르다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>急<rt>いそ</rt></ruby>いでください！',
+    example_ko: '서두르세요!'
+  },
+  {
+    id: 'w182',
+    jp: '<ruby>折<rt>お</rt></ruby>れる',
+    kana: 'おれる',
+    ko: '부러지다, 꺾이다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: 'ヒールが<ruby>折<rt>お</rt></ruby>れてしまいました。',
+    example_ko: '힐이 부러져버렸어요.'
+  },
+  {
+    id: 'w183',
+    jp: '<ruby>転<rt>ころ</rt></ruby>ぶ',
+    kana: 'ころぶ',
+    ko: '넘어지다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>転<rt>ころ</rt></ruby>ばないように<ruby>気<rt>き</rt></ruby>をつけて。',
+    example_ko: '넘어지지 않도록 조심해.'
+  },
+  {
+    id: 'w184',
+    jp: '<ruby>焦<rt>あせ</rt></ruby>る',
+    kana: 'あせる',
+    ko: '초조해하다, 허둥대다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>焦<rt>あせ</rt></ruby>らずに<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いて。',
+    example_ko: '서두르지 말고 침착해.'
+  },
+  {
+    id: 'w185',
+    jp: '<ruby>逃<rt>に</rt></ruby>げる',
+    kana: 'にげる',
+    ko: '도망치다, 달아나다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>逃<rt>に</rt></ruby>げないでください。',
+    example_ko: '도망치지 마세요.'
+  },
+  {
+    id: 'w186',
+    jp: '<ruby>焼<rt>や</rt></ruby>く',
+    kana: 'やく',
+    ko: '굽다, 볶다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: 'タコヤキを<ruby>焼<rt>や</rt></ruby>きました。',
+    example_ko: '타코야키를 구웠습니다.'
+  },
+  {
+    id: 'w187',
+    jp: '<ruby>減<rt>へ</rt></ruby>る',
+    kana: 'へる',
+    ko: '줄다, 감소하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>貯金<rt>ちょきん</rt></ruby>がどんどん<ruby>減<rt>へ</rt></ruby>っていく。',
+    example_ko: '저금이 점점 줄어가고 있어.'
+  },
+  {
+    id: 'w188',
+    jp: '<ruby>寄<rt>よ</rt></ruby>る',
+    kana: 'よる',
+    ko: '들르다, 모이다, 붙다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>帰<rt>かえ</rt></ruby>りに<ruby>本屋<rt>ほんや</rt></ruby>に<ruby>寄<rt>よ</rt></ruby>ってきました。',
+    example_ko: '돌아오다가 서점에 들렀어요.'
+  },
+  {
+    id: 'w189',
+    jp: '<ruby>見習<rt>みなら</rt></ruby>う',
+    kana: 'みならう',
+    ko: '본받다, 따라 배우다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>彼女<rt>かのじょ</rt></ruby>を<ruby>見習<rt>みなら</rt></ruby>いたいです。',
+    example_ko: '그녀를 본받고 싶어요.'
+  },
+  {
+    id: 'w190',
+    jp: '<ruby>気<rt>き</rt></ruby>を<ruby>使<rt>つか</rt></ruby>う',
+    kana: 'きをつかう',
+    ko: '신경을 쓰다, 배려하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>気<rt>き</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わないでください。',
+    example_ko: '신경 쓰지 마세요.'
+  },
+  {
+    id: 'w191',
+    jp: '<ruby>気<rt>き</rt></ruby>にする',
+    kana: 'きにする',
+    ko: '신경쓰다, 마음에 두다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>気<rt>き</rt></ruby>にしないでください。',
+    example_ko: '신경 쓰지 마세요.'
+  },
+  {
+    id: 'w192',
+    jp: '<ruby>任<rt>まか</rt></ruby>せる',
+    kana: 'まかせる',
+    ko: '맡기다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>私<rt>わたし</rt></ruby>に<ruby>任<rt>まか</rt></ruby>せてください！',
+    example_ko: '저에게 맡겨주세요!'
+  },
+  {
+    id: 'w193',
+    jp: '<ruby>働<rt>はたら</rt></ruby>く',
+    kana: 'はたらく',
+    ko: '일하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>週<rt>しゅう</rt></ruby>5<ruby>日<rt>ひ</rt></ruby><ruby>働<rt>はたら</rt></ruby>いています。',
+    example_ko: '주 5일 일하고 있어요.'
+  },
+  {
+    id: 'w194',
+    jp: '<ruby>頑張<rt>がんば</rt></ruby>る',
+    kana: 'がんばる',
+    ko: '힘내다, 열심히 하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>頑張<rt>がんば</rt></ruby>りましょう！',
+    example_ko: '같이 힘냅시다!'
+  },
+  {
+    id: 'w195',
+    jp: '<ruby>続<rt>つづ</rt></ruby>ける',
+    kana: 'つづける',
+    ko: '계속하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>諦<rt>あきら</rt></ruby>めずに<ruby>続<rt>つづ</rt></ruby>けましょう。',
+    example_ko: '포기하지 말고 계속합시다.'
+  },
+  {
+    id: 'w196',
+    jp: '<ruby>先延<rt>さきの</rt></ruby>ばしにする',
+    kana: 'さきのばしにする',
+    ko: '미루다, 연기하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>歯医者<rt>はいしゃ</rt></ruby>に<ruby>行<rt>い</rt></ruby>くのを<ruby>先延<rt>さきの</rt></ruby>ばしにしていた。',
+    example_ko: '치과 가는 것을 미루고 있었다.'
+  },
+  {
+    id: 'w197',
+    jp: '<ruby>待<rt>ま</rt></ruby>ち<ruby>合<rt>あ</rt></ruby>わせる',
+    kana: 'まちあわせる',
+    ko: '만나기로 약속하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>駅前<rt>えきまえ</rt></ruby>で<ruby>待<rt>ま</rt></ruby>ち<ruby>合<rt>あ</rt></ruby>わせましょう。',
+    example_ko: '역 앞에서 만나기로 해요.'
+  },
+  {
+    id: 'w198',
+    jp: '<ruby>手<rt>て</rt></ruby>に<ruby>入<rt>はい</rt></ruby>る',
+    kana: 'てにはいる',
+    ko: '손에 들어오다, 입수하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>日本<rt>にほん</rt></ruby>でしか<ruby>手<rt>て</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らないです。',
+    example_ko: '일본에서만 구할 수 있어요.'
+  },
+  {
+    id: 'w199',
+    jp: 'たまる',
+    kana: 'たまる',
+    ko: '쌓이다, 모이다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>疲<rt>つか</rt></ruby>れがたまっています。',
+    example_ko: '피로가 쌓여 있어요.'
+  },
+  {
+    id: 'w200',
+    jp: 'サボる',
+    kana: 'さぼる',
+    ko: '땡땡이 치다, 게을리하다',
+    tag: '동사',
+    level: '동사',
+    source: '동사',
+    example_jp: '<ruby>授業<rt>じゅぎょう</rt></ruby>をサボってはいけません。',
+    example_ko: '수업을 빠지면 안 됩니다.'
+  },
+  {
+    id: 'w201',
+    jp: '<ruby>幸<rt>しあわ</rt></ruby>せ',
+    kana: 'しあわせ',
+    ko: '행복',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: 'これが<ruby>私<rt>わたし</rt></ruby>の<ruby>幸<rt>しあわ</rt></ruby>せな<ruby>時間<rt>じかん</rt></ruby>です。',
+    example_ko: '이것이 나의 행복한 시간입니다.'
+  },
+  {
+    id: 'w202',
+    jp: '<ruby>購入<rt>こうにゅう</rt></ruby>',
+    kana: 'こうにゅう',
+    ko: '구입',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>大量<rt>たいりょう</rt></ruby>に<ruby>購入<rt>こうにゅう</rt></ruby>しました。',
+    example_ko: '대량으로 구입했습니다.'
+  },
+  {
+    id: 'w203',
+    jp: '<ruby>油<rt>あぶら</rt></ruby>',
+    kana: 'あぶら',
+    ko: '기름',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>油<rt>あぶら</rt></ruby>は<ruby>多<rt>おお</rt></ruby>めでお<ruby>願<rt>ねが</rt></ruby>いします。',
+    example_ko: '기름은 많이 해주세요.'
+  },
+  {
+    id: 'w204',
+    jp: '<ruby>量<rt>りょう</rt></ruby>',
+    kana: 'りょう',
+    ko: '양, 분량',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>量<rt>りょう</rt></ruby>が<ruby>少<rt>すく</rt></ruby>ないです。',
+    example_ko: '양이 적어요.'
+  },
+  {
+    id: 'w205',
+    jp: '<ruby>現実逃避<rt>げんじつとうひ</rt></ruby>',
+    kana: 'げんじつとうひ',
+    ko: '현실도피',
+    tag: '명사',
+    level: '명사',
+    source: '명사',
+    example_jp: '<ruby>旅行<rt>りょこう</rt></ruby>は<ruby>現実逃避<rt>げんじつとうひ</rt></ruby>にもなります。',
+    example_ko: '여행은 현실도피도 됩니다.'
+  }
+
+];
+
+const GRAMMAR = [
+  {
+    "id": "g048",
+    "title": "〜そうだ",
+    "desc": "~인 듯하다, ~인 것 같다 (양태·겉모습으로 본 추측) / 동사 ます형, イ형용사·ナ형용사 어간에 そう를 붙인다. 명사를 수식할 때는 そうな, 동사를 수식할 때는 そうに가 된다. 好き→好きそう, 降る→降りそう, 早い→早そう처럼 직접 보거나 느낀 인상으로 판단할 때 쓴다. (참고: 보통형+そうだ는 전문(伝聞)이라 의미가 다르다)",
+    "level": "3단계 드라마",
+    "examples": [
+      {
+        "jp": "このアニメ、絶対彼が好きそうだと思って勧めたら、案の定ハマってた。",
+        "ko": "이 애니메이션, 절대 그 사람이 좋아할 것 같다고 생각해서 추천했더니 아니나 다를까 빠져 있더라."
+      },
+      {
+        "jp": "スーパーのレジがすごく混んでて、並ぶだけで日が暮れそうだ。",
+        "ko": "마트 계산대가 엄청 붐벼서, 줄 서는 것만으로 날이 저물 것 같다."
+      },
+      {
+        "jp": "雨が降りそうな空模様だから、今日は折りたたみ傘を持っていこう。",
+        "ko": "비가 내릴 것 같은 하늘 모양이니까, 오늘은 접이식 우산을 가져가자."
+      }
+    ]
+  },
+  {
+    "id": "g049",
+    "title": "〜わけない / 〜わけがない",
+    "desc": "~일 리가 없다, ~할 리가 없다 (이치상 당연히 불가능) / 동사·형용사의 보통형에 わけがない를 붙여 '그럴 만한 이유·도리가 없다'는 강한 부정을 나타낸다. 회화에서는 が를 생략해 わけない로 자주 쓴다. はずがない와 의미가 비슷하지만 わけがない가 더 단정적이다.",
+    "level": "3단계 드라마",
+    "examples": [
+      {
+        "jp": "こんな時間に彼がまだ起きているわけないか。もう寝てるよね。",
+        "ko": "이런 시간에 그 사람이 아직 깨어 있을 리가 없나. 벌써 자고 있겠지."
+      },
+      {
+        "jp": "一日中ゲームばかりしていて、テストで100点取れるわけがない。",
+        "ko": "하루 종일 게임만 하면서 시험에서 100점 맞을 수 있을 리가 없다."
+      },
+      {
+        "jp": "そんなに安くて美味しい店が、この近くにあるわけないじゃん。",
+        "ko": "그렇게 싸고 맛있는 가게가 이 근처에 있을 리가 없잖아."
+      }
+    ]
+  },
+  {
+    "id": "g050",
+    "title": "〜か（自問自答）",
+    "desc": "~겠지, ~려나, ~구나, ~인가 (혼잣말·자문자답) / 문말에 か를 붙여 상대에게 묻는 것이 아니라 스스로에게 확인하거나 납득·체념하는 혼잣말을 나타낸다. くるわけないか의 か가 이 용법이다. 흔히 끝을 내려 읽으며, …나 / …구나 / …인가 같은 한국어 혼잣말에 대응한다.",
+    "level": "3단계 드라마",
+    "examples": [
+      {
+        "jp": "やっぱり今日のイベント、推しは来ないか。",
+        "ko": "역시 오늘 이벤트에 최애는 안 오려나… / 안 오는구나."
+      },
+      {
+        "jp": "あの人からの返信は来ないか…",
+        "ko": "그 사람한테서 답장은 안 오려나… / 안 오는구나."
+      },
+      {
+        "jp": "一生懸命準備したけど、今回のオーディションも無理か。",
+        "ko": "열심히 준비했지만, 이번 오디션도 무리인가…"
+      },
+      {
+        "jp": "今日の花火大会は中止か。楽しみにしていたのに。",
+        "ko": "오늘 불꽃축제는 취소인가… 기대하고 있었는데."
+      }
+    ]
+  },
+  {
+    id: 'g001',
+    title: '~ではありません / ~じゃないです',
+    desc: '~이/가 아닙니다 (명사 부정)',
+    level: '기초문형',
+    examples: [
+      {jp: '<ruby>日本人<rt>にほんじん</rt></ruby>ではありません。<ruby>韓国人<rt>かんこくじん</rt></ruby>です。', ko: '일본인이 아닙니다. 한국인입니다.'},
+      {jp: '今日は<ruby>雨<rt>あめ</rt></ruby>じゃないです。<ruby>晴<rt>は</rt></ruby>れです。', ko: '오늘은 비가 아닙니다. 맑습니다.'},
+    ]
+  },
+  {
+    id: 'g002',
+    title: '~ますか / ~ません / ~ました / ~ませんでした',
+    desc: '동사 정중 활용 (현재 질문 / 부정 / 과거 / 과거 부정)',
+    level: '동사활용',
+    examples: [
+      {jp: '<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ませんか？', ko: '같이 영화 보지 않을래요?'},
+      {jp: '<ruby>昨日<rt>きのう</rt></ruby>、<ruby>電話<rt>でんわ</rt></ruby>しましたか？', ko: '어제 전화했습니까?'},
+    ]
+  },
+  {
+    id: 'g003',
+    title: '~たい / ~たくない',
+    desc: '~하고 싶다 / 하고 싶지 않다 (희망)',
+    level: '희망·계획',
+    examples: [
+      {jp: '今日はお<ruby>酒<rt>さけ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みたいです。', ko: '오늘은 술을 마시고 싶어요.'},
+      {jp: '<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みたいです。', ko: '주말에는 쉬고 싶어요.'},
+      {jp: 'ディズニーランドに<ruby>遊<rt>あそ</rt></ruby>びに<ruby>行<rt>い</rt></ruby>きたいです。', ko: '디즈니랜드에 놀러 가고 싶어요.'},
+    ]
+  },
+  {
+    id: 'g004',
+    title: '~ましょう / ~に行く',
+    desc: '~합시다 / ~하러 가다',
+    level: '희망·계획',
+    examples: [
+      {jp: '<ruby>一緒<rt>いっしょ</rt></ruby>にカラオケに<ruby>行<rt>い</rt></ruby>きましょう！', ko: '같이 노래방에 갑시다!'},
+      {jp: '<ruby>水<rt>みず</rt></ruby>がないです。<ruby>買<rt>か</rt></ruby>いに<ruby>行<rt>い</rt></ruby>きましょうか。', ko: '물이 없어요. 사러 갈까요?'},
+    ]
+  },
+  {
+    id: 'g005',
+    title: '~てもいいですか',
+    desc: '~해도 됩니까? (허가 요청)',
+    level: '허가·완료',
+    examples: [
+      {jp: 'ここに<ruby>座<rt>すわ</rt></ruby>ってもいいですか？', ko: '여기 앉아도 됩니까?'},
+      {jp: 'お<ruby>店<rt>みせ</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってもいいですか？', ko: '가게 사진 찍어도 돼요?'},
+    ]
+  },
+  {
+    id: 'g006',
+    title: '~てしまいました',
+    desc: '~해버렸습니다 (완료, 아쉬움)',
+    level: '허가·완료',
+    examples: [
+      {jp: '<ruby>財布<rt>さいふ</rt></ruby>を<ruby>失<rt>な</rt></ruby>くしてしまいました。', ko: '지갑을 잃어버렸어요.'},
+      {jp: '全部<ruby>食<rt>た</rt></ruby>べてしまいました。', ko: '다 먹어버렸어요.'},
+    ]
+  },
+  {
+    id: 'g007',
+    title: '~ないで / ~なければ',
+    desc: '~하지 않고 / ~하지 않으면 (부정 조건)',
+    level: '부정·조건',
+    examples: [
+      {jp: '<ruby>忘<rt>わす</rt></ruby>れないでください。', ko: '잊지 마세요.'},
+      {jp: '<ruby>行<rt>い</rt></ruby>かなければなりません。', ko: '가지 않으면 안 됩니다.'},
+    ]
+  },
+  {
+    id: 'g008',
+    title: '~つもりです / ~予定です',
+    desc: '~할 생각입니다 / ~할 예정입니다 (의지·계획)',
+    level: '의지·추측',
+    examples: [
+      {jp: '<ruby>来年<rt>らいねん</rt></ruby>、<ruby>日本<rt>にほん</rt></ruby>に<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>くつもりです。', ko: '내년에 일본으로 여행을 갈 생각입니다.'},
+      {jp: '<ruby>夕方<rt>ゆうがた</rt></ruby>は<ruby>家族<rt>かぞく</rt></ruby>と<ruby>食事<rt>しょくじ</rt></ruby>をする<ruby>予定<rt>よてい</rt></ruby>です。', ko: '저녁에는 가족과 식사를 할 예정입니다.'},
+    ]
+  },
+  {
+    id: 'g009',
+    title: '~かもしれません',
+    desc: '~일지도 모릅니다 (추측)',
+    level: '의지·추측',
+    examples: [
+      {jp: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るかもしれません。', ko: '비가 내릴지도 모릅니다.'},
+      {jp: '<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>人<rt>ひと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いかもしれません。', ko: '주말에는 사람이 많을지도 모릅니다.'},
+    ]
+  },
+  {
+    id: 'g010',
+    title: '~前に / ~た後に / ~ながら',
+    desc: '~하기 전에 / ~한 후에 / ~하면서',
+    level: '시간표현',
+    examples: [
+      {jp: 'ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べる<ruby>前<rt>まえ</rt></ruby>に<ruby>手<rt>て</rt></ruby>を<ruby>洗<rt>あら</rt></ruby>います。', ko: '밥을 먹기 전에 손을 씻어요.'},
+      {jp: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>た<ruby>後<rt>あと</rt></ruby>にカフェに<ruby>行<rt>い</rt></ruby>きます。', ko: '영화를 본 후에 카페에 갑니다.'},
+      {jp: '<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聴<rt>き</rt></ruby>きながら<ruby>時間<rt>じかん</rt></ruby>を<ruby>過<rt>す</rt></ruby>ごしたいです。', ko: '음악을 들으면서 시간을 보내고 싶습니다.'},
+    ]
+  },
+  {
+    id: 'g011',
+    title: '~やすい / ~にくい',
+    desc: '~하기 쉽다 / ~하기 어렵다',
+    level: '의견·변화',
+    examples: [
+      {jp: '<ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>食<rt>た</rt></ruby>べやすい<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>がありますか？', ko: '외국인이 먹기 좋은 음식이 있어요?'},
+      {jp: 'このお<ruby>店<rt>みせ</rt></ruby>は<ruby>注文<rt>ちゅうもん</rt></ruby>しにくいですね。', ko: '이 가게는 주문하기 어렵네요.'},
+    ]
+  },
+  {
+    id: 'g012',
+    title: '~と思います / ~と思いました',
+    desc: '~라고 생각합니다 (의견·추측)',
+    level: '의견·변화',
+    examples: [
+      {jp: '<ruby>最近<rt>さいきん</rt></ruby>は<ruby>韓国<rt>かんこく</rt></ruby>の<ruby>方<rt>ほう</rt></ruby>がもっと<ruby>高<rt>たか</rt></ruby>いと<ruby>思<rt>おも</rt></ruby>います。', ko: '요즘은 한국이 더 비싸다고 생각합니다.'},
+      {jp: '5<ruby>月<rt>がつ</rt></ruby>の<ruby>方<rt>ほう</rt></ruby>が<ruby>旅行<rt>りょこう</rt></ruby>しやすいと<ruby>思<rt>おも</rt></ruby>います。', ko: '5월 쪽이 여행하기 좋을 거라고 생각합니다.'},
+    ]
+  },
+  {
+    id: 'g013',
+    title: '~ことになりました / ~ことにしました',
+    desc: '~하게 되었습니다 / ~하기로 했습니다',
+    level: '의견·변화',
+    examples: [
+      {jp: '<ruby>来年<rt>らいねん</rt></ruby>に<ruby>家族<rt>かぞく</rt></ruby>と<ruby>日本<rt>にほん</rt></ruby>に<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>くことになりました。', ko: '내년에 가족들과 일본으로 여행을 가게 되었습니다.'},
+      {jp: '<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>することにしました。', ko: '일본어를 공부하기로 했습니다.'},
+    ]
+  },
+  {
+    id: 'g014',
+    title: '~に比べて / ~によって',
+    desc: '~에 비해서 / ~에 따라서',
+    level: '심화표현',
+    examples: [
+      {jp: '今<ruby>年<rt>ねん</rt></ruby>の<ruby>夏<rt>なつ</rt></ruby>は<ruby>去年<rt>きょねん</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて<ruby>暑<rt>あつ</rt></ruby>くなりました。', ko: '올해 여름은 작년에 비해 더워졌습니다.'},
+      {jp: '<ruby>人<rt>ひと</rt></ruby>によって<ruby>作<rt>つく</rt></ruby>り<ruby>方<rt>かた</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>います。', ko: '사람에 따라 만드는 방법이 다릅니다.'},
+    ]
+  },
+  {
+    id: 'g015',
+    title: '~として / ~とともに',
+    desc: '~로서 (자격·입장) / ~와 함께',
+    level: '심화표현',
+    examples: [
+      {jp: '<ruby>韓国人<rt>かんこくじん</rt></ruby>として<ruby>嬉<rt>うれ</rt></ruby>しいです。', ko: '한국인으로서 기쁩니다.'},
+      {jp: 'チケットは<ruby>写真<rt>しゃしん</rt></ruby>と<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>提出<rt>ていしゅつ</rt></ruby>してください。', ko: '티켓은 사진과 함께 제출해 주세요.'},
+    ]
+  },
+  {
+    id: 'g016',
+    title: '~より / ~の方が',
+    desc: '~보다 / ~쪽이 (비교)',
+    level: '동작표현',
+    examples: [
+      {jp: '<ruby>朝<rt>あさ</rt></ruby>より<ruby>夕方<rt>ゆうがた</rt></ruby>の<ruby>方<rt>ほう</rt></ruby>が<ruby>人<rt>ひと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いです。', ko: '아침보다 저녁이 사람이 많아요.'},
+      {jp: 'オムライスよりカレーの<ruby>方<rt>ほう</rt></ruby>が<ruby>人気<rt>にんき</rt></ruby>です。', ko: '오므라이스보다 카레 쪽이 인기예요.'},
+    ]
+  },
+  // ===== 동사 활용형 규칙 =====
+  {
+    id: 'g017',
+    title: 'ます형 만들기 (3그룹 분류)',
+    desc: '동사를 3그룹으로 나누어 ます형을 만드는 규칙. 1그룹(う동사): 마지막 글자를 い단으로 변경 + ます. 2그룹(る동사): る를 떼고 + ます. 3그룹(불규칙): する→します、くる→きます',
+    level: '동사활용',
+    conjugation: [
+      { form: '1그룹 (う동사)', rule: '마지막을 い단으로 → ます', examples: '<ruby>行<rt>い</rt></ruby>く→<ruby>行<rt>い</rt></ruby>きます, <ruby>飲<rt>の</rt></ruby>む→<ruby>飲<rt>の</rt></ruby>みます, <ruby>話<rt>はな</rt></ruby>す→<ruby>話<rt>はな</rt></ruby>します, <ruby>書<rt>か</rt></ruby>く→<ruby>書<rt>か</rt></ruby>きます' },
+      { form: '2그룹 (る동사)', rule: 'る를 빼고 → ます', examples: '<ruby>食<rt>た</rt></ruby>べる→<ruby>食<rt>た</rt></ruby>べます, <ruby>見<rt>み</rt></ruby>る→<ruby>見<rt>み</rt></ruby>ます, <ruby>起<rt>お</rt></ruby>きる→<ruby>起<rt>お</rt></ruby>きます' },
+      { form: '3그룹 (불규칙)', rule: '불규칙 변화', examples: 'する→します, くる→きます' },
+      { form: '예외 1그룹', rule: '형태는 2류지만 실제 1류', examples: '<ruby>帰<rt>かえ</rt></ruby>る→<ruby>帰<rt>かえ</rt></ruby>ります, <ruby>入<rt>はい</rt></ruby>る→<ruby>入<rt>はい</rt></ruby>ります, <ruby>走<rt>はし</rt></ruby>る→<ruby>走<rt>はし</rt></ruby>ります, <ruby>切<rt>き</rt></ruby>る→<ruby>切<rt>き</rt></ruby>ります' },
+    ],
+    examples: [
+      {jp: '<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>ります。', ko: '매일 아침 달립니다.'},
+      {jp: '<ruby>友達<rt>ともだち</rt></ruby>と<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。', ko: '친구와 영화를 봅니다.'},
+    ]
+  },
+  {
+    id: 'g018',
+    title: 'ない형 만들기 (부정형)',
+    desc: '동사 부정형. 1그룹: 마지막을 あ단으로 + ない (うで끝나면 わ+ない). 2그룹: る를 빼고 + ない. 3그룹: する→しない、くる→こない',
+    level: '동사활용',
+    conjugation: [
+      { form: '1그룹', rule: '마지막을 あ단으로 → ない', examples: '<ruby>行<rt>い</rt></ruby>く→<ruby>行<rt>い</rt></ruby>かない, <ruby>飲<rt>の</rt></ruby>む→<ruby>飲<rt>の</rt></ruby>まない, <ruby>話<rt>はな</rt></ruby>す→<ruby>話<rt>はな</rt></ruby>さない' },
+      { form: '1그룹 (う로 끝남)', rule: 'う → わない', examples: '<ruby>買<rt>か</rt></ruby>う→<ruby>買<rt>か</rt></ruby>わない, <ruby>会<rt>あ</rt></ruby>う→<ruby>会<rt>あ</rt></ruby>わない' },
+      { form: '2그룹', rule: 'る를 빼고 → ない', examples: '<ruby>食<rt>た</rt></ruby>べる→<ruby>食<rt>た</rt></ruby>べない, <ruby>見<rt>み</rt></ruby>る→<ruby>見<rt>み</rt></ruby>ない' },
+      { form: '3그룹', rule: '불규칙', examples: 'する→しない, くる→こない' },
+    ],
+    examples: [
+      {jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>行<rt>い</rt></ruby>かないです。', ko: '오늘은 가지 않아요.'},
+      {jp: '<ruby>肉<rt>にく</rt></ruby>は<ruby>食<rt>た</rt></ruby>べないです。', ko: '고기는 먹지 않아요.'},
+    ]
+  },
+  {
+    id: 'g019',
+    title: 'て형 만들기 (연결형)',
+    desc: '동사의 て형. 1그룹: く→いて, ぐ→いで, す→して, つ/う/る→って, む/ぶ/ぬ→んで. 2그룹: る를 빼고 + て. 3그룹: する→して, くる→きて',
+    level: '동사활용',
+    conjugation: [
+      { form: '1그룹 く/ぐ', rule: 'く→いて、ぐ→いで', examples: '<ruby>書<rt>か</rt></ruby>く→<ruby>書<rt>か</rt></ruby>いて, <ruby>泳<rt>およ</rt></ruby>ぐ→<ruby>泳<rt>およ</rt></ruby>いで' },
+      { form: '1그룹 す', rule: 'す→して', examples: '<ruby>話<rt>はな</rt></ruby>す→<ruby>話<rt>はな</rt></ruby>して, <ruby>貸<rt>か</rt></ruby>す→<ruby>貸<rt>か</rt></ruby>して' },
+      { form: '1그룹 つ/う/る', rule: 'つ/う/る→って', examples: '<ruby>待<rt>ま</rt></ruby>つ→<ruby>待<rt>ま</rt></ruby>って, <ruby>買<rt>か</rt></ruby>う→<ruby>買<rt>か</rt></ruby>って, <ruby>乗<rt>の</rt></ruby>る→<ruby>乗<rt>の</rt></ruby>って' },
+      { form: '1그룹 む/ぶ/ぬ', rule: 'む/ぶ/ぬ→んで', examples: '<ruby>飲<rt>の</rt></ruby>む→<ruby>飲<rt>の</rt></ruby>んで, <ruby>遊<rt>あそ</rt></ruby>ぶ→<ruby>遊<rt>あそ</rt></ruby>んで, <ruby>死<rt>し</rt></ruby>ぬ→<ruby>死<rt>し</rt></ruby>んで' },
+      { form: '2그룹', rule: 'る를 빼고 → て', examples: '<ruby>食<rt>た</rt></ruby>べる→<ruby>食<rt>た</rt></ruby>べて, <ruby>見<rt>み</rt></ruby>る→<ruby>見<rt>み</rt></ruby>て' },
+      { form: '3그룹', rule: '불규칙', examples: 'する→して, くる→きて' },
+    ],
+    examples: [
+      {jp: '<ruby>駅<rt>えき</rt></ruby>に<ruby>行<rt>い</rt></ruby>って<ruby>切符<rt>きっぷ</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。', ko: '역에 가서 표를 샀어요.'},
+      {jp: '<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聴<rt>き</rt></ruby>いて<ruby>勉強<rt>べんきょう</rt></ruby>します。', ko: '음악을 들으면서 공부합니다.'},
+    ]
+  },
+  {
+    id: 'g020',
+    title: '가능형 (～ことができる / ～られる)',
+    desc: '~할 수 있다. ことができる: 어떤 행동이 가능함 (모든 동사). られる형: 2그룹 る 빼고+られる, 1그룹 あ단+れる, する→できる, くる→こられる',
+    level: '동사활용',
+    conjugation: [
+      { form: '1그룹', rule: 'あ단 + れる', examples: '<ruby>行<rt>い</rt></ruby>く→<ruby>行<rt>い</rt></ruby>ける, <ruby>飲<rt>の</rt></ruby>む→<ruby>飲<rt>の</rt></ruby>める, <ruby>話<rt>はな</rt></ruby>す→<ruby>話<rt>はな</rt></ruby>せる' },
+      { form: '2그룹', rule: 'る를 빼고 + られる', examples: '<ruby>食<rt>た</rt></ruby>べる→<ruby>食<rt>た</rt></ruby>べられる, <ruby>見<rt>み</rt></ruby>る→<ruby>見<rt>み</rt></ruby>られる' },
+      { form: '3그룹', rule: '불규칙', examples: 'する→できる, くる→こられる' },
+    ],
+    examples: [
+      {jp: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>せます。', ko: '일본어를 말할 수 있습니다.'},
+      {jp: '<ruby>泳<rt>およ</rt></ruby>ぐことができません。', ko: '수영을 할 수 없습니다.'},
+      {jp: '<ruby>明日<rt>あした</rt></ruby>は<ruby>来<rt>こ</rt></ruby>られますか？', ko: '내일 올 수 있어요?'},
+    ]
+  },
+  {
+    id: 'g021',
+    title: '수동형 (～れる / ～られる)',
+    desc: '수동형: 다른 사람에게 ~을 당하다. 1그룹: あ단 + れる. 2그룹: る를 빼고 + られる. 3그룹: する→される, くる→こられる',
+    level: '동사활용',
+    conjugation: [
+      { form: '1그룹', rule: 'あ단 + れる', examples: '<ruby>叱<rt>しか</rt></ruby>る→<ruby>叱<rt>しか</rt></ruby>られる, <ruby>褒<rt>ほ</rt></ruby>める→<ruby>褒<rt>ほ</rt></ruby>められる' },
+      { form: '2그룹', rule: 'る를 빼고 + られる', examples: '<ruby>食<rt>た</rt></ruby>べる→<ruby>食<rt>た</rt></ruby>べられる, <ruby>見<rt>み</rt></ruby>る→<ruby>見<rt>み</rt></ruby>られる' },
+      { form: '3그룹', rule: '불규칙', examples: 'する→される, くる→こられる' },
+    ],
+    examples: [
+      {jp: '<ruby>先生<rt>せんせい</rt></ruby>に<ruby>褒<rt>ほ</rt></ruby>められました。', ko: '선생님에게 칭찬받았습니다.'},
+      {jp: '<ruby>雨<rt>あめ</rt></ruby>に<ruby>降<rt>ふ</rt></ruby>られてしまいました。', ko: '비를 맞아버렸습니다.'},
+      {jp: 'バカにされた。', ko: '바보 취급 당했어.'},
+    ]
+  },
+  {
+    id: 'g022',
+    title: '사역형 (～せる / ～させる)',
+    desc: '사역형: ~시키다, ~하게 하다. 1그룹: あ단 + せる. 2그룹: る를 빼고 + させる. 3그룹: する→させる, くる→こさせる',
+    level: '동사활용',
+    conjugation: [
+      { form: '1그룹', rule: 'あ단 + せる', examples: '<ruby>行<rt>い</rt></ruby>く→<ruby>行<rt>い</rt></ruby>かせる, <ruby>飲<rt>の</rt></ruby>む→<ruby>飲<rt>の</rt></ruby>ませる, <ruby>話<rt>はな</rt></ruby>す→<ruby>話<rt>はな</rt></ruby>させる' },
+      { form: '2그룹', rule: 'る를 빼고 + させる', examples: '<ruby>食<rt>た</rt></ruby>べる→<ruby>食<rt>た</rt></ruby>べさせる, <ruby>見<rt>み</rt></ruby>る→<ruby>見<rt>み</rt></ruby>させる' },
+      { form: '3그룹', rule: '불규칙', examples: 'する→させる, くる→こさせる' },
+    ],
+    examples: [
+      {jp: '<ruby>子供<rt>こども</rt></ruby>に<ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べさせます。', ko: '아이에게 채소를 먹입니다.'},
+      {jp: '<ruby>友達<rt>ともだち</rt></ruby>を<ruby>笑<rt>わら</rt></ruby>わせたい。', ko: '친구를 웃기고 싶다.'},
+    ]
+  },
+  {
+    id: 'g023',
+    title: '수동사역형 (～せられる / ～される)',
+    desc: '~하도록 당하다, 억지로 ~하게 되다. 1그룹: せ + られる (→ される로 줄임). 2그룹: させ + られる. 3그룹: させ + られる',
+    level: '동사활용',
+    examples: [
+      {jp: '<ruby>上司<rt>じょうし</rt></ruby>に<ruby>残業<rt>ざんぎょう</rt></ruby>させられました。', ko: '상사에게 (억지로) 야근을 당했습니다.'},
+      {jp: '<ruby>嫌<rt>きら</rt></ruby>いな<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>を<ruby>食<rt>た</rt></ruby>べさせられた。', ko: '싫어하는 음식을 억지로 먹어야 했다.'},
+    ]
+  },
+  {
+    id: 'g024',
+    title: '의지형 (～よう / ～ましょう)',
+    desc: '~하자, ~하겠다 (의지 표현). 1그룹: お단 + う. 2그룹: る를 빼고 + よう. 3그룹: する→しよう, くる→こよう',
+    level: '동사활용',
+    conjugation: [
+      { form: '1그룹', rule: 'お단 + う', examples: '<ruby>行<rt>い</rt></ruby>く→<ruby>行<rt>い</rt></ruby>こう, <ruby>飲<rt>の</rt></ruby>む→<ruby>飲<rt>の</rt></ruby>もう, <ruby>話<rt>はな</rt></ruby>す→<ruby>話<rt>はな</rt></ruby>そう' },
+      { form: '2그룹', rule: 'る를 빼고 + よう', examples: '<ruby>食<rt>た</rt></ruby>べる→<ruby>食<rt>た</rt></ruby>べよう, <ruby>見<rt>み</rt></ruby>る→<ruby>見<rt>み</rt></ruby>よう' },
+      { form: '3그룹', rule: '불규칙', examples: 'する→しよう, くる→こよう' },
+    ],
+    examples: [
+      {jp: '<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>行<rt>い</rt></ruby>こう！', ko: '같이 가자!'},
+      {jp: '<ruby>来年<rt>らいねん</rt></ruby>は<ruby>頑張<rt>がんば</rt></ruby>ろうと<ruby>思<rt>おも</rt></ruby>います。', ko: '내년에는 열심히 하려고 생각합니다.'},
+    ]
+  },
+  // ===== 드라마 문형 패턴 =====
+  {
+    id: 'g025',
+    title: '〜ようと思う',
+    desc: '~하려고 하다 (의지·계획). 의지형 + と思っています',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しようと<ruby>思<rt>おも</rt></ruby>っています。', ko: '일본어를 공부하려고 생각합니다.'},
+      {jp: '<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>運動<rt>うんどう</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めようと<ruby>思<rt>おも</rt></ruby>っています。', ko: '다음 달부터 운동을 시작하려고 합니다.'},
+      {jp: '<ruby>新<rt>あたら</rt></ruby>しいスマホを<ruby>買<rt>か</rt></ruby>おうと<ruby>思<rt>おも</rt></ruby>っています。', ko: '새 휴대폰을 사려고 생각하고 있어요.'},
+    ]
+  },
+  {
+    id: 'g026',
+    title: '〜ように',
+    desc: '~하도록, ~하게 되다. 목표·변화를 나타냄',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>体<rt>からだ</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけるようにしています。', ko: '몸 조심하도록 하고 있습니다.'},
+      {jp: '<ruby>毎日<rt>まいにち</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>話<rt>はな</rt></ruby>せるようになりました。', ko: '매일 일본어를 말할 수 있게 되었습니다.'},
+      {jp: '<ruby>無理<rt>むり</rt></ruby>しないようにしてください。', ko: '무리하지 않도록 해주세요.'},
+    ]
+  },
+  {
+    id: 'g027',
+    title: '〜って (引用・話題化)',
+    desc: '① ~라고 (인용) ② ~는, ~말이야 (화제화). と言って의 구어형',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>明日<rt>あした</rt></ruby><ruby>行<rt>い</rt></ruby>くって<ruby>言<rt>い</rt></ruby>ってたよね？', ko: '내일 간다고 했었잖아?'},
+      {jp: '<ruby>沖縄<rt>おきなわ</rt></ruby>って<ruby>何<rt>なに</rt></ruby>が<ruby>有名<rt>ゆうめい</rt></ruby>ですか？', ko: '오키나와는 뭐가 유명해요?'},
+      {jp: 'これっていくらですか？', ko: '이거 얼마예요?'},
+    ]
+  },
+  {
+    id: 'g028',
+    title: '〜め (程度)',
+    desc: '~인 편으로, 약간 ~하게. 정도를 부드럽게 표현할 때',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>濃<rt>こ</rt></ruby>いめでお<ruby>願<rt>ねが</rt></ruby>いします。', ko: '진한 편으로 해주세요.'},
+      {jp: '<ruby>麺<rt>めん</rt></ruby><ruby>硬<rt>かた</rt></ruby>めでお<ruby>願<rt>ねが</rt></ruby>いします。', ko: '면 딱딱하게 해주세요.'},
+      {jp: '<ruby>早<rt>はや</rt></ruby>めに<ruby>来<rt>き</rt></ruby>てください。', ko: '일찍 와주세요.'},
+      {jp: '<ruby>多<rt>おお</rt></ruby>めに<ruby>作<rt>つく</rt></ruby>りました。', ko: '많은 편으로 만들었어요.'},
+    ]
+  },
+  {
+    id: 'g029',
+    title: '〜まま',
+    desc: '~채로, ~대로 (상태가 그대로 유지)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>靴<rt>くつ</rt></ruby>を<ruby>履<rt>は</rt></ruby>いたまま<ruby>入<rt>はい</rt></ruby>らないでください。', ko: '신발을 신은 채로 들어오지 마세요.'},
+      {jp: '<ruby>昔<rt>むかし</rt></ruby>のままで<ruby>変<rt>か</rt></ruby>わらないね。', ko: '옛날 그대로 변하지 않았네.'},
+      {jp: 'ありのままに<ruby>話<rt>はな</rt></ruby>してください。', ko: '있는 그대로 말해주세요.'},
+    ]
+  },
+  {
+    id: 'g030',
+    title: '〜気がする',
+    desc: '~느낌이 든다, ~인 것 같다 (주관적 감각·직감)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>何<rt>なに</rt></ruby>か<ruby>良<rt>よ</rt></ruby>いことがある<ruby>気<rt>き</rt></ruby>がします。', ko: '오늘은 무언가 좋은 일이 있을 것 같아요.'},
+      {jp: '<ruby>最近<rt>さいきん</rt></ruby><ruby>太<rt>ふと</rt></ruby>ったような<ruby>気<rt>き</rt></ruby>がします。', ko: '최근에 살찐 것 같은 느낌이 들어요.'},
+      {jp: 'どこかで<ruby>会<rt>あ</rt></ruby>ったことがある<ruby>気<rt>き</rt></ruby>がします。', ko: '어딘가에서 만난 적이 있는 느낌이 들어요.'},
+    ]
+  },
+  {
+    id: 'g031',
+    title: '〜てもらう / 〜てもらえますか',
+    desc: '~해 받다 / ~해 주실 수 있나요? (상대방의 행동을 받는 표현)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってもらえますか？', ko: '사진 찍어 주실 수 있나요?'},
+      {jp: '<ruby>友達<rt>ともだち</rt></ruby>に<ruby>手伝<rt>てつだ</rt></ruby>ってもらいました。', ko: '친구에게 도움 받았습니다.'},
+      {jp: 'もう<ruby>一度<rt>いちど</rt></ruby><ruby>説明<rt>せつめい</rt></ruby>してもらえますか？', ko: '한 번 더 설명해 주실 수 있나요?'},
+    ]
+  },
+  {
+    id: 'g032',
+    title: '〜たばかりだ',
+    desc: '~한 지 얼마 안 됐다, 방금 막 ~했다',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>今<rt>いま</rt></ruby><ruby>食<rt>た</rt></ruby>べたばかりです。', ko: '방금 먹었습니다.'},
+      {jp: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>たばかりです。', ko: '일본에 막 왔습니다.'},
+      {jp: '<ruby>結婚<rt>けっこん</rt></ruby>したばかりのカップルです。', ko: '막 결혼한 커플입니다.'},
+    ]
+  },
+  {
+    id: 'g033',
+    title: '〜ところだ',
+    desc: '① 기본형+ところ: 막 ~하려던 참 ② た형+ところ: 방금 ~한 참 ③ ている+ところ: ~하는 중',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>今<rt>いま</rt></ruby>から<ruby>出<rt>で</rt></ruby>かけるところです。', ko: '지금 막 나가려던 참이에요.'},
+      {jp: '<ruby>食<rt>た</rt></ruby>べ<ruby>終<rt>お</rt></ruby>わったところです。', ko: '방금 다 먹은 참이에요.'},
+      {jp: 'ちょうど<ruby>準備<rt>じゅんび</rt></ruby>しているところです。', ko: '마침 준비하는 중이에요.'},
+    ]
+  },
+  {
+    id: 'g034',
+    title: '〜なきゃ (ならない의 구어형)',
+    desc: '~해야 한다, ~해야 해! (なければならない의 캐주얼한 표현)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>行<rt>い</rt></ruby>かなきゃ！', ko: '가야 해!'},
+      {jp: '<ruby>宿題<rt>しゅくだい</rt></ruby>を<ruby>終<rt>お</rt></ruby>わらせなきゃ。', ko: '숙제를 끝내야 해.'},
+      {jp: '<ruby>健康<rt>けんこう</rt></ruby>のために<ruby>運動<rt>うんどう</rt></ruby>しなきゃ。', ko: '건강을 위해 운동해야 해.'},
+    ]
+  },
+  {
+    id: 'g035',
+    title: '〜なら',
+    desc: '~라면 (조건·가정). 이미 알고 있는 정보를 바탕으로 조언·제안',
+    level: '조건·가정',
+    examples: [
+      {jp: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>行<rt>い</rt></ruby>くなら<ruby>京都<rt>きょうと</rt></ruby>がおすすめです。', ko: '일본에 간다면 교토를 추천해요.'},
+      {jp: '<ruby>明日<rt>あした</rt></ruby>なら<ruby>時間<rt>じかん</rt></ruby>があります。', ko: '내일이라면 시간이 있어요.'},
+      {jp: '<ruby>静<rt>しず</rt></ruby>かな<ruby>場所<rt>ばしょ</rt></ruby>ならどこでもいいです。', ko: '조용한 곳이라면 어디든 좋아요.'},
+    ]
+  },
+  {
+    id: 'g036',
+    title: '〜ば〜ほど',
+    desc: '~하면 ~할수록 (비례 관계)',
+    level: '조건·가정',
+    examples: [
+      {jp: '<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>勉強<rt>べんきょう</rt></ruby>すればするほど<ruby>面白<rt>おもしろ</rt></ruby>い。', ko: '일본어는 공부하면 할수록 재미있어요.'},
+      {jp: 'この<ruby>本<rt>ほん</rt></ruby>は<ruby>読<rt>よ</rt></ruby>めば<ruby>読<rt>よ</rt></ruby>むほど<ruby>面白<rt>おもしろ</rt></ruby>い。', ko: '이 책은 읽으면 읽을수록 재미있어요.'},
+      {jp: '<ruby>山<rt>やま</rt></ruby>は<ruby>高<rt>たか</rt></ruby>ければ<ruby>高<rt>たか</rt></ruby>いほど<ruby>景色<rt>けしき</rt></ruby>がいい。', ko: '산은 높으면 높을수록 경치가 좋아요.'},
+    ]
+  },
+  {
+    id: 'g037',
+    title: '〜ている間に',
+    desc: '~하고 있는 사이에, ~하는 동안에',
+    level: '시간표현',
+    examples: [
+      {jp: '<ruby>子供<rt>こども</rt></ruby>が<ruby>寝<rt>ね</rt></ruby>ている<ruby>間<rt>あいだ</rt></ruby>に<ruby>掃除<rt>そうじ</rt></ruby>しました。', ko: '아이가 자는 사이에 청소했습니다.'},
+      {jp: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ている<ruby>間<rt>あいだ</rt></ruby>に<ruby>雨<rt>あめ</rt></ruby>がやみました。', ko: '영화를 보는 동안에 비가 그쳤어요.'},
+      {jp: '<ruby>待<rt>ま</rt></ruby>っている<ruby>間<rt>あいだ</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みました。', ko: '기다리는 동안에 책을 읽었어요.'},
+    ]
+  },
+  {
+    id: 'g038',
+    title: '〜のせいだ',
+    desc: '~탓이다, ~때문이다 (불좋은 결과의 원인)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>全部私<rt>ぜんぶわたし</rt></ruby>のせいです。', ko: '다 내 탓이에요.'},
+      {jp: '<ruby>疲<rt>つか</rt></ruby>れたせいかすぐ<ruby>眠<rt>ねむ</rt></ruby>れました。', ko: '피곤한 탓인지 바로 잠들 수 있었어요.'},
+      {jp: '<ruby>天気<rt>てんき</rt></ruby>のせいで<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>い。', ko: '날씨 탓에 기분이 안 좋아요.'},
+    ]
+  },
+  {
+    id: 'g039',
+    title: '〜てほしい / 〜てほしいなと思う',
+    desc: '~해줬으면 좋겠다 (바람·희망). 제3자에게 기대할 때는 〜てほしいなと思う',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>早<rt>はや</rt></ruby>く<ruby>来<rt>き</rt></ruby>てほしいです。', ko: '빨리 와줬으면 좋겠어요.'},
+      {jp: '<ruby>子供<rt>こども</rt></ruby>には<ruby>健康<rt>けんこう</rt></ruby>に<ruby>育<rt>そだ</rt></ruby>ってほしいと<ruby>思<rt>おも</rt></ruby>います。', ko: '아이는 건강하게 자라줬으면 한다고 생각합니다.'},
+      {jp: '<ruby>正直<rt>しょうじき</rt></ruby>に<ruby>話<rt>はな</rt></ruby>してほしい。', ko: '솔직하게 말해줬으면 해.'},
+    ]
+  },
+  {
+    id: 'g040',
+    title: '〜くらい / 〜ぐらい',
+    desc: '~정도, ~쯤 (대략적인 양·정도)',
+    level: '회화패턴',
+    examples: [
+      {jp: '10<ruby>分<rt>ぷん</rt></ruby>くらい<ruby>待<rt>ま</rt></ruby>ってもらえますか？', ko: '10분 정도 기다려 주실 수 있나요?'},
+      {jp: '<ruby>一日<rt>いちにち</rt></ruby>くらい<ruby>休<rt>やす</rt></ruby>んでも<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですよ。', ko: '하루 정도 쉬어도 괜찮아요.'},
+      {jp: '<ruby>子供<rt>こども</rt></ruby>でもできるくらい<ruby>簡単<rt>かんたん</rt></ruby>です。', ko: '아이도 할 수 있을 정도로 쉬워요.'},
+    ]
+  },
+  {
+    id: 'g041',
+    title: 'だからって',
+    desc: '그렇다고 해서 (이유를 인정하지만 결론에 반박할 때)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>友達<rt>ともだち</rt></ruby>だからって<ruby>何<rt>なん</rt></ruby>でもしていいわけじゃない。', ko: '친구라고 해서 뭐든 해도 되는 건 아니야.'},
+      {jp: '<ruby>頑張<rt>がんば</rt></ruby>ったからって、かならず<ruby>成功<rt>せいこう</rt></ruby>するわけではない。', ko: '열심히 했다고 해서 반드시 성공하는 건 아니야.'},
+      {jp: '<ruby>安<rt>やす</rt></ruby>いからって<ruby>買<rt>か</rt></ruby>いすぎはよくない。', ko: '싸다고 해서 너무 많이 사는 건 좋지 않아.'},
+    ]
+  },
+  {
+    id: 'g042',
+    title: '〜同士',
+    desc: '~끼리, 같은 처지의 사람들끼리',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>友達同士<rt>ともだちどうし</rt></ruby>で<ruby>旅行<rt>りょこう</rt></ruby>しました。', ko: '친구끼리 여행했습니다.'},
+      {jp: '<ruby>日本人同士<rt>にほんじんどうし</rt></ruby>でも<ruby>方言<rt>ほうげん</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>います。', ko: '일본인끼리도 방언이 달라요.'},
+      {jp: '<ruby>親同士<rt>おやどうし</rt></ruby>も<ruby>仲<rt>なか</rt></ruby>がいいです。', ko: '부모끼리도 사이가 좋아요.'},
+    ]
+  },
+  {
+    id: 'g043',
+    title: '〜みたいなもの',
+    desc: '~같은 거, ~나 다름없어 (비유·유사성)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>締<rt>し</rt></ruby>めのラーメンはデザートみたいなものだから。', ko: '마무리 라멘은 디저트 같은 거니까.'},
+      {jp: 'もう<ruby>家族<rt>かぞく</rt></ruby>みたいなものだよ。', ko: '이제 가족 같은 거야.'},
+      {jp: '<ruby>趣味<rt>しゅみ</rt></ruby>みたいなものだから<ruby>負担<rt>ふたん</rt></ruby>はない。', ko: '취미같은 거니까 부담은 없어.'},
+    ]
+  },
+  {
+    id: 'g044',
+    title: '〜ようかなって思ってる',
+    desc: '~할까 하고 생각 중이다 (가벼운 검토·고민)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>転職<rt>てんしょく</rt></ruby>しようかなって<ruby>思<rt>おも</rt></ruby>ってる。', ko: '이직할까 생각 중이야.'},
+      {jp: '<ruby>髪<rt>かみ</rt></ruby>を<ruby>切<rt>き</rt></ruby>ろうかなって<ruby>思<rt>おも</rt></ruby>っています。', ko: '머리를 자를까 생각 중입니다.'},
+      {jp: '<ruby>新<rt>あたら</rt></ruby>しいスマホ<ruby>買<rt>か</rt></ruby>おうかなって<ruby>思<rt>おも</rt></ruby>ってる。', ko: '새 휴대폰 살까 생각 중이야.'},
+    ]
+  },
+  {
+    id: 'g045',
+    title: '〜だろう',
+    desc: '~겠지, ~인 걸까 (추측·확인). でしょう보다 캐주얼·남성적',
+    level: '추측·의견',
+    examples: [
+      {jp: '<ruby>明日<rt>あした</rt></ruby>は<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るだろう。', ko: '내일은 비가 오겠지.'},
+      {jp: '<ruby>彼<rt>かれ</rt></ruby>はもう<ruby>家<rt>いえ</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>っただろう。', ko: '그는 이미 집에 돌아갔겠지.'},
+      {jp: '<ruby>明日<rt>あした</rt></ruby><ruby>試験<rt>しけん</rt></ruby>があるだろう？', ko: '내일 시험 있지?'},
+    ]
+  },
+  {
+    id: 'g046',
+    title: '〜てみたら',
+    desc: '~해 보니까, ~해보니 (시도 후의 발견)',
+    level: '추측·의견',
+    examples: [
+      {jp: '<ruby>食<rt>た</rt></ruby>べてみたら<ruby>意外<rt>いがい</rt></ruby>と<ruby>美味<rt>おい</rt></ruby>しかった。', ko: '먹어보니까 의외로 맛있었어.'},
+      {jp: '<ruby>実際<rt>じっさい</rt></ruby>にやってみたら<ruby>思<rt>おも</rt></ruby>ったより<ruby>大変<rt>たいへん</rt></ruby>だった。', ko: '실제로 해보니까 생각보다 힘들었어.'},
+      {jp: '<ruby>連絡<rt>れんらく</rt></ruby>してみたら<ruby>案外<rt>あんがい</rt></ruby>よかった。', ko: '연락해보니까 생각보다 좋았어.'},
+    ]
+  },
+  {
+    id: 'g047',
+    title: '〜ところじゃない / 〜どころじゃない',
+    desc: '~할 때가 아니다, ~할 여유가 없다 (상황이 안 됨)',
+    level: '회화패턴',
+    examples: [
+      {jp: '<ruby>旅行<rt>りょこう</rt></ruby>どころじゃないよ、<ruby>仕事<rt>しごと</rt></ruby>が<ruby>山積<rt>やまづ</rt></ruby>みで。', ko: '여행 갈 때가 아니야, 일이 산더미야.'},
+      {jp: '<ruby>笑<rt>わら</rt></ruby>っているところじゃないよ！', ko: '웃을 때가 아니야!'},
+      {jp: '<ruby>歯医者<rt>はいしゃ</rt></ruby>に<ruby>行<rt>い</rt></ruby>くどころじゃなかった。', ko: '치과에 갈 상황이 아니었어.'},
+    ]
+  }
+
+];
+
+const TRAVEL = [
+  {
+    id: 't001',
+    situation: '공항 & 입국',
+    icon: '✈️',
+    dialogues: [
+      {speaker: '직원', jp: 'パスポートと<ruby>入国<rt>にゅうこく</rt></ruby>カードを<ruby>見<rt>み</rt></ruby>せてください。', ko: '여권과 입국 신고서를 보여 주세요.'},
+      {speaker: '나', jp: '<ruby>観光<rt>かんこう</rt></ruby>です。<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>来<rt>き</rt></ruby>ました。', ko: '관광입니다. 여행하러 왔어요.'},
+      {speaker: '직원', jp: 'どのくらい<ruby>滞在<rt>たいざい</rt></ruby>しますか？', ko: '얼마나 머무르실 예정인가요?'},
+      {speaker: '나', jp: '2<ruby>泊<rt>はく</rt></ruby>3<ruby>日<rt>にち</rt></ruby>です。', ko: '2박 3일입니다.'},
+      {speaker: '직원', jp: '<ruby>滞在中<rt>たいざいちゅう</rt></ruby>の<ruby>宿泊先<rt>しゅくはくさき</rt></ruby>はどこですか？', ko: '머무르는 숙소는 어디인가요?'},
+      {speaker: '나', jp: '<ruby>銀座<rt>ぎんざ</rt></ruby>にあるホテルです。', ko: '긴자에 있는 호텔입니다.'},
+    ]
+  },
+  {
+    id: 't002',
+    situation: '택시 & 대중교통',
+    icon: '🚕',
+    dialogues: [
+      {speaker: '나', jp: '<ruby>東京駅<rt>とうきょうえき</rt></ruby>でお<ruby>願<rt>ねが</rt></ruby>いします。', ko: '도쿄역으로 부탁드립니다.'},
+      {speaker: '운전기사', jp: '今、<ruby>渋滞<rt>じゅうたい</rt></ruby>がひどいので<ruby>有料道路<rt>ゆうりょうどうろ</rt></ruby>で<ruby>行<rt>い</rt></ruby>った<ruby>方<rt>ほう</rt></ruby>が<ruby>速<rt>はや</rt></ruby>そうですが、どうしますか？', ko: '지금 정체가 심해서 유료 도로로 가는게 더 빠를 것 같은데 어떻게 하시겠어요?'},
+      {speaker: '나', jp: 'はい。<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。', ko: '네. 괜찮아요.'},
+      {speaker: '나', jp: '<ruby>到着<rt>とうちゃく</rt></ruby><ruby>時間<rt>じかん</rt></ruby>はどれぐらい<ruby>違<rt>ちが</rt></ruby>いますか？', ko: '도착 시간이 얼마나 차이나요?'},
+    ]
+  },
+  {
+    id: 't003',
+    situation: '숙소',
+    icon: '🏨',
+    dialogues: [
+      {speaker: '나', jp: 'お<ruby>世話<rt>せわ</rt></ruby>になっております。今日から2<ruby>泊<rt>はく</rt></ruby>三<ruby>日<rt>にち</rt></ruby>で<ruby>予約<rt>よやく</rt></ruby>したものですが、', ko: '안녕하세요. 오늘부터 2박 3일 예약한 사람입니다만,'},
+      {speaker: '나', jp: '<ruby>部屋<rt>へや</rt></ruby>の<ruby>暗証番号<rt>あんしょうばんごう</rt></ruby>をもう<ruby>一度<rt>いちど</rt></ruby><ruby>教<rt>おし</rt></ruby>えていただけますか？', ko: '방 비밀번호 한번 더 알려 주실 수 있을까요?'},
+      {speaker: '직원', jp: '<ruby>暗証番号<rt>あんしょうばんごう</rt></ruby>は4568シャープアスタリスクです。', ko: '비밀번호는 4568#*입니다.'},
+    ]
+  },
+  {
+    id: 't004',
+    situation: '라멘집',
+    icon: '🍜',
+    dialogues: [
+      {speaker: '나', jp: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>美味<rt>おい</rt></ruby>しいラーメン<ruby>屋<rt>や</rt></ruby>さんおすすめしていただけますか？', ko: '일본 라멘 맛집 추천해주세요.'},
+      {speaker: '점원', jp: '<ruby>韓国<rt>かんこく</rt></ruby>の<ruby>方<rt>かた</rt></ruby>は<ruby>豚骨<rt>とんこつ</rt></ruby>ラーメンが<ruby>好<rt>す</rt></ruby>きな<ruby>方<rt>かた</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いですが、', ko: '한국분들은 돈코츠 라멘을 좋아하시는 분이 많은데,'},
+      {speaker: '점원', jp: '<ruby>麺<rt>めん</rt></ruby>の<ruby>硬<rt>かた</rt></ruby>さはどうしますか？<ruby>硬<rt>かた</rt></ruby>め・<ruby>普通<rt>ふつう</rt></ruby>・やわめ', ko: '면 굳기는 어떻게 하시겠어요? 딱딱하게/보통/부드럽게'},
+    ]
+  },
+  {
+    id: 't005',
+    situation: '스시집',
+    icon: '🍣',
+    dialogues: [
+      {speaker: '직원', jp: 'いらっしゃいませ。ご<ruby>予約<rt>よやく</rt></ruby>されてますか？', ko: '어서오세요. 예약하셨나요?'},
+      {speaker: '나', jp: 'はい。〇〇という<ruby>名前<rt>なまえ</rt></ruby>で<ruby>予約<rt>よやく</rt></ruby>しました。', ko: '네. ○○ 이름으로 예약했습니다.'},
+      {speaker: '직원', jp: '12<ruby>時<rt>じ</rt></ruby>から3<ruby>名様<rt>めいさま</rt></ruby>でご<ruby>予約<rt>よやく</rt></ruby>の<ruby>様<rt>よう</rt></ruby>、ご<ruby>来店<rt>らいてん</rt></ruby>ありがとうございます。', ko: '12시부터 3분으로 예약하신 님. 내점 감사합니다.'},
+      {speaker: '직원', jp: 'こちらの4<ruby>人<rt>にん</rt></ruby>かけのお<ruby>席<rt>せき</rt></ruby>、どうぞ。', ko: '이쪽 4인석에 앉으세요.'},
+    ]
+  },
+  {
+    id: 't006',
+    situation: '카페',
+    icon: '☕',
+    dialogues: [
+      {speaker: '직원', jp: 'いらっしゃいませ。<ruby>次<rt>つぎ</rt></ruby>のお<ruby>待<rt>ま</rt></ruby>ちのお<ruby>客様<rt>きゃくさま</rt></ruby>どうぞ。ご<ruby>注文<rt>ちゅうもん</rt></ruby>お<ruby>伺<rt>うかが</rt></ruby>いします。', ko: '어서오세요. 다음 기다리시는 손님! 주문하시겠어요?'},
+      {speaker: '나', jp: 'アイスコーヒーレギュラーサイズ<ruby>一<rt>ひと</rt></ruby>つとカフェラテホットでショートサイズ<ruby>一<rt>ひと</rt></ruby>つお<ruby>願<rt>ねが</rt></ruby>いします。', ko: '아이스 커피 레귤러 사이즈 하나하고 카페라테 핫으로 숏 사이즈 하나 부탁드립니다.'},
+      {speaker: '나', jp: 'アイスコーヒーは<ruby>氷<rt>こおり</rt></ruby><ruby>少<rt>すく</rt></ruby>なめでお<ruby>願<rt>ねが</rt></ruby>いします。', ko: '아이스커피는 얼음 적게 부탁드립니다.'},
+      {speaker: '직원', jp: '<ruby>店内<rt>てんない</rt></ruby>ご<ruby>利用<rt>りよう</rt></ruby>ですか、お<ruby>持<rt>も</rt></ruby>ち<ruby>帰<rt>かえ</rt></ruby>りですか？', ko: '점내 이용하시나요? 포장이신가요?'},
+    ]
+  },
+  {
+    id: 't007',
+    situation: '편의점',
+    icon: '🏪',
+    dialogues: [
+      {speaker: '직원', jp: 'お<ruby>待<rt>ま</rt></ruby>ちのお<ruby>客様<rt>きゃくさま</rt></ruby>どうぞ。いらっしゃいませ。<ruby>袋<rt>ふくろ</rt></ruby>は<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？', ko: '기다리시는 손님 어서오세요. 봉투는 괜찮으세요?'},
+      {speaker: '나', jp: 'ください。あとアメリカンドック<ruby>一<rt>ひと</rt></ruby>つと<ruby>唐揚<rt>からあ</rt></ruby>げ<ruby>棒<rt>ぼう</rt></ruby><ruby>一<rt>ひと</rt></ruby>つ、アイスコーヒーSとホットコーヒーSお<ruby>願<rt>ねが</rt></ruby>いします。', ko: '주세요. 그리고 아메리칸도그 하나하고 가라아게봉 하나, 아이스 커피 S하고 따뜻한 커피 S 부탁드립니다.'},
+      {speaker: '나', jp: 'おでんは今の<ruby>時期<rt>じき</rt></ruby>にはないですよね？', ko: '오뎅은 지금 시기에는 없죠?'},
+    ]
+  },
+  {
+    id: 't008',
+    situation: '쇼핑 & 옷 입어보기',
+    icon: '🛍️',
+    dialogues: [
+      {speaker: '나', jp: 'すみません、これ<ruby>試着<rt>しちゃく</rt></ruby>できますか？', ko: '죄송한데 이거 입어볼 수 있을까요?'},
+      {speaker: '직원', jp: 'はい。<ruby>何点<rt>なんてん</rt></ruby><ruby>試着<rt>しちゃく</rt></ruby>されますか？', ko: '네. 몇 벌 입어보시나요?'},
+      {speaker: '직원', jp: 'こちらの<ruby>部屋<rt>へや</rt></ruby>でご<ruby>試着<rt>しちゃく</rt></ruby>ください。<ruby>靴<rt>くつ</rt></ruby>をぬいでご<ruby>利用<rt>りよう</rt></ruby>ください。', ko: '이쪽 방에서 입어보세요. 신발을 벗고 이용 부탁드립니다.'},
+    ]
+  },
+  {
+    id: 't009',
+    situation: '반품 & 교환',
+    icon: '🔄',
+    dialogues: [
+      {speaker: '나', jp: 'すみません、これの<ruby>返品<rt>へんぴん</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いしたいのですが、', ko: '죄송한데 이거 반품을 부탁하고 싶은데요.'},
+      {speaker: '직원', jp: 'お<ruby>客様<rt>きゃくさま</rt></ruby>ご<ruby>購入<rt>こうにゅう</rt></ruby>の<ruby>際<rt>さい</rt></ruby>のレシートはお<ruby>持<rt>も</rt></ruby>ちでしょうか？', ko: '손님 구입하실 때 영수증은 가지고 계세요?'},
+      {speaker: '직원', jp: '<ruby>問題<rt>もんだい</rt></ruby>ございませんでしたので<ruby>返品<rt>へんぴん</rt></ruby>させていただきます。', ko: '문제 없으셨기 때문에 반품해드리겠습니다.'},
+    ]
+  },
+  {
+    id: 't010',
+    situation: '면세',
+    icon: '💴',
+    dialogues: [
+      {speaker: '직원', jp: 'お<ruby>客様<rt>きゃくさま</rt></ruby>、<ruby>免税<rt>めんぜい</rt></ruby>されますか？', ko: '손님 면세하시나요?'},
+      {speaker: '나', jp: 'はい。<ruby>免税<rt>めんぜい</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いしたいのですが。', ko: '네. 면세 부탁하고 싶은데요.'},
+      {speaker: '직원', jp: '<ruby>免税<rt>めんぜい</rt></ruby>は5000<ruby>円<rt>えん</rt></ruby>以上の<ruby>場合<rt>ばあい</rt></ruby><ruby>可能<rt>かのう</rt></ruby>となります。', ko: '면세는 5000엔 이상의 경우에 가능합니다.'},
+      {speaker: '직원', jp: '3<ruby>階<rt>かい</rt></ruby>の<ruby>免税<rt>めんぜい</rt></ruby>カウンターでお<ruby>会計<rt>かいけい</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします。', ko: '3층의 면세 카운터에서 계산 부탁드립니다.'},
+    ]
+  },
+  {
+    id: 't011',
+    situation: '공항 돌아가는 길',
+    icon: '🚌',
+    dialogues: [
+      {speaker: '나', jp: 'すみません、<ruby>成田<rt>なりた</rt></ruby>に<ruby>行<rt>い</rt></ruby>く<ruby>空港<rt>くうこう</rt></ruby>バスの<ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>はどこですか？', ko: '죄송한데요. 나리타 가는 공항버스 타는 곳은 어디예요?'},
+      {speaker: '직원', jp: 'ここから<ruby>左側<rt>ひだりがわ</rt></ruby>の<ruby>方<rt>ほう</rt></ruby>にある<ruby>八重洲口<rt>やえすぐち</rt></ruby>から<ruby>出<rt>で</rt></ruby>ていただいて、<ruby>右側<rt>みぎがわ</rt></ruby>に<ruby>最後<rt>さいご</rt></ruby>までまっすぐ<ruby>行<rt>い</rt></ruby>くとマックがあります。', ko: '여기에서 왼쪽 방향 야에스구치로 나가셔서 오른쪽으로 끝까지 쭉 가시면 맥도날드가 있어요.'},
+      {speaker: '나', jp: 'ありがとうございます。バスは<ruby>何分<rt>なんぷん</rt></ruby>ごとにありますか？', ko: '감사합니다. 버스는 몇분마다 있습니까?'},
+    ]
+  },
+  {
+    id: 't012',
+    situation: '분실물 찾기',
+    icon: '🔍',
+    dialogues: [
+      {speaker: '나', jp: 'すみません、<ruby>昨日<rt>きのう</rt></ruby>この<ruby>駅<rt>えき</rt></ruby>でスイカを<ruby>失<rt>な</rt></ruby>くしてしまって…ここに<ruby>落<rt>お</rt></ruby>とし<ruby>物<rt>もの</rt></ruby>で<ruby>届<rt>とど</rt></ruby>いていませんか？', ko: '죄송한데 어제 이 역에서 스이카를 잃어버려서요. 여기에 분실물로 들어오지 않았습니까?'},
+      {speaker: '직원', jp: 'いつどこで<ruby>失<rt>な</rt></ruby>くされたんですか？', ko: '언제 어디에서 잃어버리셨나요?'},
+      {speaker: '나', jp: '<ruby>昨日<rt>きのう</rt></ruby>この<ruby>駅<rt>えき</rt></ruby>で<ruby>使<rt>つか</rt></ruby>ってから<ruby>失<rt>な</rt></ruby>くしたみたいです。', ko: '어제 이 역에서 사용하고 난 뒤부터 잃어버린 것 같아요.'},
+      {speaker: '직원', jp: '<ruby>届<rt>とど</rt></ruby>いているか<ruby>確認<rt>かくにん</rt></ruby>してみます。', ko: '들어왔는지 확인해 보겠습니다.'},
+    ]
+  },
+];
+
+const DRAMA = [
+  // 1단계
+  {
+    id: 'd001',
+    stage: 1,
+    title: '벌써 일년',
+    lines: [
+      {speaker: '동료', jp: 'ひとみ<ruby>先生<rt>せんせい</rt></ruby>はここに<ruby>来<rt>き</rt></ruby>てもう<ruby>一年<rt>いちねん</rt></ruby>？', ko: '히토미 선생님은 여기 온지 벌써 일년?'},
+      {speaker: '히토미', jp: 'はい。でもまだまだです。', ko: '네. 근데 아직 멀었어요.'},
+    ],
+    words: [
+      {jp: 'もう', ko: '벌써, 이미, 이제'},
+      {jp: 'でも', ko: '근데, 하지만'},
+      {jp: 'まだまだ', ko: '아직이다, 아직도'},
+    ]
+  },
+  {
+    id: 'd002',
+    stage: 1,
+    title: '비싼 아이스부터 그만둬',
+    lines: [
+      {speaker: '아이', jp: '今のままじゃ、この<ruby>子<rt>こ</rt></ruby>たちを<ruby>幸<rt>しあわ</rt></ruby>せにできない。', ko: '지금 이대로라면, 이 아이들을 행복하게 할 수 없어.'},
+      {speaker: '아이', jp: 'CMとか<ruby>映画<rt>えいが</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>こないかな。', ko: '광고나 영화 일 안 들어 오려나.'},
+      {speaker: '매니저', jp: 'いや、まずその<ruby>高<rt>たか</rt></ruby>いアイスをやめなさい。', ko: '아니, 일단 그 비싼 아이스부터 그만둬.'},
+    ],
+    words: [
+      {jp: '今のままじゃ', ko: '지금 이대로라면'},
+      {jp: '<ruby>幸<rt>しあわ</rt></ruby>せ', ko: '행복'},
+      {jp: 'まず', ko: '일단, 우선'},
+      {jp: 'やめる', ko: '그만두다, 중단하다'},
+    ]
+  },
+  {
+    id: 'd003',
+    stage: 1,
+    title: '여전히 귀엽다',
+    lines: [
+      {speaker: '친구1', jp: 'びっくりした？', ko: '놀랐어?'},
+      {speaker: '친구2', jp: '<ruby>相変<rt>あいか</rt></ruby>わらず<ruby>可愛<rt>かわい</rt></ruby>いですね。そのリアクション。', ko: '여전히 변함없이 귀엽네요. 그 반응.'},
+    ],
+    words: [
+      {jp: 'びっくりする', ko: '깜짝 놀라다'},
+      {jp: '<ruby>相変<rt>あいか</rt></ruby>わらず', ko: '변함없이, 여전히'},
+    ]
+  },
+  {
+    id: 'd004',
+    stage: 1,
+    title: '회사에서 논알콜',
+    lines: [
+      {speaker: '와카코', jp: '<ruby>会社<rt>かいしゃ</rt></ruby>で<ruby>飲<rt>の</rt></ruby>んで、<ruby>花火<rt>はなび</rt></ruby>を<ruby>見<rt>み</rt></ruby>て、なんて<ruby>不思議<rt>ふしぎ</rt></ruby>な<ruby>夏<rt>なつ</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>。', ko: '회사에서 마시고, 불꽃축제 보고, 이 무슨 신기한 여름 밤인가.'},
+      {speaker: '와카코', jp: 'これもノンアルコールビールのおかげだね。', ko: '이것도 논알콜 맥주 덕분이네.'},
+    ],
+    words: [
+      {jp: '<ruby>会社<rt>かいしゃ</rt></ruby>', ko: '회사'},
+      {jp: '<ruby>花火<rt>はなび</rt></ruby>', ko: '불꽃놀이'},
+      {jp: '<ruby>不思議<rt>ふしぎ</rt></ruby>', ko: '신기함, 불가사의'},
+      {jp: 'おかげ', ko: '덕분'},
+    ]
+  },
+  // 2단계
+  {
+    id: 'd005',
+    stage: 2,
+    title: '참을 수 없다',
+    lines: [
+      {speaker: '직원', jp: 'お<ruby>待<rt>ま</rt></ruby>たせしました。<ruby>上<rt>じょう</rt></ruby>シャケになります。', ko: '오래 기다리셨습니다. 상연어입니다.'},
+      {speaker: '와카코', jp: 'こうばしいかおり。<ruby>待<rt>ま</rt></ruby>ちきれない。<ruby>来<rt>き</rt></ruby>た<ruby>来<rt>き</rt></ruby>た！', ko: '고소한 향. 참을 수 없어. 왔다왔다!'},
+    ],
+    words: [
+      {jp: 'こうばしい', ko: '고소하다'},
+      {jp: 'かおり', ko: '향, 향기'},
+      {jp: '<ruby>待<rt>ま</rt></ruby>ちきれない', ko: '참을 수 없다, 기다릴 수 없다'},
+    ]
+  },
+  {
+    id: 'd006',
+    stage: 2,
+    title: '안색이 안좋다',
+    lines: [
+      {speaker: '친구', jp: '<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>？<ruby>顔色<rt>かおいろ</rt></ruby><ruby>悪<rt>わる</rt></ruby>いよ。', ko: '괜찮아? 안색이 안좋아.'},
+      {speaker: '친구', jp: '<ruby>徹夜<rt>てつや</rt></ruby>はよくないって<ruby>言<rt>い</rt></ruby>ってるのに。', ko: '밤샘은 안 좋다고 말했는데.'},
+    ],
+    words: [
+      {jp: '<ruby>顔色<rt>かおいろ</rt></ruby>', ko: '얼굴색, 안색'},
+      {jp: '<ruby>悪<rt>わる</rt></ruby>い', ko: '나쁘다, 안 좋다'},
+      {jp: '<ruby>徹夜<rt>てつや</rt></ruby>', ko: '밤새움, 철야'},
+    ]
+  },
+  {
+    id: 'd007',
+    stage: 2,
+    title: '건강에는 운동',
+    lines: [
+      {speaker: '엄마', jp: 'ああ、やっぱり<ruby>運動<rt>うんどう</rt></ruby>なのね。', ko: '아아 역시 운동이구나.'},
+      {speaker: '미캉', jp: '<ruby>何<rt>なに</rt></ruby>が？', ko: '뭐가?'},
+      {speaker: '엄마', jp: '<ruby>健康<rt>けんこう</rt></ruby>には<ruby>運動<rt>うんどう</rt></ruby>だって。', ko: '건강에는 운동이래.'},
+      {speaker: '동동이', jp: 'それは<ruby>当然<rt>とうぜん</rt></ruby>じゃないの。', ko: '그건 당연하잖아.'},
+    ],
+    words: [
+      {jp: 'やっぱり', ko: '역시'},
+      {jp: '<ruby>健康<rt>けんこう</rt></ruby>', ko: '건강'},
+      {jp: '<ruby>当然<rt>とうぜん</rt></ruby>', ko: '당연'},
+    ]
+  },
+  {
+    id: 'd008',
+    stage: 2,
+    title: '더블치즈버거',
+    lines: [
+      {speaker: '직원', jp: 'こんにちは。マクドナルドへようこそ。ご<ruby>注文<rt>ちゅうもん</rt></ruby>はどうしますか？', ko: '안녕하세요. 맥도날드에 오신 걸 환영합니다. 주문 어떻게 하시겠어요?'},
+      {speaker: '손님', jp: 'ダブルチーズバーガーで。ピクルス<ruby>抜<rt>ぬ</rt></ruby>き、オニオン<ruby>多<rt>おお</rt></ruby>めで。', ko: '더블 치즈버거로. 피클빼고, 양파 많이.'},
+      {speaker: '직원', jp: 'はい。620<ruby>円<rt>えん</rt></ruby>になります。', ko: '네. 총 620엔입니다.'},
+    ],
+    words: [
+      {jp: 'ようこそ', ko: '환영합니다'},
+      {jp: 'ピクルス<ruby>抜<rt>ぬ</rt></ruby>き', ko: '피클 빼고'},
+      {jp: '<ruby>多<rt>おお</rt></ruby>め', ko: '많이, 많은 양으로'},
+      {jp: '<ruby>少<rt>すく</rt></ruby>なめ', ko: '적게, 적은 양으로'},
+    ]
+  },
+  // 3단계
+  {
+    id: 'd009',
+    stage: 3,
+    title: '일어날 일은 일어난다',
+    lines: [
+      {speaker: '미사', jp: 'これから<ruby>起<rt>お</rt></ruby>こることを<ruby>知<rt>し</rt></ruby>っていれば、<ruby>運命<rt>うんめい</rt></ruby>を<ruby>避<rt>さ</rt></ruby>けることができる。', ko: '앞으로 일어날 일을 알고 있으면, 운명을 피할 수 있어.'},
+      {speaker: '미사', jp: 'でも、<ruby>行動<rt>こうどう</rt></ruby><ruby>変<rt>か</rt></ruby>えても、<ruby>起<rt>お</rt></ruby>こることは<ruby>起<rt>お</rt></ruby>こる。', ko: '근데 행동을 바꿔도, 일어날 일은 일어나.'},
+    ],
+    words: [
+      {jp: '<ruby>起<rt>お</rt></ruby>こる', ko: '일어나다, 발생하다'},
+      {jp: '<ruby>運命<rt>うんめい</rt></ruby>', ko: '운명'},
+      {jp: '<ruby>避<rt>さ</rt></ruby>ける', ko: '피하다'},
+      {jp: '<ruby>行動<rt>こうどう</rt></ruby>', ko: '행동'},
+    ]
+  },
+  {
+    id: 'd010',
+    stage: 3,
+    title: '부담을 주다',
+    lines: [
+      {speaker: '상사', jp: 'カンベさんにばっかり<ruby>負担<rt>ふたん</rt></ruby>かけてごめんね。', ko: '칸베 씨한테만 부담줘서 미안해.'},
+      {speaker: '상사', jp: '<ruby>下<rt>した</rt></ruby>のカフェでちょっと<ruby>確認<rt>かくにん</rt></ruby>だけ、いい？', ko: '아래 카페에서 잠깐 확인만, 괜찮아?'},
+    ],
+    words: [
+      {jp: '<ruby>負担<rt>ふたん</rt></ruby>をかける', ko: '부담주다'},
+      {jp: 'ばっかり', ko: '~만, ~뿐'},
+      {jp: '<ruby>確認<rt>かくにん</rt></ruby>', ko: '확인'},
+    ]
+  },
+  {
+    id: 'd011',
+    stage: 3,
+    title: '치아가 튼튼한 엄마',
+    lines: [
+      {speaker: '엄마', jp: '<ruby>嫌<rt>いや</rt></ruby>なことは<ruby>後回<rt>あとまわ</rt></ruby>しにするからでしょ。', ko: '싫은 일은 뒤로 미루니까 그렇잖아.'},
+      {speaker: '미캉', jp: 'お<ruby>母<rt>かあ</rt></ruby>さんには<ruby>分<rt>わ</rt></ruby>からないよ。この<ruby>気持<rt>きも</rt></ruby>ち。', ko: '엄마에게는 이 기분은 모르겠지.'},
+      {speaker: '엄마', jp: 'エビフライのしっぽが<ruby>一番<rt>いちばん</rt></ruby>おいしいのよ！', ko: '새우튀김은 꼬리가 가장 맛있는 거야!'},
+    ],
+    words: [
+      {jp: '<ruby>後回<rt>あとまわ</rt></ruby>しにする', ko: '뒤로 미루다'},
+      {jp: '<ruby>気持<rt>きも</rt></ruby>ち', ko: '기분, 마음'},
+      {jp: '<ruby>一番<rt>いちばん</rt></ruby>', ko: '가장, 제일'},
+    ]
+  },
+  {
+    id: 'd012',
+    stage: 3,
+    title: '상담해주다',
+    lines: [
+      {speaker: '여자1', jp: 'お<ruby>料理<rt>りょうり</rt></ruby><ruby>作<rt>つく</rt></ruby>るのはお<ruby>好<rt>す</rt></ruby>きなんですか？', ko: '요리 만드는 건 좋아하시나요?'},
+      {speaker: '여자2', jp: '<ruby>夫<rt>おっと</rt></ruby>と<ruby>子供<rt>こども</rt></ruby>に<ruby>毎日<rt>まいにち</rt></ruby><ruby>作<rt>つく</rt></ruby>ってますから。', ko: '남편하고 아이에게 매일 만들고 있으니까.'},
+      {speaker: '여자2', jp: 'メニューについてとか、<ruby>相談<rt>そうだん</rt></ruby>に<ruby>乗<rt>の</rt></ruby>れると<ruby>思<rt>おも</rt></ruby>いますけど。', ko: '메뉴에 대한 거라던가, 상담해 드릴 수 있을 것 같은데.'},
+    ],
+    words: [
+      {jp: 'お<ruby>好<rt>す</rt></ruby>き', ko: '좋아하다 (존경어)'},
+      {jp: '<ruby>毎日<rt>まいにち</rt></ruby>', ko: '매일'},
+      {jp: '<ruby>相談<rt>そうだん</rt></ruby>に<ruby>乗<rt>の</rt></ruby>る', ko: '상담해주다'},
+    ]
+  },
+  {
+    id: 'd014',
+    stage: 3,
+    title: '일본인 남자친구와 연락 문제(1)',
+    lines: [
+      {speaker: '남자', jp: '<ruby>日本人<rt>にほんじん</rt></ruby><ruby>男子<rt>だんし</rt></ruby>と<ruby>恋愛<rt>れんあい</rt></ruby>していて、', ko: '일본인 남자랑 연애 중인데'},
+      {speaker: '남자', jp: '<ruby>返信<rt>へんしん</rt></ruby>が<ruby>遅<rt>おそ</rt></ruby>くて<ruby>辛<rt>つら</rt></ruby>いっていうことだったんですけど', ko: '답장이 늦어서 힘들다고 하셨습니다만'},
+      {speaker: '남자', jp: 'いやぁ、これは<ruby>想像<rt>そうぞう</rt></ruby>するだけでも<ruby>辛<rt>つら</rt></ruby>いです', ko: '아… 이건 진짜 상상만 해도 괴롭습니다'},
+      {speaker: '남자', jp: 'でも<ruby>正直<rt>しょうじき</rt></ruby>、<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>気<rt>き</rt></ruby>にしなくていいと<ruby>思<rt>おも</rt></ruby>います', ko: '그런데 솔직히, 전혀 신경 안 쓰셔도 된다고 생각해요.'},
+      {speaker: '남자', jp: 'そもそも<ruby>日本人<rt>にほんじん</rt></ruby>って、<ruby>韓国<rt>かんこく</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べると', ko: '원래 일본인들은 한국 사람들에 비하면'},
+      {speaker: '남자', jp: 'ラインする<ruby>頻度<rt>ひんど</rt></ruby>が<ruby>結構<rt>けっこう</rt></ruby><ruby>少<rt>すく</rt></ruby>ない<ruby>方<rt>ほう</rt></ruby>なんですよ', ko: '라인(LINE)을 하는 빈도가 꽤 적은 편이에요.'},
+      {speaker: '남자', jp: 'あんまり<ruby>連絡<rt>れんらく</rt></ruby>にこだわらない<ruby>人<rt>ひと</rt></ruby>も<ruby>多<rt>おお</rt></ruby>いんですよ', ko: '별로 연락에 신경 안 쓰는 사람도 많아요.'},
+    ],
+    words: [
+      {jp: '<ruby>恋愛<rt>れんあい</rt></ruby>', ko: '연애'},
+      {jp: '<ruby>返信<rt>へんしん</rt></ruby>', ko: '답장, 답변'},
+      {jp: '<ruby>想像<rt>そうぞう</rt></ruby>する', ko: '상상하다'},
+      {jp: '<ruby>気<rt>き</rt></ruby>にする', ko: '신경쓰다'},
+      {jp: '<ruby>正直<rt>しょうじき</rt></ruby>', ko: '솔직히'},
+      {jp: 'そもそも', ko: '원래, 애초에'},
+      {jp: '<ruby>比<rt>くら</rt></ruby>べる', ko: '비교하다'},
+      {jp: '<ruby>頻度<rt>ひんど</rt></ruby>', ko: '빈도'},
+      {jp: '<ruby>相談<rt>そうだん</rt></ruby>に<ruby>乗<rt>の</rt></ruby>る', ko: '상담을 해주다'},
+      {jp: '<ruby>返<rt>かえ</rt></ruby>す', ko: '돌려주다, 답장하다'},
+      {jp: '<ruby>気<rt>き</rt></ruby>になる', ko: '궁금하다, 마음에 걸리다'},
+      {jp: '<ruby>極端<rt>きょくたん</rt></ruby>', ko: '극단적'},
+      {jp: 'こだわる', ko: '각별히 신경쓰다, ~만 고집하다'},
+    ]
+  },
+  {
+    id: 'd015',
+    stage: 3,
+    title: '작전을 짜다',
+    lines: [
+      {speaker: '딸', jp: 'そんな<ruby>無責任<rt>むせきにん</rt></ruby>な', ko: '그런 무책임한'},
+      {speaker: '아빠', jp: 'いやまぁ', ko: '아니 뭐'},
+      {speaker: '아빠', jp: '<ruby>本人<rt>ほんにん</rt></ruby>の<ruby>意思<rt>いし</rt></ruby><ruby>尊重<rt>そんちょう</rt></ruby>してくれてんじゃないの', ko: '본인의 의사를 존중해주는 거 아닐까'},
+      {speaker: '화자', jp: 'これから<ruby>作戦<rt>さくせん</rt></ruby>を<ruby>深<rt>ふか</rt></ruby>く<ruby>練<rt>ね</rt></ruby>ります', ko: '지금부터 작전을 깊이 짜겠습니다'},
+    ],
+    words: [
+      {jp: '<ruby>無責任<rt>むせきにん</rt></ruby>', ko: '무책임'},
+      {jp: '<ruby>本人<rt>ほんにん</rt></ruby>', ko: '본인'},
+      {jp: '<ruby>意思<rt>いし</rt></ruby>', ko: '의사'},
+      {jp: '<ruby>尊重<rt>そんちょう</rt></ruby>', ko: '존중'},
+      {jp: '<ruby>作戦<rt>さくせん</rt></ruby>を<ruby>練<rt>ね</rt></ruby>る', ko: '작전을 짜다'},
+      {jp: '<ruby>深<rt>ふか</rt></ruby>く', ko: '깊이'},
+    ]
+  },
+  // 4단계
+  {
+    id: 'd013',
+    stage: 4,
+    title: '기다려주셔야 한다',
+    lines: [
+      {speaker: '직원', jp: 'お<ruby>客様<rt>きゃくさま</rt></ruby>は<ruby>何名<rt>なんめい</rt></ruby>ですか？', ko: '손님, 몇 분이세요?'},
+      {speaker: '부장님', jp: '1<ruby>名<rt>めい</rt></ruby>です。', ko: '한 명이요.'},
+      {speaker: '직원', jp: '<ruby>申<rt>もう</rt></ruby>し<ruby>訳<rt>わけ</rt></ruby>ございません。ただいま<ruby>満席<rt>まんせき</rt></ruby>になりましたので、30<ruby>分<rt>ぷん</rt></ruby>ほどお<ruby>待<rt>ま</rt></ruby>ちいただく<ruby>形<rt>かたち</rt></ruby>になります。', ko: '정말 죄송합니다만. 현재 만석이 되었기 때문에 30분 정도 기다려주셔야 합니다.'},
+      {speaker: '미사', jp: 'よろしければご<ruby>一緒<rt>いっしょ</rt></ruby>に…', ko: '괜찮으시면 함께…'},
+    ],
+    words: [
+      {jp: '<ruby>申<rt>もう</rt></ruby>し<ruby>訳<rt>わけ</rt></ruby>ございません', ko: '정말 죄송합니다 (최고 격식)'},
+      {jp: '<ruby>満席<rt>まんせき</rt></ruby>', ko: '만석'},
+      {jp: '〜<ruby>形<rt>かたち</rt></ruby>になります', ko: '~하는 형태가 됩니다 (완곡 표현)'},
+      {jp: 'よろしければ', ko: '괜찮으시면'},
+    ]
+  },,
+  {
+    "id": "d016",
+    "stage": 3,
+    "title": "올 리가 없다",
+    "lines": [
+      {
+        "jp": "あの人が好きそうな棚の前にいれば",
+        "ko": "그 사람이 좋아할 것 같은 선반 앞에 있으면",
+        "speaker": "여자"
+      },
+      {
+        "jp": "偶然!",
+        "ko": "우연!",
+        "speaker": "여자"
+      },
+      {
+        "jp": "既に偶然じゃないけど…",
+        "ko": "이미 우연이 아니지만…",
+        "speaker": "여자"
+      },
+      {
+        "jp": "お?かわしま!",
+        "ko": "오? 카와시마!",
+        "speaker": "남자"
+      },
+      {
+        "jp": "かわしまSFとか好きなの?",
+        "ko": "카와시마 SF 같은 거 좋아해?",
+        "speaker": "남자"
+      },
+      {
+        "jp": "うん!ちょこっとだけ",
+        "ko": "응! 조금만",
+        "speaker": "여자"
+      },
+      {
+        "jp": "え、たちばなくんが読んでた本はどれ?",
+        "ko": "에, 타치바나 군이 읽고 있던 책은 어떤 거야?",
+        "speaker": "여자"
+      },
+      {
+        "jp": "くるわけないか",
+        "ko": "올 리가 없나",
+        "speaker": "여자"
+      }
+    ],
+    "words": [
+      {
+        "jp": "好きそうだ",
+        "ko": "좋아할 것 같다"
+      },
+      {
+        "jp": "棚（たな）",
+        "ko": "선반, 진열대, 장 (本棚 책장, 食器棚 찬장·식기장)"
+      },
+      {
+        "jp": "偶然（ぐうぜん）",
+        "ko": "우연"
+      },
+      {
+        "jp": "既に（すでに）",
+        "ko": "이미, 벌써"
+      },
+      {
+        "jp": "ちょこっとだけ",
+        "ko": "조금만, 아주 조금만 (ちょこっと 쪼금, 찔끔)"
+      }
+    ]
+  }
+
+];
+
+const DRAMA_REVIEW = [
+  {
+    "id": "dr_latest",
+    "dramaId": "d016",
+    "title": "올 리가 없다",
+    "stage": 3,
+    "grammar": [
+      {
+        "examples": [
+          {
+            "jp": "このアニメ、絶対彼が好きそうだと思って勧めたら、案の定ハマってた。",
+            "ko": "이 애니메이션, 절대 그 사람이 좋아할 것 같다고 생각해서 추천했더니 아니나 다를까 빠져 있더라."
+          },
+          {
+            "jp": "スーパーのレジがすごく混んでて、並ぶだけで日が暮れそうだ。",
+            "ko": "마트 계산대가 엄청 붐벼서, 줄 서는 것만으로 날이 저물 것 같다."
+          },
+          {
+            "jp": "雨が降りそうな空模様だから、今日は折りたたみ傘を持っていこう。",
+            "ko": "비가 내릴 것 같은 하늘 모양이니까, 오늘은 접이식 우산을 가져가자."
+          }
+        ],
+        "meaning": "~인 듯하다, ~인 것 같다 (양태·겉모습으로 본 추측)",
+        "note": "동사 ます형, イ형용사·ナ형용사 어간에 そう를 붙인다. 명사를 수식할 때는 そうな, 동사를 수식할 때는 そうに가 된다. 好き→好きそう, 降る→降りそう, 早い→早そう처럼 직접 보거나 느낀 인상으로 판단할 때 쓴다. (참고: 보통형+そうだ는 전문(伝聞)이라 의미가 다르다)",
+        "pattern": "〜そうだ",
+        "practice": [
+          {
+            "jp": "この辛そうなラーメン、見た目だけで汗が出てくる。",
+            "ko": "이 매울 것 같은 라면, 겉모습만으로도 땀이 난다."
+          },
+          {
+            "jp": "新しく入ったアルバイトの子、真面目で仕事が早そうだ。",
+            "ko": "새로 들어온 아르바이트생, 성실하고 일을 잘할 것 같다."
+          },
+          {
+            "jp": "子供たちが楽しそうに遊んでいる姿を見て心が癒やされました。",
+            "ko": "아이들이 즐거운 듯이 놀고 있는 모습을 보고 마음이 치유되었습니다."
+          },
+          {
+            "jp": "この問題、一見簡単そうに見えて実はかなり難しい。",
+            "ko": "이 문제, 언뜻 간단해 보여서 실은 꽤 어렵다."
+          },
+          {
+            "jp": "荷物が重すぎて、途中で袋が破れそうだ。",
+            "ko": "짐이 너무 무거워서 도중에 봉지가 찢어질 것 같다."
+          }
+        ]
+      },
+      {
+        "examples": [
+          {
+            "jp": "こんな時間に彼がまだ起きているわけないか。もう寝てるよね。",
+            "ko": "이런 시간에 그 사람이 아직 깨어 있을 리가 없나. 벌써 자고 있겠지."
+          },
+          {
+            "jp": "一日中ゲームばかりしていて、テストで100点取れるわけがない。",
+            "ko": "하루 종일 게임만 하면서 시험에서 100점 맞을 수 있을 리가 없다."
+          },
+          {
+            "jp": "そんなに安くて美味しい店が、この近くにあるわけないじゃん。",
+            "ko": "그렇게 싸고 맛있는 가게가 이 근처에 있을 리가 없잖아."
+          }
+        ],
+        "meaning": "~일 리가 없다, ~할 리가 없다 (이치상 당연히 불가능)",
+        "note": "동사·형용사의 보통형에 わけがない를 붙여 '그럴 만한 이유·도리가 없다'는 강한 부정을 나타낸다. 회화에서는 が를 생략해 わけない로 자주 쓴다. はずがない와 의미가 비슷하지만 わけがない가 더 단정적이다.",
+        "pattern": "〜わけない / 〜わけがない",
+        "practice": [
+          {
+            "jp": "何回も練習したんだから、本番で失敗するわけがない！自信を持って。",
+            "ko": "몇 번이나 연습했으니까 실전에서 실패할 리가 없어! 자신을 가져."
+          },
+          {
+            "jp": "買ったばかりなのに、もう壊れるわけがない。何かの間違いだよ。",
+            "ko": "막 샀는데 벌써 고장 날 리가 없다. 무슨 착오겠지."
+          },
+          {
+            "jp": "あの真面目な田中さんが、約束を破るわけがありません。",
+            "ko": "그 성실한 다나카 씨가 약속을 어길 리가 없습니다."
+          },
+          {
+            "jp": "毎日こんなに甘いものばかり食べていたら、痩せるわけないよね。",
+            "ko": "매일 이렇게 단것만 먹고 있으면 살이 빠질 리가 없지."
+          }
+        ]
+      },
+      {
+        "examples": [
+          {
+            "jp": "やっぱり今日のイベント、推しは来ないか。",
+            "ko": "역시 오늘 이벤트에 최애는 안 오려나… / 안 오는구나."
+          },
+          {
+            "jp": "あの人からの返信は来ないか…",
+            "ko": "그 사람한테서 답장은 안 오려나… / 안 오는구나."
+          },
+          {
+            "jp": "一生懸命準備したけど、今回のオーディションも無理か。",
+            "ko": "열심히 준비했지만, 이번 오디션도 무리인가…"
+          },
+          {
+            "jp": "今日の花火大会は中止か。楽しみにしていたのに。",
+            "ko": "오늘 불꽃축제는 취소인가… 기대하고 있었는데."
+          }
+        ],
+        "meaning": "~겠지, ~려나, ~구나, ~인가 (혼잣말·자문자답)",
+        "note": "문말에 か를 붙여 상대에게 묻는 것이 아니라 스스로에게 확인하거나 납득·체념하는 혼잣말을 나타낸다. くるわけないか의 か가 이 용법이다. 흔히 끝을 내려 읽으며, …나 / …구나 / …인가 같은 한국어 혼잣말에 대응한다.",
+        "pattern": "〜か（自問自答）",
+        "practice": [
+          {
+            "jp": "いくら努力しても、やっぱり天才には勝てないのか。",
+            "ko": "아무리 노력해도 역시 천재는 이길 수 없는 건가."
+          },
+          {
+            "jp": "欲しかった限定グッズ、もう売り切れか。",
+            "ko": "갖고 싶었던 한정판 굿즈, 벌써 품절인가."
+          },
+          {
+            "jp": "休日はあっという間に終わっちゃうな。明日からまた出勤か。",
+            "ko": "휴일은 눈 깜짝할 사이에 끝나버리는구나. 내일부터 또 출근인가."
+          }
+        ]
+      }
+    ],
+    "fill": [
+      {
+        "jp": "あの人が好きそうな棚の前にいれば",
+        "ko": "그 사람이 좋아할 것 같은 선반 앞에 있으면"
+      },
+      {
+        "jp": "既に偶然じゃないけど…",
+        "ko": "이미 우연이 아니지만…"
+      },
+      {
+        "jp": "かわしまSFとか好きなの?",
+        "ko": "카와시마 SF 같은 거 좋아해?"
+      },
+      {
+        "jp": "うん!ちょこっとだけ",
+        "ko": "응! 조금만"
+      },
+      {
+        "jp": "くるわけないか",
+        "ko": "올 리가 없나"
+      }
+    ]
+  }
+];
+const TODAY_TALK = {"topic": "コンビニで<ruby>会計<rt>かいけい</rt></ruby>", "topic_ko": "편의점에서 계산하기", "level": "N4", "turns": [{"who": "점원", "mine": false, "jp": "いらっしゃいませ。<ruby>以上<rt>いじょう</rt></ruby>でよろしいですか？", "ko": "어서 오세요. 이게 다이신가요?"}, {"who": "나", "mine": true, "cue_ko": "도시락도 하나 추가한다고 말하기", "jp": "あ、このお<ruby>弁当<rt>べんとう</rt></ruby>も<ruby>一<rt>ひと</rt></ruby>つ<ruby>追加<rt>ついか</rt></ruby>でお<ruby>願<rt>ねが</rt></ruby>いします。", "ko": "아, 이 도시락도 하나 추가로 부탁드려요.", "tip": "追加で = 「추가로」, 주문에 뭔가 더할 때 쓴다"}, {"who": "점원", "mine": false, "jp": "かしこまりました。お<ruby>弁当<rt>べんとう</rt></ruby>、<ruby>温<rt>あたた</rt></ruby>めますか？", "ko": "알겠습니다. 도시락 데워 드릴까요?"}, {"who": "나", "mine": true, "cue_ko": "데워 달라고 부탁하기", "jp": "はい、<ruby>温<rt>あたた</rt></ruby>めてください。", "ko": "네, 데워 주세요."}, {"who": "점원", "mine": false, "jp": "お<ruby>箸<rt>はし</rt></ruby>はおつけしますか？", "ko": "젓가락은 넣어 드릴까요?"}, {"who": "나", "mine": true, "cue_ko": "젓가락은 됐다고 정중히 거절하기", "jp": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。<ruby>家<rt>いえ</rt></ruby>で<ruby>食<rt>た</rt></ruby>べるので。", "ko": "괜찮아요. 집에서 먹을 거라서요.", "tip": "大丈夫です = 「괜찮아요」, 거절할 때 부드럽게 쓰는 표현"}, {"who": "점원", "mine": false, "jp": "<ruby>全部<rt>ぜんぶ</rt></ruby>で<ruby>780円<rt>ななひゃくはちじゅうえん</rt></ruby>になります。", "ko": "전부 해서 780엔입니다."}, {"who": "나", "mine": true, "cue_ko": "교통카드로 계산할 수 있는지 묻기", "jp": "ICカードで<ruby>払<rt>はら</rt></ruby>えますか？", "ko": "교통카드로 낼 수 있나요?", "tip": "払えます = 払う(내다)의 가능형, 「낼 수 있다」"}]};
+
+</script>
+<style>
+  :root {
+    --primary: #e63946;
+    --primary-dark: #c1121f;
+    --secondary: #457b9d;
+    --accent: #f4a261;
+    --bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --text: #2d2d2d;
+    --text-light: #6c757d;
+    --border: #dee2e6;
+    --success: #2a9d8f;
+    --shadow: 0 2px 12px rgba(0,0,0,0.1);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 19px; }
+  rt { font-size: 0.62em; font-weight: 600; letter-spacing: 0; opacity: 0.95; }
+  body {
+    font-family: 'Hiragino Sans', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #c1121f 100%);
+    color: #fff;
+    padding: 18px 20px 14px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(230,57,70,0.3);
+    position: sticky; top: 0; z-index: 100;
+  }
+  header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px; }
+  header p { font-size: 0.8rem; opacity: 0.85; margin-top: 2px; }
+
+  .tab-bar {
+    display: flex;
+    background: #fff;
+    border-bottom: 2px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky; top: 64px; z-index: 99;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 12px 8px;
+    border: none;
+    background: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+  }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #fff5f5; }
+  .tab-btn:hover { background: #f8f8f8; }
+
+  .tab-content { display: none; padding: 16px; max-width: 860px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .card h2 {
+    font-size: 1rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.68rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .badge.blue { background: var(--secondary); }
+  .badge.green { background: var(--success); }
+  .badge.orange { background: var(--accent); color: #333; }
+
+  /* 후리가나(루비) */
+  ruby rt {
+    font-size: 0.55em;
+    color: var(--text-light);
+  }
+
+  /* 오늘의 학습 헤더 */
+  .today-header {
+    background: linear-gradient(135deg, var(--primary), #457b9d);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .today-header .date-label { font-size: 0.8rem; opacity: 0.85; }
+  .today-header .lesson-title { font-size: 1.4rem; font-weight: 700; margin: 6px 0 4px; }
+  .today-header .lesson-sub { font-size: 0.85rem; opacity: 0.9; }
+
+  /* 스트릭 바 */
+  .streak-bar { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+  .streak-day {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700;
+  }
+  .streak-day.today { background: rgba(255,255,255,0.3); border: 2px solid #fff; color: #fff; }
+  .streak-day.done { background: rgba(255,255,255,0.5); }
+
+  /* 플래시카드 */
+  .flashcard-wrap {
+    perspective: 1000px;
+    height: 180px;
+    cursor: pointer;
+    margin-bottom: 14px;
+  }
+  .flashcard {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    border-radius: var(--radius);
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--radius);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .flashcard-front { background: linear-gradient(135deg, #fff5f5, #fff); }
+  .flashcard-back { background: linear-gradient(135deg, #f0f9f7, #fff); transform: rotateY(180deg); }
+  .flashcard-jp { font-size: 2rem; font-weight: 700; color: var(--primary); text-align: center; line-height: 1.4; }
+  .flashcard-reading { font-size: 0.9rem; color: var(--text-light); margin-top: 6px; }
+  .flashcard-hint { font-size: 0.75rem; color: var(--text-light); margin-top: 8px; }
+  .flashcard-kr { font-size: 1.6rem; font-weight: 700; color: var(--success); text-align: center; }
+  .flashcard-example { font-size: 0.95rem; color: var(--text-light); margin-top: 8px; text-align: center; line-height: 1.4; }
+
+  /* 플래시카드 네비 */
+  .flashcard-nav {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin-bottom: 10px;
+  }
+  .nav-btn {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 6px 16px;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  }
+  .nav-btn:disabled { opacity: 0.4; cursor: default; }
+  .card-counter { font-size: 0.82rem; color: var(--text-light); min-width: 50px; text-align: center; }
+
+  /* 학습 버튼 */
+  .learn-btns {
+    display: flex; gap: 10px; justify-content: center;
+    margin-top: 4px;
+  }
+  .btn-learned {
+    background: var(--success); color: #fff;
+    border: none; border-radius: 20px; padding: 8px 22px;
+    font-size: 0.85rem; cursor: pointer; font-weight: 700;
+    transition: opacity 0.2s;
+  }
+  .btn-learned:hover { opacity: 0.85; }
+  .btn-review {
+    background: #f0f4f8; color: var(--text);
+    border: 1px solid var(--border); border-radius: 20px; padding: 8px 22px;
+    font-size: 0.85rem; cursor: pointer; font-weight: 600;
+  }
+  .progress-bar { background: var(--bg); border-radius: 10px; height: 8px; overflow: hidden; margin-top: 4px; }
+  .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.6s; }
+  .progress-text { font-size: 0.75rem; color: var(--text-light); margin-top: 4px; text-align: right; }
+
+  /* 검색 & 필터 */
+  .search-box {
+    width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+    border-radius: 20px; font-size: 0.88rem; outline: none; margin-bottom: 10px;
+  }
+  .search-box:focus { border-color: var(--primary); }
+  .filter-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+  .filter-btn {
+    padding: 4px 12px; border: 1px solid var(--border); border-radius: 20px;
+    font-size: 0.75rem; background: none; cursor: pointer; font-weight: 600; color: var(--text-light);
+  }
+  .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  /* 단어 목록 */
+  .word-list { list-style: none; }
+  .word-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .word-item:last-child { border-bottom: none; }
+  .word-jp { font-size: 1.05rem; font-weight: 700; color: var(--primary); line-height: 1.5; }
+  .word-reading { font-size: 0.78rem; color: var(--text-light); }
+  .word-kr { flex: 1; font-size: 0.88rem; }
+  .word-tag { background: #f0f4f8; color: var(--secondary); font-size: 0.68rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
+  .word-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.7rem; cursor: pointer; }
+  .word-check.done { background: var(--success); border-color: var(--success); color: #fff; font-weight: 700; }
+
+  /* 문법 */
+  .grammar-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .grammar-item:last-child { border-bottom: none; margin-bottom: 0; }
+  .grammar-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+  .grammar-desc { font-size: 0.82rem; color: var(--text-light); margin-bottom: 8px; }
+  .conj-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-bottom: 8px; }
+  .conj-table th, .conj-table td { border: 1px solid var(--border); padding: 4px 6px; text-align: left; }
+  .conj-table th { background: var(--surface); font-weight: 600; }
+  /* 카타카나 탭 */
+  .kt-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .kt-tab { flex: 1; padding: 10px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); font-size: 0.88rem; cursor: pointer; }
+  .kt-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 700; }
+  .kt-chart-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 20px; }
+  .kt-cell { text-align: center; padding: 10px 4px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: background .15s; position: relative; }
+  .kt-cell:active { background: var(--primary-light); }
+  .kt-cell .kt-char { font-size: 1.5rem; font-weight: 700; display: block; }
+  .kt-cell .kt-roma { font-size: 0.7rem; color: var(--text-light); display: block; margin-top: 2px; }
+  .kt-cell.confused { border-color: #f59e0b; background: #fffbeb; }
+  .kt-popup { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 999; }
+  .kt-popup-inner { background: #fff; border-radius: 16px; padding: 28px 32px; text-align: center; min-width: 220px; }
+  .kt-popup-char { font-size: 4rem; font-weight: 900; }
+  .kt-popup-roma { font-size: 1.4rem; color: var(--primary); font-weight: 700; margin: 4px 0; }
+  .kt-popup-hira { font-size: 1.1rem; color: var(--text-light); }
+  .kt-popup-tip { font-size: 0.85rem; color: #555; margin-top: 10px; padding: 8px; background: #f8f8f8; border-radius: 8px; }
+  .kt-confused { margin-top: 20px; }
+  .kt-confused h3 { font-size: 0.95rem; margin-bottom: 10px; }
+  .confused-pair { display: flex; align-items: center; gap: 12px; padding: 10px; background: #fffbeb; border: 1px solid #f59e0b; border-radius: 10px; margin-bottom: 8px; }
+  .confused-pair .pair-chars { font-size: 1.6rem; font-weight: 900; letter-spacing: 8px; min-width: 80px; }
+  .confused-pair .pair-desc { font-size: 0.8rem; color: #555; line-height: 1.5; }
+  .kt-tip-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+  .kt-tip-char { font-size: 2.2rem; font-weight: 900; min-width: 48px; text-align: center; }
+  .kt-tip-roma { font-size: 0.75rem; color: var(--primary); font-weight: 700; }
+  .kt-tip-text { font-size: 0.83rem; color: #444; line-height: 1.6; }
+  .quiz-question { font-size: 3.5rem; font-weight: 900; text-align: center; margin: 16px 0 24px; }
+  .quiz-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .quiz-btn { padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 1.1rem; background: #fff; cursor: pointer; transition: all .15s; }
+  .quiz-btn.correct { background: #d1fae5; border-color: #10b981; }
+  .quiz-btn.wrong { background: #fee2e2; border-color: #ef4444; }
+  .quiz-result { text-align: center; font-size: 1rem; font-weight: 700; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+  .quiz-next { display: block; width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px; }
+  .grammar-ex { background: var(--bg); border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; }
+  .grammar-ex .jp { font-size: 0.9rem; line-height: 1.6; }
+  .grammar-ex .kr { font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
+  .section-title { font-weight: 700; font-size: 0.9rem; color: var(--secondary); padding: 10px 0 6px; }
+
+  /* 여행회화 & 드라마 아코디언 */
+  .situation-card, .drama-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 10px; overflow: hidden; }
+  .situation-header, .drama-header {
+    padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer; font-weight: 700; font-size: 0.95rem;
+  }
+  .situation-header:hover, .drama-header:hover { background: #f8f8f8; }
+  .situation-body, .drama-body { display: none; padding: 0 16px 14px; }
+  .situation-body.open, .drama-body.open { display: block; }
+  .chevron { transition: transform 0.3s; font-size: 0.8rem; color: var(--text-light); }
+  .chevron.open { transform: rotate(180deg); }
+
+  .dialogue { padding: 8px 0; border-bottom: 1px solid var(--bg); }
+  .dialogue:last-child { border-bottom: none; }
+  .dialogue-role { font-size: 0.72rem; font-weight: 700; color: var(--secondary); margin-bottom: 2px; }
+  .dialogue-jp { font-size: 0.9rem; line-height: 1.6; }
+  .dialogue-kr { font-size: 0.8rem; color: var(--text-light); margin-top: 2px; }
+
+  .drama-line { padding: 8px 0; border-bottom: 1px solid var(--bg); }
+  .drama-line:last-child { border-bottom: none; }
+  .drama-speaker { font-size: 0.72rem; font-weight: 700; color: var(--secondary); margin-bottom: 2px; }
+  .drama-jp { font-size: 0.9rem; line-height: 1.6; }
+  .drama-kr { font-size: 0.8rem; color: var(--text-light); margin-top: 2px; }
+  .word-point { background: var(--bg); border-radius: 8px; padding: 10px 12px; margin-top: 10px; }
+  .word-point-title { font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
+
+  .drama-stage-1 .drama-header { border-left: 4px solid #2a9d8f; }
+  .drama-stage-2 .drama-header { border-left: 4px solid #457b9d; }
+  .drama-stage-3 .drama-header { border-left: 4px solid #f4a261; }
+  .drama-stage-4 .drama-header { border-left: 4px solid var(--primary); }
+
+  /* 최근 복습 섹션 */
+  .review-section { margin-bottom: 20px; }
+  .review-section-title { font-weight: 700; font-size: 1rem; color: var(--primary); padding: 6px 0 10px; display: flex; align-items: center; gap: 6px; }
+  .review-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 12px; overflow: hidden; border-left: 4px solid #f4a261; }
+  .review-card-header { padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 0.95rem; }
+  .review-card-header:hover { background: #f8f8f8; }
+  .review-card-body { display: none; padding: 0 16px 14px; }
+  .review-card-body.open { display: block; }
+  .review-sub-title { font-size: 0.82rem; font-weight: 700; color: var(--secondary); margin: 12px 0 6px; padding-top: 8px; border-top: 1px solid var(--bg); }
+  .review-sub-title:first-child { border-top: none; padding-top: 4px; }
+  .grammar-review-item { background: var(--bg); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  .grammar-review-pattern { font-weight: 700; font-size: 0.92rem; color: var(--primary); margin-bottom: 2px; }
+  .grammar-review-meaning { font-size: 0.8rem; color: var(--text-light); margin-bottom: 6px; }
+  .grammar-review-note { font-size: 0.78rem; color: #e76f51; margin-bottom: 6px; }
+  .grammar-ex-item { font-size: 0.83rem; padding: 4px 0; border-bottom: 1px solid #eee; }
+  .grammar-ex-item:last-child { border-bottom: none; }
+  .grammar-ex-jp { line-height: 1.6; }
+  .grammar-ex-ko { color: var(--text-light); font-size: 0.78rem; }
+  .fill-item { background: var(--card-bg); border: 1px solid #e9ecef; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  .fill-ko { font-size: 0.88rem; margin-bottom: 6px; color: var(--text); font-weight: 500; }
+  .fill-answer-btn { font-size: 0.78rem; color: var(--secondary); cursor: pointer; text-decoration: underline; display: inline-block; }
+  .fill-jp { display: none; font-size: 0.9rem; line-height: 1.7; color: var(--primary); margin-top: 6px; background: #f0f7ff; border-radius: 6px; padding: 7px 10px; }
+  .fill-jp.show { display: block; }
+
+  .empty-state { text-align: center; color: var(--text-light); padding: 30px; }
+  .learned-badge { font-size: 0.65rem; background: #d4edda; color: #155724; padding: 1px 6px; border-radius: 10px; margin-left: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🇯🇵 일본어 매일 학습</h1>
+  <p id="headerDate"></p>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('today')">🏠 오늘의 학습</button>
+  <button class="tab-btn" onclick="showTab('vocab')">📖 단어장</button>
+  <button class="tab-btn" onclick="showTab('grammar')">📝 문법</button>
+  <button class="tab-btn" onclick="showTab('travel')">✈️ 여행회화</button>
+  <button class="tab-btn" onclick="showTab('drama')">🎬 드라마</button>
+  <button class="tab-btn" onclick="showTab('katakana')">🔤 카타카나</button>
+</nav>
+
+<!-- 오늘의 학습 탭 -->
+<div id="tab-today" class="tab-content active">
+  <div class="today-header" id="todayHeader">
+    <div class="date-label" id="todayDate"></div>
+    <div class="lesson-title" id="todayTitle"></div>
+    <div class="lesson-sub" id="todaySub"></div>
+    <div class="streak-bar" id="streakBar"></div>
+  </div>
+
+  <div class="card">
+    <h2>🃏 오늘의 단어 플래시카드</h2>
+    <div class="flashcard-wrap" onclick="flipCard()">
+      <div class="flashcard" id="flashcard">
+        <div class="flashcard-front">
+          <div class="flashcard-jp" id="fc-jp">-</div>
+          <div class="flashcard-hint">클릭하면 뜻이 나와요 👆</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="flashcard-kr" id="fc-kr">-</div>
+          <div class="flashcard-example" id="fc-example"></div>
+        </div>
+      </div>
+    </div>
+    <div class="flashcard-nav">
+      <button class="nav-btn" id="prevBtn" onclick="event.stopPropagation(); prevCard()">◀ 이전</button>
+      <span class="card-counter" id="cardCounter">1 / 1</span>
+      <button class="nav-btn" id="nextBtn" onclick="event.stopPropagation(); nextCard()">다음 ▶</button>
+    </div>
+    <div class="learn-btns" id="learnBtns" style="display:none">
+      <button class="btn-learned" onclick="markLearnedAndNext()">✓ 알았어요</button>
+      <button class="btn-review" onclick="markReviewAndNext()">🔄 다시 볼게요</button>
+    </div>
+  </div>
+
+<div class="card" id="todayTalkCard">
+  <h2>💬 오늘의 회화</h2>
+  <div class="talk-topic" id="talkTopic"></div>
+  <div id="talkBody"></div>
+</div>
+
+
+  <div class="card" id="todayGrammarCard">
+    <h2>📝 오늘의 문법</h2>
+    <div id="todayGrammarBody"></div>
+  </div>
+
+  <div class="card">
+    <h2>📊 학습 진행도</h2>
+    <div id="progressSection"></div>
+  </div>
+</div>
+
+<!-- 단어장 탭 -->
+<div id="tab-vocab" class="tab-content">
+  <div class="card" style="padding-bottom:8px">
+    <input class="search-box" id="wordSearch" type="text" placeholder="단어 검색 (일본어 또는 한국어)..." oninput="filterWords()">
+    <div class="filter-btns" id="filterBtns">
+      <button class="filter-btn active" onclick="setFilter('all',this)">전체</button>
+      <button class="filter-btn" onclick="setFilter('기초어휘',this)">기초어휘</button>
+      <button class="filter-btn" onclick="setFilter('동작·회화',this)">동작·회화</button>
+      <button class="filter-btn" onclick="setFilter('의견·표현',this)">의견·표현</button>
+      <button class="filter-btn" onclick="setFilter('동사',this)">동사</button>
+      <button class="filter-btn" onclick="setFilter('형용사',this)">형용사</button>
+      <button class="filter-btn" onclick="setFilter('명사',this)">명사</button>
+      <button class="filter-btn" onclick="setFilter('부사·표현',this)">부사·표현</button>
+      <button class="filter-btn" onclick="setFilter('여행',this)">여행</button>
+      <button class="filter-btn" onclick="setFilter('unlearned',this)">⬜ 미학습</button>
+    </div>
+  </div>
+  <div id="wordListContainer"></div>
+</div>
+
+<!-- 문법 탭 -->
+<div id="tab-grammar" class="tab-content">
+  <div id="grammarContainer"></div>
+</div>
+
+<!-- 여행회화 탭 -->
+<div id="tab-travel" class="tab-content">
+  <div id="travelContainer"></div>
+</div>
+
+<!-- 드라마 탭 -->
+<div id="tab-drama" class="tab-content">
+  <div id="dramaReviewContainer"></div>
+  <div id="dramaContainer"></div>
+</div>
+
+<div id="tab-katakana" class="tab-content">
+  <!-- 서브탭 -->
+  <div class="kt-tabs">
+    <button class="kt-tab active" onclick="showKtTab('chart',this)">📋 일람표</button>
+    <button class="kt-tab" onclick="showKtTab('tips',this)">💡 암기법</button>
+    <button class="kt-tab" onclick="showKtTab('quiz',this)">✏️ 퀴즈</button>
+  </div>
+
+  <!-- 일람표 -->
+  <div id="kt-chart" class="kt-section">
+    <div class="card">
+      <h2>카타카나 50음도</h2>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:12px">탭하면 읽는 법을 확인할 수 있어요</p>
+      <div id="ktChartGrid"></div>
+      <div class="kt-confused">
+        <h3>⚠️ 자주 헷갈리는 쌍</h3>
+        <div id="ktConfusedList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 암기법 -->
+  <div id="kt-tips" class="kt-section" style="display:none">
+    <div class="card">
+      <h2>모양으로 기억하는 카타카나</h2>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:12px">각 글자를 이미지로 연상해 보세요</p>
+      <div id="ktTipsList"></div>
+    </div>
+  </div>
+
+  <!-- 퀴즈 -->
+  <div id="kt-quiz" class="kt-section" style="display:none">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 style="margin:0">카타카나 퀴즈</h2>
+        <div>
+          <select id="quizMode" style="font-size:0.85rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;margin-right:6px">
+            <option value="kata2roma">카타카나 → 읽기</option>
+            <option value="roma2kata">읽기 → 카타카나</option>
+          </select>
+          <button onclick="startQuiz()" style="background:var(--primary);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.85rem;cursor:pointer">시작</button>
+        </div>
+      </div>
+      <div id="quizScore" style="font-size:0.85rem;color:var(--text-light);margin-bottom:12px"></div>
+      <div id="quizBody"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 학습 진행도 (localStorage)
+// ============================================================
+const PROGRESS_KEY = 'jp_study_progress';
+
+function getProgress() {
+  return JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
+}
+
+function markLearned(id) {
+  const p = getProgress();
+  p[id] = { status: 'learned', date: new Date().toISOString() };
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(p));
+}
+
+function markReview(id) {
+  const p = getProgress();
+  p[id] = { status: 'review' };
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(p));
+}
+
+function isLearned(id) {
+  return getProgress()[id]?.status === 'learned';
+}
+
+function learnedCount() {
+  const p = getProgress();
+  return Object.values(p).filter(v => v.status === 'learned').length;
+}
+
+// ============================================================
+// 앱 상태
+// ============================================================
+let currentFilter = 'all';
+let currentCardIndex = 0;
+let todayWords = [];
+let isFlipped = false;
+
+// ============================================================
+// 날짜 유틸
+// ============================================================
+function getToday() { return new Date(2026, 6, 14); }
+
+function formatDate(d) {
+  const days = ['일','월','화','수','목','금','토'];
+  return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
+}
+
+function getDayOfYear(d) {
+  const start = new Date(d.getFullYear(), 0, 0);
+  return Math.floor((d - start) / 86400000);
+}
+
+function stripHtml(s) {
+  return (s || '').replace(/<[^>]+>/g, '');
+}
+
+// ============================================================
+// 오늘의 학습
+// ============================================================
+function initToday() {
+  const d = getToday();
+  document.getElementById('headerDate').textContent = formatDate(d);
+  document.getElementById('todayDate').textContent = formatDate(d);
+
+  const doy = getDayOfYear(d);
+  const lessons = [
+    '3과 복습','4과 복습','5과 복습','6과 복습','7과 복습',
+    '8과 복습','9과 복습','10과 복습','11과 복습','12과 복습',
+    '13과 복습','14과 복습','15과 복습','16과 복습','17과 복습',
+    '18과 복습','19과 복습','20과 복습','한걸음 복습','총복습',
+  ];
+  document.getElementById('todayTitle').textContent = `오늘의 레슨: ${lessons[doy % lessons.length]}`;
+  document.getElementById('todaySub').textContent = '플래시카드로 오늘의 단어를 익혀보세요!';
+
+  // 스트릭 바
+  const streak = document.getElementById('streakBar');
+  streak.innerHTML = '';
+  const dayNames = ['일','월','화','수','목','금','토'];
+  for (let i = -6; i <= 0; i++) {
+    const dd = new Date(d); dd.setDate(d.getDate() + i);
+    const el = document.createElement('div');
+    el.className = 'streak-day ' + (i === 0 ? 'today' : (i < 0 ? 'done' : 'empty'));
+    el.textContent = dayNames[dd.getDay()];
+    streak.appendChild(el);
+  }
+
+  // 오늘의 단어: 미학습 우선, 날짜 기반 10개
+  const progress = getProgress();
+  const unlearned = WORDS.filter(w => !isLearned(w.id));
+  const learned = WORDS.filter(w => isLearned(w.id));
+  const pool = [...unlearned, ...learned];
+  const start = (doy * 10) % pool.length;
+  todayWords = [];
+  for (let i = 0; i < 10; i++) todayWords.push(pool[(start + i) % pool.length]);
+
+  currentCardIndex = 0;
+  isFlipped = false;
+  updateFlashcard();
+
+  // 오늘의 문법
+  const gramIdx = doy % GRAMMAR.length;
+  const g = GRAMMAR[gramIdx];
+  const nextG = GRAMMAR[(gramIdx + 1) % GRAMMAR.length];
+  document.getElementById('todayGrammarBody').innerHTML = renderGrammarItem(g) + renderGrammarItem(nextG);
+
+  // 진행도
+  const totalWords = WORDS.length;
+  const done = learnedCount();
+  document.getElementById('progressSection').innerHTML = `
+    <div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px">
+        <span>단어 학습 완료</span>
+        <span style="color:var(--success);font-weight:700">${done} / ${totalWords}개</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${(done/totalWords*100).toFixed(0)}%"></div></div>
+      <div class="progress-text">${(done/totalWords*100).toFixed(0)}% 완료</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px">
+        <span>전체 과정</span>
+        <span style="color:var(--secondary);font-weight:700">${lessons[doy % lessons.length]}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${((doy % lessons.length + 1)/lessons.length*100).toFixed(0)}%;background:linear-gradient(90deg,var(--secondary),#6baed6)"></div></div>
+    </div>
+  `;
+}
+
+function renderGrammarItem(g) {
+  const conjHtml = (g.conjugation || []).length ? `
+    <table class="conj-table">
+      <thead><tr><th>형태</th><th>규칙</th><th>예</th></tr></thead>
+      <tbody>${(g.conjugation).map(c => `<tr><td>${c.form}</td><td>${c.rule}</td><td>${c.examples}</td></tr>`).join('')}</tbody>
+    </table>` : '';
+  const exHtml = (g.examples || []).map(e => `
+    <div class="grammar-ex">
+      <div class="jp">${e.jp}</div>
+      <div class="kr">${e.ko || e.kr}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="grammar-item">
+      <div class="grammar-title">${g.title}</div>
+      <div class="grammar-desc">${g.desc}</div>
+      ${conjHtml}
+      ${exHtml}
+    </div>
+  `;
+}
+
+function updateFlashcard() {
+  if (!todayWords.length) return;
+  const w = todayWords[currentCardIndex];
+  const learned = isLearned(w.id);
+
+  document.getElementById('fc-jp').innerHTML = w.jp;
+  document.getElementById('fc-kr').textContent = w.ko || w.kr;
+
+  const exJp = w.example_jp || '';
+  const exKo = w.example_ko || '';
+  document.getElementById('fc-example').innerHTML = exJp
+    ? `<div>${exJp}</div><div style="color:#aaa">${exKo}</div>`
+    : '';
+
+  document.getElementById('cardCounter').textContent = `${currentCardIndex + 1} / ${todayWords.length}`;
+  document.getElementById('prevBtn').disabled = currentCardIndex === 0;
+  document.getElementById('nextBtn').disabled = currentCardIndex === todayWords.length - 1;
+
+  // 플래시카드 뒤집기 초기화
+  if (isFlipped) {
+    document.getElementById('flashcard').classList.remove('flipped');
+    isFlipped = false;
+    document.getElementById('learnBtns').style.display = 'none';
+  }
+
+  // 이미 학습한 단어는 카운터 옆에 표시
+  const counter = document.getElementById('cardCounter');
+  counter.innerHTML = `${currentCardIndex + 1} / ${todayWords.length}${learned ? ' <span class="learned-badge">✓ 완료</span>' : ''}`;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+  document.getElementById('learnBtns').style.display = isFlipped ? 'flex' : 'none';
+}
+
+function prevCard() {
+  if (currentCardIndex > 0) { currentCardIndex--; updateFlashcard(); }
+}
+
+function nextCard() {
+  if (currentCardIndex < todayWords.length - 1) { currentCardIndex++; updateFlashcard(); }
+}
+
+function markLearnedAndNext() {
+  const w = todayWords[currentCardIndex];
+  markLearned(w.id);
+  // 진행도 업데이트
+  initToday();
+  if (currentCardIndex < todayWords.length - 1) { currentCardIndex++; }
+  updateFlashcard();
+}
+
+function markReviewAndNext() {
+  const w = todayWords[currentCardIndex];
+  markReview(w.id);
+  if (currentCardIndex < todayWords.length - 1) { currentCardIndex++; updateFlashcard(); }
+  else updateFlashcard();
+}
+
+// ============================================================
+// 단어장
+// ============================================================
+function initVocab() { filterWords(); }
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterWords();
+}
+
+function filterWords() {
+  const q = (document.getElementById('wordSearch').value || '').toLowerCase();
+  const progress = getProgress();
+
+  let filtered = WORDS.filter(w => {
+    if (currentFilter === 'unlearned') return !isLearned(w.id);
+    const matchFilter = currentFilter === 'all' || w.level === currentFilter || w.tag === currentFilter;
+    const plain = stripHtml(w.jp).toLowerCase();
+    const matchQ = !q || plain.includes(q) || (w.kana||'').includes(q) || (w.ko||w.kr||'').includes(q);
+    return matchFilter && matchQ;
+  });
+
+  const container = document.getElementById('wordListContainer');
+  if (!filtered.length) {
+    container.innerHTML = '<div class="card"><div class="empty-state">검색 결과가 없습니다.</div></div>';
+    return;
+  }
+
+  // 레벨별 그룹
+  const groups = {};
+  filtered.forEach(w => {
+    const g = w.level;
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(w);
+  });
+
+  let html = '';
+  Object.entries(groups).forEach(([g, ws]) => {
+    const items = ws.map(w => {
+      const learned = isLearned(w.id);
+      return `
+        <li class="word-item">
+          <div class="word-check ${learned ? 'done' : ''}" onclick="toggleWordLearned('${w.id}', this)">${learned ? '✓' : ''}</div>
+          <div>
+            <div class="word-jp">${w.jp}</div>
+          </div>
+          <div class="word-kr">${w.ko || w.kr}</div>
+          <span class="word-tag">${w.tag}</span>
+        </li>
+      `;
+    }).join('');
+    html += `
+      <div class="card" style="padding-bottom:4px">
+        <h2><span class="badge">${g}</span> ${ws.length}개</h2>
+        <ul class="word-list">${items}</ul>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function toggleWordLearned(id, el) {
+  if (isLearned(id)) {
+    markReview(id);
+    el.classList.remove('done');
+    el.textContent = '';
+  } else {
+    markLearned(id);
+    el.classList.add('done');
+    el.textContent = '✓';
+  }
+  // 진행도 업데이트
+  document.getElementById('progressSection') && initTodayProgress();
+}
+
+function initTodayProgress() {
+  const totalWords = WORDS.length;
+  const done = learnedCount();
+  const el = document.getElementById('progressSection');
+  if (!el) return;
+  const doy = getDayOfYear(getToday());
+  const lessons = ['3과 복습','4과 복습','5과 복습','6과 복습','7과 복습','8과 복습','9과 복습','10과 복습','11과 복습','12과 복습','13과 복습','14과 복습','15과 복습','16과 복습','17과 복습','18과 복습','19과 복습','20과 복습','한걸음 복습','총복습'];
+  el.innerHTML = `
+    <div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px">
+        <span>단어 학습 완료</span>
+        <span style="color:var(--success);font-weight:700">${done} / ${totalWords}개</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${(done/totalWords*100).toFixed(0)}%"></div></div>
+      <div class="progress-text">${(done/totalWords*100).toFixed(0)}% 완료</div>
+    </div>
+  `;
+}
+
+// ============================================================
+// 문법
+// ============================================================
+function initGrammar() {
+  const container = document.getElementById('grammarContainer');
+  const verbTable = `
+    <div class="card" style="margin-bottom:14px">
+      <h2>🔤 동사 ます형 활용 규칙</h2>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:8px">
+          <thead>
+            <tr style="background:#f0f4f8">
+              <th style="padding:8px;border:1px solid var(--border);text-align:left">그룹</th>
+              <th style="padding:8px;border:1px solid var(--border);text-align:left">규칙</th>
+              <th style="padding:8px;border:1px solid var(--border);text-align:left">예시</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:8px;border:1px solid var(--border);font-weight:700;color:var(--primary)">1그룹<br><small>(う단 동사)</small></td>
+              <td style="padding:8px;border:1px solid var(--border)">마지막 う단 → い단 + ます</td>
+              <td style="padding:8px;border:1px solid var(--border)">いく→いき<b>ます</b><br>のむ→のみ<b>ます</b><br>はなす→はなし<b>ます</b></td>
+            </tr>
+            <tr style="background:#fafafa">
+              <td style="padding:8px;border:1px solid var(--border);font-weight:700;color:var(--secondary)">2그룹<br><small>(る동사)</small></td>
+              <td style="padding:8px;border:1px solid var(--border)">る를 떼고 + ます</td>
+              <td style="padding:8px;border:1px solid var(--border)">たべる→たべ<b>ます</b><br>おきる→おき<b>ます</b><br>ねる→ね<b>ます</b></td>
+            </tr>
+            <tr>
+              <td style="padding:8px;border:1px solid var(--border);font-weight:700;color:var(--success)">3그룹<br><small>(불규칙)</small></td>
+              <td style="padding:8px;border:1px solid var(--border)">통째로 암기</td>
+              <td style="padding:8px;border:1px solid var(--border)">する→し<b>ます</b><br>くる→き<b>ます</b></td>
+            </tr>
+            <tr style="background:#fff9f0">
+              <td style="padding:8px;border:1px solid var(--border);font-weight:700;color:#c77a00">예외 (2→1)</td>
+              <td style="padding:8px;border:1px solid var(--border)">る로 끝나지만 1그룹</td>
+              <td style="padding:8px;border:1px solid var(--border)">かえる→かえり<b>ます</b><br>はいる→はいり<b>ます</b><br>はしる→はしり<b>ます</b></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  const grammarHtml = GRAMMAR.map(g => renderGrammarItem(g)).join('');
+  container.innerHTML = verbTable + `<div class="card"><h2>📝 문법 패턴 (${GRAMMAR.length}개)</h2>${grammarHtml}</div>`;
+}
+
+// ============================================================
+// 여행회화
+// ============================================================
+function initTravel() {
+  const container = document.getElementById('travelContainer');
+  const html = TRAVEL.map((t, i) => {
+    const header = t.icon ? `${t.icon} ${t.situation}` : (t.category || t.situation || '');
+    const dialogues = (t.dialogues || []).map(d => `
+      <div class="dialogue">
+        <div class="dialogue-role">${d.speaker || d.role}</div>
+        <div class="dialogue-jp">${d.jp}</div>
+        <div class="dialogue-kr">${d.ko || d.kr}</div>
+      </div>
+    `).join('');
+    return `
+      <div class="situation-card">
+        <div class="situation-header" onclick="toggleSituation(${i})">
+          <span>${header}</span>
+          <span class="chevron" id="chev-${i}">▼</span>
+        </div>
+        <div class="situation-body" id="sit-${i}">${dialogues}</div>
+      </div>
+    `;
+  }).join('');
+  container.innerHTML = html;
+}
+
+function toggleSituation(i) {
+  document.getElementById(`sit-${i}`).classList.toggle('open');
+  document.getElementById(`chev-${i}`).classList.toggle('open');
+}
+
+// ============================================================
+// 드라마
+// ============================================================
+function initDrama() {
+  const container = document.getElementById('dramaContainer');
+  const stages = [1, 2, 3, 4];
+  const stageLabels = {1:'1단계 (입문)', 2:'2단계 (초급)', 3:'3단계 (중급)', 4:'4단계 (고급)'};
+  let html = '';
+
+  stages.forEach(stage => {
+    const items = DRAMA.filter(d => d.stage === stage);
+    if (!items.length) return;
+    html += `<div class="section-title">${stageLabels[stage]}</div>`;
+
+    items.forEach((d, i) => {
+      const uid = `drama-${stage}-${i}`;
+      const wordHtml = (d.words || []).map(w => `
+        <div style="display:flex;gap:8px;font-size:0.85rem;margin-bottom:3px">
+          <span style="color:var(--secondary);font-weight:700;min-width:120px">${w.jp}</span>
+          <span>${w.ko || w.kr}</span>
+        </div>
+      `).join('');
+
+      const linesHtml = (d.lines || []).map(l => `
+        <div class="drama-line">
+          <div class="drama-speaker">${l.speaker}</div>
+          <div class="drama-jp">${l.jp}</div>
+          <div class="drama-kr">${l.ko || l.kr}</div>
+        </div>
+      `).join('');
+
+      html += `
+        <div class="drama-card drama-stage-${stage}">
+          <div class="drama-header" onclick="toggleDrama('${uid}')">
+            <span>🎬 ${d.title}</span>
+            <span class="chevron" id="dchev-${uid}">▼</span>
+          </div>
+          <div class="drama-body" id="${uid}">
+            ${linesHtml}
+            ${wordHtml ? `<div class="word-point"><div class="word-point-title">📌 단어 포인트</div>${wordHtml}</div>` : ''}
+          </div>
+        </div>
+      `;
+    });
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleDrama(uid) {
+  document.getElementById(uid).classList.toggle('open');
+  document.getElementById(`dchev-${uid}`).classList.toggle('open');
+}
+
+// ============================================================
+// 최근 복습
+// ============================================================
+function initDramaReview() {
+  const container = document.getElementById('dramaReviewContainer');
+  if (container.dataset.init) return;
+  container.dataset.init = '1';
+
+  if (!DRAMA_REVIEW || !DRAMA_REVIEW.length) return;
+
+  let html = '<div class="review-section"><div class="review-section-title">📖 최근 복습</div>';
+
+  DRAMA_REVIEW.forEach(rev => {
+    const drama = DRAMA.find(d => d.id === rev.dramaId);
+    if (!drama) return;
+    const uid = `rev-${rev.id}`;
+
+    const linesHtml = (drama.lines || []).map(l => `
+      <div class="drama-line">
+        <div class="drama-speaker">${l.speaker}</div>
+        <div class="drama-jp">${l.jp}</div>
+        <div class="drama-kr">${l.ko || l.kr}</div>
+      </div>`).join('');
+
+    const wordsHtml = (drama.words || []).map(w => `
+      <div style="display:flex;gap:8px;font-size:0.85rem;margin-bottom:3px">
+        <span style="color:var(--secondary);font-weight:700;min-width:120px">${w.jp}</span>
+        <span>${w.ko || w.kr}</span>
+      </div>`).join('');
+
+    const grammarHtml = (rev.grammar || []).map((g, gi) => {
+      const practiceHtml = (g.practice || []).map((p, pi) => {
+        const pid = `${uid}-g${gi}-p${pi}`;
+        return `
+          <div class="fill-item">
+            <div class="fill-ko">${pi + 1}. ${p.ko}</div>
+            <span class="fill-answer-btn" onclick="revealFill('${pid}')">답 보기</span>
+            <div class="fill-jp" id="${pid}">${p.jp}</div>
+          </div>`;
+      }).join('');
+      return `
+      <div class="grammar-review-item">
+        <div class="grammar-review-pattern">${g.pattern}</div>
+        <div class="grammar-review-meaning">${g.meaning}</div>
+        ${g.note ? `<div class="grammar-review-note">※ ${g.note}</div>` : ''}
+        ${(g.examples || []).map(ex => `
+          <div class="grammar-ex-item">
+            <div class="grammar-ex-jp">${ex.jp}</div>
+            <div class="grammar-ex-ko">${ex.ko}</div>
+          </div>`).join('')}
+        ${practiceHtml ? `<div style="margin-top:8px;font-size:0.78rem;font-weight:700;color:var(--primary);margin-bottom:4px">✏️ 연습</div>${practiceHtml}` : ''}
+      </div>`;
+    }).join('');
+
+    const fillHtml = (rev.fill || []).map((f, i) => `
+      <div class="fill-item">
+        <div class="fill-ko">${i + 1}. ${f.ko}</div>
+        <span class="fill-answer-btn" onclick="revealFill('${uid}-f${i}')">답 보기</span>
+        <div class="fill-jp" id="${uid}-f${i}">${f.jp}</div>
+      </div>`).join('');
+
+    html += `
+      <div class="review-card">
+        <div class="review-card-header" onclick="toggleReview('${uid}')">
+          <span>📝 ${rev.title}</span>
+          <span class="chevron" id="rchev-${uid}">▼</span>
+        </div>
+        <div class="review-card-body" id="${uid}">
+          <div class="review-sub-title">🎬 대사</div>
+          ${linesHtml}
+          ${wordsHtml ? `<div class="review-sub-title">📌 단어</div><div class="word-point">${wordsHtml}</div>` : ''}
+          ${grammarHtml ? `<div class="review-sub-title">📐 문형</div>${grammarHtml}` : ''}
+          ${fillHtml ? `<div class="review-sub-title">✏️ 빈칸 채우기</div>${fillHtml}` : ''}
+        </div>
+      </div>`;
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function toggleReview(uid) {
+  document.getElementById(uid).classList.toggle('open');
+  document.getElementById(`rchev-${uid}`).classList.toggle('open');
+}
+
+function revealFill(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('show');
+  const btn = el.previousElementSibling;
+  if (btn) btn.textContent = el.classList.contains('show') ? '답 숨기기' : '답 보기';
+}
+
+// ============================================================
+// 탭 전환
+// ============================================================
+const tabIds = ['today', 'vocab', 'grammar', 'travel', 'drama', 'katakana'];
+
+function showTab(tabName) {
+  tabIds.forEach(t => {
+    document.getElementById(`tab-${t}`).classList.toggle('active', t === tabName);
+  });
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', tabIds[i] === tabName);
+  });
+  if (tabName === 'vocab') initVocab();
+  if (tabName === 'grammar') initGrammar();
+  if (tabName === 'travel') initTravel();
+  if (tabName === 'drama') { initDramaReview(); initDrama(); }
+  if (tabName === 'katakana') initKatakana();
+}
+
+// ============================================================
+// 카타카나 탭
+// ============================================================
+const KATAKANA = [
+  {k:'ア',h:'あ',r:'a'}, {k:'イ',h:'い',r:'i'}, {k:'ウ',h:'う',r:'u'}, {k:'エ',h:'え',r:'e'}, {k:'オ',h:'お',r:'o'},
+  {k:'カ',h:'か',r:'ka'},{k:'キ',h:'き',r:'ki'},{k:'ク',h:'く',r:'ku'},{k:'ケ',h:'け',r:'ke'},{k:'コ',h:'こ',r:'ko'},
+  {k:'サ',h:'さ',r:'sa'},{k:'シ',h:'し',r:'shi'},{k:'ス',h:'す',r:'su'},{k:'セ',h:'せ',r:'se'},{k:'ソ',h:'そ',r:'so'},
+  {k:'タ',h:'た',r:'ta'},{k:'チ',h:'ち',r:'chi'},{k:'ツ',h:'つ',r:'tsu'},{k:'テ',h:'て',r:'te'},{k:'ト',h:'と',r:'to'},
+  {k:'ナ',h:'な',r:'na'},{k:'ニ',h:'に',r:'ni'},{k:'ヌ',h:'ぬ',r:'nu'},{k:'ネ',h:'ね',r:'ne'},{k:'ノ',h:'の',r:'no'},
+  {k:'ハ',h:'は',r:'ha'},{k:'ヒ',h:'ひ',r:'hi'},{k:'フ',h:'ふ',r:'fu'},{k:'ヘ',h:'へ',r:'he'},{k:'ホ',h:'ほ',r:'ho'},
+  {k:'マ',h:'ま',r:'ma'},{k:'ミ',h:'み',r:'mi'},{k:'ム',h:'む',r:'mu'},{k:'メ',h:'め',r:'me'},{k:'モ',h:'も',r:'mo'},
+  {k:'ヤ',h:'や',r:'ya'},{k:'　',h:'',r:''}, {k:'ユ',h:'ゆ',r:'yu'},{k:'　',h:'',r:''}, {k:'ヨ',h:'よ',r:'yo'},
+  {k:'ラ',h:'ら',r:'ra'},{k:'リ',h:'り',r:'ri'},{k:'ル',h:'る',r:'ru'},{k:'レ',h:'れ',r:'re'},{k:'ロ',h:'ろ',r:'ro'},
+  {k:'ワ',h:'わ',r:'wa'},{k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'ヲ',h:'を',r:'wo'},
+  {k:'ン',h:'ん',r:'n'}, {k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'　',h:'',r:''},
+];
+
+// 자주 헷갈리는 쌍
+const CONFUSED_PAIRS = [
+  { chars: 'シ ツ', r: 'shi / tsu', desc: 'シ(shi): 짧은 획 2개가 왼쪽에 세로로 → 긴 획이 오른쪽 위로 흐름\nツ(tsu): 짧은 획 2개가 위에 가로로 → 긴 획이 오른쪽 아래로 흐름' },
+  { chars: 'ソ ン', r: 'so / n', desc: 'ソ(so): 짧은 획이 오른쪽 위에 → 긴 획이 왼쪽 아래로\nン(n): 짧은 획이 왼쪽에 → 긴 획이 오른쪽 위로 올라감' },
+  { chars: 'ア マ', r: 'a / ma', desc: 'ア(a): 세로획이 교차점 위에서 시작\nマ(ma): 오른쪽 획이 교차점 아래에서 꺾임' },
+  { chars: 'ウ ワ', r: 'u / wa', desc: 'ウ(u): 위에 짧은 획 하나, 아래가 U자\nワ(wa): 위에 짧은 획 없고 오른쪽이 내려옴' },
+  { chars: 'ク ケ', r: 'ku / ke', desc: 'ク(ku): 획이 2개 (단순한 형태)\nケ(ke): 획이 3개, 세로획에 두 획이 붙음' },
+  { chars: 'ヌ メ', r: 'nu / me', desc: 'ヌ(nu): 가로획 + X처럼 교차, 마지막에 고리\nメ(me): X자 교차, 고리 없음' },
+  { chars: 'フ ラ', r: 'fu / ra', desc: 'フ(fu): 위에서 꺾이는 후지산 모양\nラ(ra): 가로획 + 아래로 꺾임 (라멘 그릇)' },
+  { chars: 'コ ロ', r: 'ko / ro', desc: 'コ(ko): 오른쪽이 열려있는 ㄷ 모양\nロ(ro): 사각형이 완전히 닫혀 있음' },
+];
+
+// 암기 팁
+const KATAKANA_TIPS = [
+  {k:'ア',r:'a',  tip:'가위 벌린 모양. 영어 A를 눕힌 것'},
+  {k:'イ',r:'i',  tip:'두 사람이 나란히. 이(2)인'},
+  {k:'ウ',r:'u',  tip:'우산(傘) 손잡이 위쪽 부분'},
+  {k:'エ',r:'e',  tip:'철로 모양 (=工). 위아래 선과 가운데 선'},
+  {k:'オ',r:'o',  tip:'あ보다 단순한 오 모양. 오 하고 입 벌린 형태'},
+  {k:'カ',r:'ka', tip:'칼(刀) 모양. 力(力)과 같은 형태'},
+  {k:'キ',r:'ki', tip:'키(key)를 세워놓은 모양. 가로 2획 + 세로 1획'},
+  {k:'ク',r:'ku', tip:'새 부리(beak). 쿠쿠 새 입'},
+  {k:'ケ',r:'ke', tip:'ク에 가로획 하나 추가된 케'},
+  {k:'コ',r:'ko', tip:'コーナー(코너). ㄷ자처럼 열린 모양'},
+  {k:'サ',r:'sa', tip:'사람이 팔 벌린 모양. 세 획'},
+  {k:'シ',r:'shi', tip:'웃는 얼굴(:). 점 2개가 왼쪽 세로로, 획이 오른쪽 위로'},
+  {k:'ス',r:'su', tip:'스윙(swing). 아래가 고리처럼 휘어짐'},
+  {k:'セ',r:'se', tip:'영어 세(SE)처럼 생긴 모양'},
+  {k:'ソ',r:'so', tip:'씨앗(seed) 뿌리는 동작. 위에 점, 아래로 흐름'},
+  {k:'タ',r:'ta', tip:'タ는 た의 윗부분. 타(打) 모양'},
+  {k:'チ',r:'chi', tip:'치어리더 모양. 위에 가로획, 아래 곡선'},
+  {k:'ツ',r:'tsu', tip:'점 2개가 위에 가로로, 획이 오른쪽 아래로 → シ와 방향이 반대!'},
+  {k:'テ',r:'te', tip:'테레비(TV) 안테나 모양. 十자에 위 가로획'},
+  {k:'ト',r:'to', tip:'도끼(to-kin/토끼). 세로획에 짧은 가로획'},
+  {k:'ナ',r:'na', tip:'나이프(knife). 十자 모양'},
+  {k:'ニ',r:'ni', tip:'二(に). 가로 두 획, 숫자 2처럼'},
+  {k:'ヌ',r:'nu', tip:'누들(noodle). X자 교차에 마지막 고리'},
+  {k:'ネ',r:'ne', tip:'네코(고양이, neko). 고양이 얼굴처럼 생긴 形'},
+  {k:'ノ',r:'no', tip:'노(NO)를 사선으로. 단순한 한 획'},
+  {k:'ハ',r:'ha', tip:'하하(ha-ha). 두 사람이 웃는 모양'},
+  {k:'ヒ',r:'hi', tip:'히(heel, 발뒤꿈치). ㄴ자에 위 가로획'},
+  {k:'フ',r:'fu', tip:'후지산(富士山). 위에서 꺾이는 산 모양'},
+  {k:'ヘ',r:'he', tip:'へ와 똑같이 생겼어요! 가장 쉬운 카타카나'},
+  {k:'ホ',r:'ho', tip:'호(ho-ho). 十자에 양쪽으로 획이 나옴'},
+  {k:'マ',r:'ma', tip:'마마(mama). 낚싯바늘 모양'},
+  {k:'ミ',r:'mi', tip:'ミ=三(み). 가로 세 획, 미(3)'},
+  {k:'ム',r:'mu', tip:'무(cow, MOO). 소가 입을 벌린 모양'},
+  {k:'メ',r:'me', tip:'메(me=나). X자 교차'},
+  {k:'モ',r:'mo', tip:'모어(more). 가로 세 획 + 곡선'},
+  {k:'ヤ',r:'ya', tip:'야(야호). や의 윗부분, 오른쪽 방향'},
+  {k:'ユ',r:'yu', tip:'유(U자). 아래가 U자로 열림'},
+  {k:'ヨ',r:'yo', tip:'요(요요). ヨ=三개의 가로획, 오른쪽 막힘'},
+  {k:'ラ',r:'ra', tip:'라멘(ramen) 그릇. 가로획 + 아래로 꺾임'},
+  {k:'リ',r:'ri', tip:'리(ri=두 기둥). 두 세로획이 나란히'},
+  {k:'ル',r:'ru', tip:'루트(route). 꺾임이 있는 경로 모양'},
+  {k:'レ',r:'re', tip:'레이(ray). 한 획이 아래로 뻗음 (ノ보다 꺾임)'},
+  {k:'ロ',r:'ro', tip:'로봇(robot). 완전히 닫힌 사각형'},
+  {k:'ワ',r:'wa', tip:'와인잔(wine glass). 위가 열리고 아래로 모임'},
+  {k:'ヲ',r:'wo', tip:'조사 を의 카타카나. 거의 외래어 표기에 안 씀'},
+  {k:'ン',r:'n', tip:'ン vs ソ 주의! ン은 영어 n처럼 위로 올라감'},
+];
+
+const confusedSet = new Set(['シ','ツ','ソ','ン','ア','マ','ウ','ワ','ク','ケ','ヌ','メ','フ','ラ','コ','ロ']);
+
+let quizList = [], quizIdx = 0, quizCorrect = 0, quizAnswered = false;
+
+function initKatakana() {
+  renderKtChart();
+  renderKtTips();
+}
+
+function showKtTab(name, btn) {
+  ['chart','tips','quiz'].forEach(n => {
+    document.getElementById('kt-' + n).style.display = n === name ? '' : 'none';
+  });
+  document.querySelectorAll('.kt-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (name === 'quiz' && quizList.length === 0) startQuiz();
+}
+
+function renderKtChart() {
+  const grid = document.createElement('div');
+  grid.className = 'kt-chart-grid';
+  KATAKANA.forEach(item => {
+    const cell = document.createElement('div');
+    if (!item.r) {
+      cell.style.visibility = 'hidden';
+      cell.className = 'kt-cell';
+    } else {
+      cell.className = 'kt-cell' + (confusedSet.has(item.k) ? ' confused' : '');
+      cell.innerHTML = `<span class="kt-char">${item.k}</span><span class="kt-roma">${item.r}</span>`;
+      cell.onclick = () => showKtPopup(item);
+    }
+    grid.appendChild(cell);
+  });
+  document.getElementById('ktChartGrid').replaceChildren(grid);
+
+  const confList = document.getElementById('ktConfusedList');
+  confList.innerHTML = CONFUSED_PAIRS.map(p => `
+    <div class="confused-pair">
+      <div class="pair-chars">${p.chars}</div>
+      <div>
+        <div style="font-weight:700;font-size:0.82rem;margin-bottom:4px">${p.r}</div>
+        <div class="pair-desc">${p.desc.replace(/\n/g,'<br>')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showKtPopup(item) {
+  const tip = KATAKANA_TIPS.find(t => t.k === item.k);
+  const overlay = document.createElement('div');
+  overlay.className = 'kt-popup';
+  overlay.innerHTML = `
+    <div class="kt-popup-inner">
+      <div class="kt-popup-char">${item.k}</div>
+      <div class="kt-popup-roma">${item.r}</div>
+      <div class="kt-popup-hira">히라가나: ${item.h}</div>
+      ${tip ? `<div class="kt-popup-tip">💡 ${tip.tip}</div>` : ''}
+      <button onclick="this.closest('.kt-popup').remove()" style="margin-top:16px;background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:0.9rem;cursor:pointer">닫기</button>
+    </div>
+  `;
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+}
+
+function renderKtTips() {
+  document.getElementById('ktTipsList').innerHTML = KATAKANA_TIPS.map(t => `
+    <div class="kt-tip-item">
+      <div class="kt-tip-char">${t.k}<div class="kt-tip-roma">${t.r}</div></div>
+      <div class="kt-tip-text">${t.tip}</div>
+    </div>
+  `).join('');
+}
+
+function startQuiz() {
+  const mode = document.getElementById('quizMode') ? document.getElementById('quizMode').value : 'kata2roma';
+  const pool = KATAKANA.filter(x => x.r && x.r.trim());
+  quizList = [...pool].sort(() => Math.random() - 0.5);
+  quizIdx = 0; quizCorrect = 0; quizAnswered = false;
+  renderQuiz(mode);
+}
+
+function renderQuiz(mode) {
+  mode = mode || (document.getElementById('quizMode') ? document.getElementById('quizMode').value : 'kata2roma');
+  const pool = KATAKANA.filter(x => x.r && x.r.trim());
+  if (quizIdx >= quizList.length) {
+    document.getElementById('quizBody').innerHTML = `
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:2rem;margin-bottom:8px">🎉</div>
+        <div style="font-size:1.2rem;font-weight:700;margin-bottom:4px">${quizCorrect} / ${quizList.length} 정답</div>
+        <div style="color:var(--text-light);margin-bottom:16px">${Math.round(quizCorrect/quizList.length*100)}% 정확도</div>
+        <button onclick="startQuiz()" class="quiz-next">다시 하기</button>
+      </div>`;
+    document.getElementById('quizScore').textContent = '';
+    return;
+  }
+  const item = quizList[quizIdx];
+  const question = mode === 'kata2roma' ? item.k : item.r;
+  // 오답 3개 선택
+  const wrong = pool.filter(x => x.k !== item.k).sort(() => Math.random() - 0.5).slice(0, 3);
+  const choices = [...wrong, item].sort(() => Math.random() - 0.5);
+  const choiceHtml = choices.map(c => {
+    const label = mode === 'kata2roma' ? c.r : c.k;
+    return `<button class="quiz-btn" onclick="checkAnswer(this,'${c.k}','${item.k}','${mode}')">${label}</button>`;
+  }).join('');
+  document.getElementById('quizScore').textContent = `${quizIdx + 1} / ${quizList.length}  ·  맞힌 수: ${quizCorrect}`;
+  document.getElementById('quizBody').innerHTML = `
+    <div class="quiz-question">${question}</div>
+    <div class="quiz-choices">${choiceHtml}</div>
+    <div id="quizResult"></div>
+  `;
+  quizAnswered = false;
+}
+
+function checkAnswer(btn, chosen, correct, mode) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const isOk = chosen === correct;
+  if (isOk) quizCorrect++;
+  document.querySelectorAll('.quiz-btn').forEach(b => {
+    const label = b.textContent.trim();
+    const target = mode === 'kata2roma' ? KATAKANA.find(x=>x.k===correct)?.r : correct;
+    if (label === target || b === btn && isOk) b.classList.add('correct');
+    else if (b === btn && !isOk) b.classList.add('wrong');
+  });
+  const res = document.getElementById('quizResult');
+  const tip = KATAKANA_TIPS.find(t=>t.k===correct);
+  res.innerHTML = `
+    <div class="quiz-result" style="background:${isOk?'#d1fae5':'#fee2e2'}">${isOk?'⭕ 정답!':'❌ 오답 — 정답: '+correct+' ('+KATAKANA.find(x=>x.k===correct)?.r+')'}</div>
+    ${tip?`<div style="font-size:0.8rem;color:#555;text-align:center;margin-bottom:8px">💡 ${tip.tip}</div>`:''}
+    <button class="quiz-next" onclick="quizIdx++;renderQuiz()">다음 →</button>
+  `;
+}
+
+// 앱 시작
+initToday();
+
+function installTodayTalkStyles() {
+  if (document.getElementById('todayTalkStyles')) return;
+  const style = document.createElement('style');
+  style.id = 'todayTalkStyles';
+  style.textContent = `
+    .talk-topic { font-weight: 700; margin-bottom: 14px; color: #374151; }
+    .talk-turn { border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; margin: 10px 0; background: #fff; }
+    .talk-speaker { font-weight: 700; color: #111827; margin-bottom: 6px; }
+    .talk-jp { font-size: 1.05rem; line-height: 1.8; color: #111827; }
+    .talk-ko, .talk-cue, .talk-tip { margin-top: 6px; color: #4b5563; line-height: 1.5; }
+    .talk-mine { cursor: pointer; background: #f8fafc; }
+    .talk-reveal { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .24s ease, opacity .2s ease; }
+    .talk-mine.open .talk-reveal { max-height: 240px; opacity: 1; }
+  `;
+  document.head.appendChild(style);
+}
+
+function renderTodayTalk() {
+  const card = document.getElementById('todayTalkCard');
+  if (!card) return;
+  if (!TODAY_TALK) {
+    card.style.display = 'none';
+    return;
+  }
+  installTodayTalkStyles();
+  const topic = document.getElementById('talkTopic');
+  const body = document.getElementById('talkBody');
+  if (!topic || !body) return;
+  topic.innerHTML = `${TODAY_TALK.topic_ko || ''} (${TODAY_TALK.topic || ''}) · ${TODAY_TALK.level || ''}`;
+  body.innerHTML = '';
+  (TODAY_TALK.turns || []).forEach((turn) => {
+    const item = document.createElement('div');
+    item.className = `talk-turn${turn.mine ? ' talk-mine' : ''}`;
+    if (turn.mine) {
+      const speaker = document.createElement('div');
+      speaker.className = 'talk-speaker';
+      speaker.textContent = '🙋 내 차례';
+      const cue = document.createElement('div');
+      cue.className = 'talk-cue';
+      cue.textContent = turn.cue_ko || '';
+      const reveal = document.createElement('div');
+      reveal.className = 'talk-reveal';
+      const jp = document.createElement('div');
+      jp.className = 'talk-jp';
+      jp.innerHTML = turn.jp || '';
+      const ko = document.createElement('div');
+      ko.className = 'talk-ko';
+      ko.textContent = turn.ko || '';
+      reveal.appendChild(jp);
+      reveal.appendChild(ko);
+      if (turn.tip) {
+        const tip = document.createElement('div');
+        tip.className = 'talk-tip';
+        tip.textContent = turn.tip;
+        reveal.appendChild(tip);
+      }
+      item.appendChild(speaker);
+      item.appendChild(cue);
+      item.appendChild(reveal);
+      item.addEventListener('click', () => item.classList.toggle('open'));
+    } else {
+      const speaker = document.createElement('div');
+      speaker.className = 'talk-speaker';
+      speaker.textContent = turn.who || '';
+      const jp = document.createElement('div');
+      jp.className = 'talk-jp';
+      jp.innerHTML = turn.jp || '';
+      const ko = document.createElement('div');
+      ko.className = 'talk-ko';
+      ko.textContent = turn.ko || '';
+      item.appendChild(speaker);
+      item.appendChild(jp);
+      item.appendChild(ko);
+    }
+    body.appendChild(item);
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderTodayTalk);
+} else {
+  renderTodayTalk();
+}
+</script>
+</body>
+</html>
