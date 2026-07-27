@@ -22,6 +22,61 @@
 
 const WORDS = [
   {
+    "id": "w623",
+    "jp": "ジャガイモ",
+    "kana": "ジャガイモ",
+    "ko": "감자",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "이런 날은 그라탕?",
+    "example_jp": "ジャガイモが<ruby>残<rt>のこ</rt></ruby>ってたのと",
+    "example_ko": "감자가 남아 있었던 거랑"
+  },
+  {
+    "id": "w624",
+    "jp": "<ruby>残<rt>のこ</rt></ruby>る",
+    "kana": "のこる",
+    "ko": "남다",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "이런 날은 그라탕?",
+    "example_jp": "ジャガイモが<ruby>残<rt>のこ</rt></ruby>ってたのと",
+    "example_ko": "감자가 남아 있었던 거랑"
+  },
+  {
+    "id": "w625",
+    "jp": "<ruby>牛<rt>ぎゅう</rt></ruby><ruby>乳<rt>にゅう</rt></ruby>",
+    "kana": "ぎゅうにゅう",
+    "ko": "우유",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "이런 날은 그라탕?",
+    "example_jp": "<ruby>牛<rt>ぎゅう</rt></ruby><ruby>乳<rt>にゅう</rt></ruby>がヤバかったはず",
+    "example_ko": "우유가 상할 것 같았어, 분명 위험했어"
+  },
+  {
+    "id": "w626",
+    "jp": "やばい",
+    "kana": "やばい",
+    "ko": "위험하다, 큰일이다, 심하다, 대박이다",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "이런 날은 그라탕?",
+    "example_jp": "",
+    "example_ko": ""
+  },
+  {
+    "id": "w627",
+    "jp": "グラタン",
+    "kana": "グラタン",
+    "ko": "그라탕",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "이런 날은 그라탕?",
+    "example_jp": "グラタンかな?",
+    "example_ko": "그라탕이지? 그라탕이려나"
+  },
+  {
     "id": "w616",
     "jp": "<ruby>名<rt>めい</rt></ruby>",
     "kana": "めい",
@@ -6877,6 +6932,80 @@ const WORDS = [
 ];
 
 const GRAMMAR = [
+  {
+    "id": "g164",
+    "title": "〜のと",
+    "desc": "-인 거랑, -한 거랑, -인 데다가 / 동사·형용사의 보통형에 「の」를 붙여 명사화한 뒤 「と」로 나열하는 형태다. 이유를 두 가지 이상 가볍게 늘어놓을 때 쓰며, 뒤에 「ので / から / で」가 이어져 최종 결과로 연결되는 경우가 많다. 명사·な형용사는 「〜なのと」가 된다(例: 静かなのと). 「〜し、〜し」보다 구어적이고 담백하며, 회화에서는 나열만 하고 결과를 생략하기도 한다.",
+    "level": "2단계 드라마",
+    "examples": [
+      {
+        "jp": "<ruby>冷<rt>れい</rt></ruby><ruby>蔵<rt>ぞう</rt></ruby><ruby>庫<rt>こ</rt></ruby>に<ruby>卵<rt>たまご</rt></ruby>があったのと、ご<ruby>飯<rt>はん</rt></ruby>も<ruby>残<rt>のこ</rt></ruby>ってたからチャーハンにした",
+        "ko": "냉장고에 달걀이 있었던 데다가 밥도 남아 있어서 볶음밥으로 했다"
+      },
+      {
+        "jp": "<ruby>駅<rt>えき</rt></ruby>から<ruby>近<rt>ちか</rt></ruby>かったのと、<ruby>家<rt>や</rt></ruby><ruby>賃<rt>ちん</rt></ruby>が<ruby>安<rt>やす</rt></ruby>かったのでこの<ruby>部<rt>へ</rt></ruby><ruby>屋<rt>や</rt></ruby>に<ruby>決<rt>き</rt></ruby>めた",
+        "ko": "역에서 가까운 거랑 월세가 저렴해서 이 방으로 정했다"
+      },
+      {
+        "jp": "<ruby>天<rt>て</rt></ruby><ruby>気<rt>んき</rt></ruby>が<ruby>良<rt>よ</rt></ruby>かったのと、<ruby>気<rt>き</rt></ruby><ruby>分<rt>ぶん</rt></ruby><ruby>転<rt>てん</rt></ruby><ruby>換<rt>かん</rt></ruby>したくて<ruby>散<rt>さん</rt></ruby><ruby>歩<rt>ぽ</rt></ruby>に<ruby>出<rt>で</rt></ruby>た",
+        "ko": "날씨가 좋았던 거랑 기분 전환하고 싶어서 산책을 나갔다"
+      }
+    ],
+    "note": "동사·형용사의 보통형에 「の」를 붙여 명사화한 뒤 「と」로 나열하는 형태다. 이유를 두 가지 이상 가볍게 늘어놓을 때 쓰며, 뒤에 「ので / から / で」가 이어져 최종 결과로 연결되는 경우가 많다. 명사·な형용사는 「〜なのと」가 된다(例: 静かなのと). 「〜し、〜し」보다 구어적이고 담백하며, 회화에서는 나열만 하고 결과를 생략하기도 한다.",
+    "practice": [
+      {
+        "jp": "<ruby>部<rt>へ</rt></ruby><ruby>屋<rt>や</rt></ruby>が<ruby>汚<rt>きたな</rt></ruby>かったのと、<ruby>狭<rt>せま</rt></ruby>かったので、<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しすることにした",
+        "ko": "방이 더러웠던 거랑 좁았기 때문에 이사하기로 했다"
+      },
+      {
+        "jp": "<ruby>初<rt>はじ</rt></ruby>めてでよく<ruby>分<rt>わ</rt></ruby>からないのと、<ruby>緊<rt>きん</rt></ruby><ruby>張<rt>ちょう</rt></ruby>で<ruby>失<rt>しっ</rt></ruby><ruby>敗<rt>ぱい</rt></ruby>してしまいました",
+        "ko": "처음이라 잘 모르는 데다가 긴장해서 실수해버렸습니다"
+      },
+      {
+        "jp": "<ruby>仕<rt>し</rt></ruby><ruby>事<rt>ごと</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>終<rt>お</rt></ruby>わったのと、ちょうど<ruby>見<rt>み</rt></ruby>たい<ruby>映<rt>えい</rt></ruby><ruby>画<rt>が</rt></ruby>があったので<ruby>映<rt>えい</rt></ruby><ruby>画<rt>が</rt></ruby><ruby>館<rt>かん</rt></ruby>に<ruby>行<rt>い</rt></ruby>った",
+        "ko": "일이 빨리 끝난 데다, 마침 보고 싶었던 영화가 있어서 극장에 갔다"
+      }
+    ]
+  },
+  {
+    "id": "g165",
+    "title": "〜はず",
+    "desc": "분명 -일 것이다 / 근거가 있어서 당연히 그렇게 될 거라고 판단할 때 쓴다. 접속은 동사·い형용사 보통형+はず, な형용사+なはず, 명사+のはず다. 「〜はずがない」는 '그럴 리가 없다'는 강한 부정 추측, 「〜はずだった」는 '그럴 예정이었는데 (실제로는 아니었다)'라는 뉘앙스가 된다. 근거 없는 막연한 추측인 「〜だろう / かもしれない」와 달리 반드시 판단의 근거가 전제된다.",
+    "level": "2단계 드라마",
+    "examples": [
+      {
+        "jp": "<ruby>今<rt>きょ</rt></ruby><ruby>日<rt>う</rt></ruby>は<ruby>平<rt>へい</rt></ruby><ruby>日<rt>じつ</rt></ruby>だから、<ruby>道<rt>みち</rt></ruby>は<ruby>空<rt>す</rt></ruby>いているはずです",
+        "ko": "오늘은 평일이니까 분명 길은 한산할 겁니다"
+      },
+      {
+        "jp": "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>日<rt>に</rt></ruby><ruby>本<rt>ほん</rt></ruby>に10<ruby>年<rt>ねん</rt></ruby><ruby>住<rt>す</rt></ruby>んでいるから、<ruby>日<rt>に</rt></ruby><ruby>本<rt>ほん</rt></ruby><ruby>語<rt>ご</rt></ruby>ができないはずがないです",
+        "ko": "저 사람은 일본에 10년 살았으니 일본어를 못할 리가 없어요"
+      },
+      {
+        "jp": "<ruby>店<rt>みせ</rt></ruby>は9<ruby>時<rt>じ</rt></ruby>までだから、まだ<ruby>開<rt>あ</rt></ruby>いているはずです",
+        "ko": "가게는 9시까지이므로 분명 아직 열려 있을 거예요"
+      }
+    ],
+    "note": "근거가 있어서 당연히 그렇게 될 거라고 판단할 때 쓴다. 접속은 동사·い형용사 보통형+はず, な형용사+なはず, 명사+のはず다. 「〜はずがない」는 '그럴 리가 없다'는 강한 부정 추측, 「〜はずだった」는 '그럴 예정이었는데 (실제로는 아니었다)'라는 뉘앙스가 된다. 근거 없는 막연한 추측인 「〜だろう / かもしれない」와 달리 반드시 판단의 근거가 전제된다.",
+    "practice": [
+      {
+        "jp": "この<ruby>時<rt>じ</rt></ruby><ruby>間<rt>かん</rt></ruby>なら、<ruby>子<rt>こ</rt></ruby>どもたちは<ruby>学<rt>がっ</rt></ruby><ruby>校<rt>こう</rt></ruby>にいるはずですけど",
+        "ko": "이 시간이면 아이들은 분명 학교에 있을 텐데요"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>真<rt>ま</rt></ruby><ruby>面<rt>じ</rt></ruby><ruby>目<rt>め</rt></ruby>だから、<ruby>約<rt>やく</rt></ruby><ruby>束<rt>そく</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れないはずです",
+        "ko": "그는 성실하니 분명 약속을 잊지 않을 겁니다"
+      },
+      {
+        "jp": "もう7<ruby>時<rt>じ</rt></ruby>だから、<ruby>彼<rt>かれ</rt></ruby>は<ruby>寝<rt>ね</rt></ruby>ているはずがないです",
+        "ko": "벌써 7시니까 그는 자고 있을 리가 없습니다"
+      },
+      {
+        "jp": "<ruby>何<rt>なん</rt></ruby><ruby>度<rt>ど</rt></ruby>も<ruby>確<rt>かく</rt></ruby><ruby>認<rt>にん</rt></ruby>したので、ミスはないはずです",
+        "ko": "몇 번이나 확인했으니 분명 실수는 없을 겁니다"
+      }
+    ]
+  },
   {
     "id": "g162",
     "title": "お + ます형 + いただく",
@@ -15272,6 +15401,61 @@ const DRAMA = [
       {
         "jp": "<ruby>任<rt>まか</rt></ruby>せる",
         "ko": "맡기다"
+      }
+    ]
+  }
+,
+  {
+    "id": "d059",
+    "stage": 2,
+    "title": "이런 날은 그라탕?",
+    "lines": [
+      {
+        "jp": "ジャガイモが<ruby>残<rt>のこ</rt></ruby>ってたのと",
+        "ko": "감자가 남아 있었던 거랑",
+        "speaker": "여자"
+      },
+      {
+        "jp": "そうだ",
+        "ko": "아, 맞다",
+        "speaker": "여자"
+      },
+      {
+        "jp": "<ruby>牛<rt>ぎゅう</rt></ruby><ruby>乳<rt>にゅう</rt></ruby>がヤバかったはず",
+        "ko": "우유가 상할 것 같았어, 분명 위험했어",
+        "speaker": "여자"
+      },
+      {
+        "jp": "こんな<ruby>日<rt>ひ</rt></ruby>は",
+        "ko": "이런 날은",
+        "speaker": "여자"
+      },
+      {
+        "jp": "グラタンかな?",
+        "ko": "그라탕이지? 그라탕이려나",
+        "speaker": "여자"
+      }
+    ],
+    "words": [
+      {
+        "jp": "ジャガイモ",
+        "ko": "감자"
+      },
+      {
+        "jp": "<ruby>残<rt>のこ</rt></ruby>る",
+        "ko": "남다"
+      },
+      {
+        "jp": "<ruby>牛<rt>ぎゅう</rt></ruby><ruby>乳<rt>にゅう</rt></ruby>",
+        "ko": "우유"
+      },
+      {
+        "jp": "やばい",
+        "ko": "위험하다, 큰일이다, 심하다, 대박이다"
+      },
+      {
+        "jp": "グラタン",
+        "ko": "그라탕"
       }
     ]
   }
