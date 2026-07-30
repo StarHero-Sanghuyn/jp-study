@@ -22,6 +22,50 @@
 
 const WORDS = [
   {
+    "id": "w636",
+    "jp": "<ruby>材<rt>ざい</rt></ruby><ruby>料<rt>りょう</rt></ruby>",
+    "kana": "ざいりょう",
+    "ko": "재료",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "다 못 쓴 파",
+    "example_jp": "<ruby>材<rt>ざい</rt></ruby><ruby>料<rt>りょう</rt></ruby>はジャガイモ",
+    "example_ko": "재료는 감자"
+  },
+  {
+    "id": "w637",
+    "jp": "ジャガイモ",
+    "kana": "ジャガイモ",
+    "ko": "감자",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "다 못 쓴 파",
+    "example_jp": "<ruby>材<rt>ざい</rt></ruby><ruby>料<rt>りょう</rt></ruby>はジャガイモ",
+    "example_ko": "재료는 감자"
+  },
+  {
+    "id": "w638",
+    "jp": "ネギ",
+    "kana": "ネギ",
+    "ko": "파",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "다 못 쓴 파",
+    "example_jp": "<ruby>使<rt>つか</rt></ruby>い<ruby>切<rt>き</rt></ruby>れなかったネギ",
+    "example_ko": "다 못 쓴 파"
+  },
+  {
+    "id": "w639",
+    "jp": "<ruby>匂<rt>にお</rt></ruby>い",
+    "kana": "におい",
+    "ko": "냄새, 향",
+    "tag": "드라마",
+    "level": "2단계",
+    "source": "다 못 쓴 파",
+    "example_jp": "いい<ruby>匂<rt>にお</rt></ruby>い",
+    "example_ko": "좋은 냄새"
+  },
+  {
     "id": "w628",
     "jp": "<ruby>夜分<rt>やぶん</rt></ruby>",
     "kana": "やぶん",
@@ -7020,6 +7064,45 @@ const WORDS = [
 ];
 
 const GRAMMAR = [
+  {
+    "id": "g167",
+    "title": "<ruby>動<rt>どう</rt></ruby><ruby>詞<rt>し</rt></ruby>ます<ruby>形<rt>けい</rt></ruby> + <ruby>切<rt>き</rt></ruby>れない",
+    "desc": "끝까지 다 ~할 수 없다 / 동사 ます형에서 ます를 떼고 「切れない」를 붙인다. 「切る」가 '끝까지 다 해내다'라는 완료의 뜻이고, 그 가능형 부정 「切れない」는 '양이나 정도가 많아서 끝까지 다 해낼 수 없다'는 뜻이 된다. 능력 부족보다 '분량이 많아 감당이 안 된다'는 뉘앙스가 핵심이다. 과거형은 「切れなかった」, 긍정형 「切れる」는 '다 ~할 수 있다'. 표기는 「食べきれない」처럼 히라가나로 쓰는 경우도 많다.",
+    "level": "2단계 드라마",
+    "examples": [
+      {
+        "jp": "<ruby>食<rt>た</rt></ruby>べ<ruby>切<rt>き</rt></ruby>れないほど<ruby>料<rt>りょう</rt></ruby><ruby>理<rt>り</rt></ruby>が<ruby>並<rt>なら</rt></ruby>んでいる",
+        "ko": "다 먹을 수 없을 정도로 음식이 차려져 있다"
+      },
+      {
+        "jp": "<ruby>今<rt>きょ</rt></ruby><ruby>日<rt>う</rt></ruby><ruby>中<rt>じゅう</rt></ruby>には<ruby>読<rt>よ</rt></ruby>み<ruby>切<rt>き</rt></ruby>れないと<ruby>思<rt>おも</rt></ruby>う",
+        "ko": "오늘 안에는 끝까지 다 읽을 수 없을 것 같다"
+      },
+      {
+        "jp": "<ruby>一<rt>いち</rt></ruby><ruby>度<rt>ど</rt></ruby>では<ruby>覚<rt>おぼ</rt></ruby>え<ruby>切<rt>き</rt></ruby>れない",
+        "ko": "내용을 한 번에 다 외울 수 없다"
+      },
+      {
+        "jp": "<ruby>使<rt>つか</rt></ruby>い<ruby>切<rt>き</rt></ruby>れなかった<ruby>材<rt>ざい</rt></ruby><ruby>料<rt>りょう</rt></ruby>で<ruby>作<rt>つく</rt></ruby>れるレシピを<ruby>考<rt>かんが</rt></ruby>えてみましょう",
+        "ko": "다 쓰지 못한 재료로 만들 수 있는 레시피를 생각해 봅시다"
+      }
+    ],
+    "note": "동사 ます형에서 ます를 떼고 「切れない」를 붙인다. 「切る」가 '끝까지 다 해내다'라는 완료의 뜻이고, 그 가능형 부정 「切れない」는 '양이나 정도가 많아서 끝까지 다 해낼 수 없다'는 뜻이 된다. 능력 부족보다 '분량이 많아 감당이 안 된다'는 뉘앙스가 핵심이다. 과거형은 「切れなかった」, 긍정형 「切れる」는 '다 ~할 수 있다'. 표기는 「食べきれない」처럼 히라가나로 쓰는 경우도 많다.",
+    "practice": [
+      {
+        "jp": "<ruby>5<rt>ご</rt></ruby><ruby>分<rt>ふん</rt></ruby>では<ruby>伝<rt>つた</rt></ruby>えきれない",
+        "ko": "5분으로는 다 전할 수 없다"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>には<ruby>感<rt>かん</rt></ruby><ruby>謝<rt>しゃ</rt></ruby>してもしきれない",
+        "ko": "그에게는 감사해도 다 할 수 없다 (이루 말할 수 없을 만큼 감사하다)"
+      },
+      {
+        "jp": "<ruby>多<rt>おお</rt></ruby>すぎて<ruby>覚<rt>おぼ</rt></ruby>えきれない",
+        "ko": "너무 많아서 다 외울 수 없다"
+      }
+    ]
+  },
   {
     "id": "g166",
     "title": "〜ちゃった（〜てしまった）",
@@ -15676,6 +15759,52 @@ const DRAMA = [
       {
         "jp": "<ruby>料理<rt>りょうり</rt></ruby>",
         "ko": "요리"
+      }
+    ]
+  }
+,
+  {
+    "id": "d061",
+    "stage": 2,
+    "title": "다 못 쓴 파",
+    "lines": [
+      {
+        "jp": "<ruby>材<rt>ざい</rt></ruby><ruby>料<rt>りょう</rt></ruby>はジャガイモ",
+        "ko": "재료는 감자",
+        "speaker": "여자"
+      },
+      {
+        "jp": "そして",
+        "ko": "그리고",
+        "speaker": "여자"
+      },
+      {
+        "jp": "<ruby>使<rt>つか</rt></ruby>い<ruby>切<rt>き</rt></ruby>れなかったネギ",
+        "ko": "다 못 쓴 파",
+        "speaker": "여자"
+      },
+      {
+        "jp": "いい<ruby>匂<rt>にお</rt></ruby>い",
+        "ko": "좋은 냄새",
+        "speaker": "여자"
+      }
+    ],
+    "words": [
+      {
+        "jp": "<ruby>材<rt>ざい</rt></ruby><ruby>料<rt>りょう</rt></ruby>",
+        "ko": "재료"
+      },
+      {
+        "jp": "ジャガイモ",
+        "ko": "감자"
+      },
+      {
+        "jp": "ネギ",
+        "ko": "파"
+      },
+      {
+        "jp": "<ruby>匂<rt>にお</rt></ruby>い",
+        "ko": "냄새, 향"
       }
     ]
   }
