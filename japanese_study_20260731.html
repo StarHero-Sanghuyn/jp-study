@@ -16444,10 +16444,20 @@ function initToday() {
   const progress = getProgress();
   const unlearned = WORDS.filter(w => !isLearned(w.id));
   const learned = WORDS.filter(w => isLearned(w.id));
-  const pool = [...unlearned, ...learned];
-  const start = (doy * 10) % pool.length;
-  todayWords = [];
-  for (let i = 0; i < 10; i++) todayWords.push(pool[(start + i) % pool.length]);
+  // 인덱스 회전은 단어가 추가되면(앞에 prepend + 길이 변화) 구간이 밀려 며칠 전 단어를 다시 밟는다.
+  // 단어 id + 날짜 해시로 뽑으면 배열이 바뀌어도 그날의 선택이 흔들리지 않는다.
+  const dayHash = (id) => {
+    let h = 0;
+    for (let i = 0; i < id.length; i++) h = (Math.imul(h, 31) + id.charCodeAt(i)) | 0;
+    h = Math.imul(h ^ doy, 2654435761); // 시드를 뒤에서 섞어야 날짜가 순서를 바꾼다
+    return (h ^ (h >>> 15)) | 0;
+  };
+  const pickWords = (arr, k) =>
+    arr.slice().sort((a, b) => dayHash(a.id) - dayHash(b.id)).slice(0, k);
+  todayWords = pickWords(unlearned, 10);
+  if (todayWords.length < 10) {
+    todayWords = todayWords.concat(pickWords(learned, 10 - todayWords.length));
+  }
 
   currentCardIndex = 0;
   isFlipped = false;
