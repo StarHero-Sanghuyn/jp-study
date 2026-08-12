@@ -17014,6 +17014,15 @@ const TODAY_TALK = {"topic": "<ruby>定食屋<rt>ていしょくや</rt></ruby>�
       <h2>카타카나 50음도</h2>
       <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:12px">탭하면 읽는 법을 확인할 수 있어요</p>
       <div id="ktChartGrid"></div>
+
+      <h2>탁음 · 반탁음 ( ゛ ゜ )</h2>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:12px">カ에 점 두 개(゛)를 붙이면 ガ, ハ에 동그라미(゜)를 붙이면 パ</p>
+      <div id="ktDakutenGrid"></div>
+
+      <h2>요음 (작은 ャ ュ ョ)</h2>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:12px">キ + 작은 ュ = キュ 처럼 두 글자를 한 음절로 읽어요 (큐)</p>
+      <div id="ktYouonGrid"></div>
+
       <div class="kt-confused">
         <h3>⚠️ 자주 헷갈리는 쌍</h3>
         <div id="ktConfusedList"></div>
@@ -17026,6 +17035,9 @@ const TODAY_TALK = {"topic": "<ruby>定食屋<rt>ていしょくや</rt></ruby>�
     <div class="card">
       <h2>모양으로 기억하는 카타카나</h2>
       <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:12px">각 글자를 이미지로 연상해 보세요</p>
+      <div class="kt-tip-item"><div class="kt-tip-char">゛<div class="kt-tip-roma">탁음</div></div><div class="kt-tip-text">오른쪽 위 점 두 개. カ→ガ, サ→ザ, タ→ダ, ハ→バ. 목이 울리는 소리(k→g, s→z, t→d, h→b)</div></div>
+      <div class="kt-tip-item"><div class="kt-tip-char">゜<div class="kt-tip-roma">반탁음</div></div><div class="kt-tip-text">동그라미는 ハ행에만. ハ→パ, ヒ→ピ. 터지는 p 소리</div></div>
+      <div class="kt-tip-item"><div class="kt-tip-char">ャ<div class="kt-tip-roma">요음</div></div><div class="kt-tip-text">i단(キ・シ・チ…) 뒤에 작은 ャ ュ ョ. 두 글자지만 한 박자로 읽어요. キ+ュ=キュ(큐), シ+ョ=ショ(쇼). 큰 ユ와 작은 ュ 크기 구분 주의!</div></div>
       <div id="ktTipsList"></div>
     </div>
   </div>
@@ -17036,6 +17048,12 @@ const TODAY_TALK = {"topic": "<ruby>定食屋<rt>ていしょくや</rt></ruby>�
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <h2 style="margin:0">카타카나 퀴즈</h2>
         <div>
+          <select id="quizScope" onchange="startQuiz()" style="font-size:0.85rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;margin-right:6px">
+            <option value="all">전체</option>
+            <option value="kana">50음도</option>
+            <option value="dakuten">탁음·반탁음</option>
+            <option value="youon">요음</option>
+          </select>
           <select id="quizMode" style="font-size:0.85rem;padding:4px 8px;border:1px solid var(--border);border-radius:6px;margin-right:6px">
             <option value="kata2roma">카타카나 → 읽기</option>
             <option value="roma2kata">읽기 → 카타카나</option>
@@ -17621,6 +17639,33 @@ const KATAKANA = [
   {k:'ン',h:'ん',r:'n'}, {k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'　',h:'',r:''},{k:'　',h:'',r:''},
 ];
 
+// 탁음·반탁음 (゛/゜)
+const KATAKANA_DAKUTEN = [
+  {k:'ガ',h:'が',r:'ga'},{k:'ギ',h:'ぎ',r:'gi'},{k:'グ',h:'ぐ',r:'gu'},{k:'ゲ',h:'げ',r:'ge'},{k:'ゴ',h:'ご',r:'go'},
+  {k:'ザ',h:'ざ',r:'za'},{k:'ジ',h:'じ',r:'ji'},{k:'ズ',h:'ず',r:'zu'},{k:'ゼ',h:'ぜ',r:'ze'},{k:'ゾ',h:'ぞ',r:'zo'},
+  {k:'ダ',h:'だ',r:'da'},{k:'ヂ',h:'ぢ',r:'ji(di)'},{k:'ヅ',h:'づ',r:'zu(du)'},{k:'デ',h:'で',r:'de'},{k:'ド',h:'ど',r:'do'},
+  {k:'バ',h:'ば',r:'ba'},{k:'ビ',h:'び',r:'bi'},{k:'ブ',h:'ぶ',r:'bu'},{k:'ベ',h:'べ',r:'be'},{k:'ボ',h:'ぼ',r:'bo'},
+  {k:'パ',h:'ぱ',r:'pa'},{k:'ピ',h:'ぴ',r:'pi'},{k:'プ',h:'ぷ',r:'pu'},{k:'ペ',h:'ぺ',r:'pe'},{k:'ポ',h:'ぽ',r:'po'},
+];
+
+// 요음 (작은 ャ ュ ョ)
+const KATAKANA_YOUON = [
+  {k:'キャ',h:'きゃ',r:'kya'},{k:'キュ',h:'きゅ',r:'kyu'},{k:'キョ',h:'きょ',r:'kyo'},
+  {k:'シャ',h:'しゃ',r:'sha'},{k:'シュ',h:'しゅ',r:'shu'},{k:'ショ',h:'しょ',r:'sho'},
+  {k:'チャ',h:'ちゃ',r:'cha'},{k:'チュ',h:'ちゅ',r:'chu'},{k:'チョ',h:'ちょ',r:'cho'},
+  {k:'ニャ',h:'にゃ',r:'nya'},{k:'ニュ',h:'にゅ',r:'nyu'},{k:'ニョ',h:'にょ',r:'nyo'},
+  {k:'ヒャ',h:'ひゃ',r:'hya'},{k:'ヒュ',h:'ひゅ',r:'hyu'},{k:'ヒョ',h:'ひょ',r:'hyo'},
+  {k:'ミャ',h:'みゃ',r:'mya'},{k:'ミュ',h:'みゅ',r:'myu'},{k:'ミョ',h:'みょ',r:'myo'},
+  {k:'リャ',h:'りゃ',r:'rya'},{k:'リュ',h:'りゅ',r:'ryu'},{k:'リョ',h:'りょ',r:'ryo'},
+  {k:'ギャ',h:'ぎゃ',r:'gya'},{k:'ギュ',h:'ぎゅ',r:'gyu'},{k:'ギョ',h:'ぎょ',r:'gyo'},
+  {k:'ジャ',h:'じゃ',r:'ja'},{k:'ジュ',h:'じゅ',r:'ju'},{k:'ジョ',h:'じょ',r:'jo'},
+  {k:'ビャ',h:'びゃ',r:'bya'},{k:'ビュ',h:'びゅ',r:'byu'},{k:'ビョ',h:'びょ',r:'byo'},
+  {k:'ピャ',h:'ぴゃ',r:'pya'},{k:'ピュ',h:'ぴゅ',r:'pyu'},{k:'ピョ',h:'ぴょ',r:'pyo'},
+];
+
+const ALL_KANA = [...KATAKANA, ...KATAKANA_DAKUTEN, ...KATAKANA_YOUON];
+const kanaOf = k => ALL_KANA.find(x => x.k === k);
+
 // 자주 헷갈리는 쌍
 const CONFUSED_PAIRS = [
   { chars: 'シ ツ', r: 'shi / tsu', desc: 'シ(shi): 짧은 획 2개가 왼쪽에 세로로 → 긴 획이 오른쪽 위로 흐름\nツ(tsu): 짧은 획 2개가 위에 가로로 → 긴 획이 오른쪽 아래로 흐름' },
@@ -17702,21 +17747,9 @@ function showKtTab(name, btn) {
 }
 
 function renderKtChart() {
-  const grid = document.createElement('div');
-  grid.className = 'kt-chart-grid';
-  KATAKANA.forEach(item => {
-    const cell = document.createElement('div');
-    if (!item.r) {
-      cell.style.visibility = 'hidden';
-      cell.className = 'kt-cell';
-    } else {
-      cell.className = 'kt-cell' + (confusedSet.has(item.k) ? ' confused' : '');
-      cell.innerHTML = `<span class="kt-char">${item.k}</span><span class="kt-roma">${item.r}</span>`;
-      cell.onclick = () => showKtPopup(item);
-    }
-    grid.appendChild(cell);
-  });
-  document.getElementById('ktChartGrid').replaceChildren(grid);
+  renderKtGrid('ktChartGrid', KATAKANA, 5);
+  renderKtGrid('ktDakutenGrid', KATAKANA_DAKUTEN, 5);
+  renderKtGrid('ktYouonGrid', KATAKANA_YOUON, 3);
 
   const confList = document.getElementById('ktConfusedList');
   confList.innerHTML = CONFUSED_PAIRS.map(p => `
@@ -17728,6 +17761,25 @@ function renderKtChart() {
       </div>
     </div>
   `).join('');
+}
+
+function renderKtGrid(targetId, list, cols) {
+  const grid = document.createElement('div');
+  grid.className = 'kt-chart-grid';
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  list.forEach(item => {
+    const cell = document.createElement('div');
+    if (!item.r) {
+      cell.style.visibility = 'hidden';
+      cell.className = 'kt-cell';
+    } else {
+      cell.className = 'kt-cell' + (confusedSet.has(item.k) ? ' confused' : '');
+      cell.innerHTML = `<span class="kt-char">${item.k}</span><span class="kt-roma">${item.r}</span>`;
+      cell.onclick = () => showKtPopup(item);
+    }
+    grid.appendChild(cell);
+  });
+  document.getElementById(targetId).replaceChildren(grid);
 }
 
 function showKtPopup(item) {
@@ -17756,9 +17808,15 @@ function renderKtTips() {
   `).join('');
 }
 
+function quizPool() {
+  const scope = document.getElementById('quizScope') ? document.getElementById('quizScope').value : 'all';
+  const byScope = { kana: KATAKANA, dakuten: KATAKANA_DAKUTEN, youon: KATAKANA_YOUON };
+  return (byScope[scope] || ALL_KANA).filter(x => x.r && x.r.trim());
+}
+
 function startQuiz() {
   const mode = document.getElementById('quizMode') ? document.getElementById('quizMode').value : 'kata2roma';
-  const pool = KATAKANA.filter(x => x.r && x.r.trim());
+  const pool = quizPool();
   quizList = [...pool].sort(() => Math.random() - 0.5);
   quizIdx = 0; quizCorrect = 0; quizAnswered = false;
   renderQuiz(mode);
@@ -17766,7 +17824,7 @@ function startQuiz() {
 
 function renderQuiz(mode) {
   mode = mode || (document.getElementById('quizMode') ? document.getElementById('quizMode').value : 'kata2roma');
-  const pool = KATAKANA.filter(x => x.r && x.r.trim());
+  const pool = quizPool();
   if (quizIdx >= quizList.length) {
     document.getElementById('quizBody').innerHTML = `
       <div style="text-align:center;padding:20px">
@@ -17781,7 +17839,7 @@ function renderQuiz(mode) {
   const item = quizList[quizIdx];
   const question = mode === 'kata2roma' ? item.k : item.r;
   // 오답 3개 선택
-  const wrong = pool.filter(x => x.k !== item.k).sort(() => Math.random() - 0.5).slice(0, 3);
+  const wrong = pool.filter(x => x.k !== item.k && x.r !== item.r).sort(() => Math.random() - 0.5).slice(0, 3);
   const choices = [...wrong, item].sort(() => Math.random() - 0.5);
   const choiceHtml = choices.map(c => {
     const label = mode === 'kata2roma' ? c.r : c.k;
@@ -17803,14 +17861,14 @@ function checkAnswer(btn, chosen, correct, mode) {
   if (isOk) quizCorrect++;
   document.querySelectorAll('.quiz-btn').forEach(b => {
     const label = b.textContent.trim();
-    const target = mode === 'kata2roma' ? KATAKANA.find(x=>x.k===correct)?.r : correct;
+    const target = mode === 'kata2roma' ? kanaOf(correct)?.r : correct;
     if (label === target || b === btn && isOk) b.classList.add('correct');
     else if (b === btn && !isOk) b.classList.add('wrong');
   });
   const res = document.getElementById('quizResult');
   const tip = KATAKANA_TIPS.find(t=>t.k===correct);
   res.innerHTML = `
-    <div class="quiz-result" style="background:${isOk?'#d1fae5':'#fee2e2'}">${isOk?'⭕ 정답!':'❌ 오답 — 정답: '+correct+' ('+KATAKANA.find(x=>x.k===correct)?.r+')'}</div>
+    <div class="quiz-result" style="background:${isOk?'#d1fae5':'#fee2e2'}">${isOk?'⭕ 정답!':'❌ 오답 — 정답: '+correct+' ('+kanaOf(correct)?.r+')'}</div>
     ${tip?`<div style="font-size:0.8rem;color:#555;text-align:center;margin-bottom:8px">💡 ${tip.tip}</div>`:''}
     <button class="quiz-next" onclick="quizIdx++;renderQuiz()">다음 →</button>
   `;
